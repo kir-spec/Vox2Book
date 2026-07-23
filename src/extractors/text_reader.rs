@@ -1,17 +1,40 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::fs;
 use std::path::Path;
 use regex::Regex;
+use encoding_rs::WINDOWS_1251;
 use crate::models::{ElementType, Genre, LiteratureElement};
 
 pub fn read_plain_text<P: AsRef<Path>>(filepath: P, default_genre: Genre) -> (Vec<LiteratureElement>, Genre) {
-    let file = match File::open(&filepath) {
-        Ok(f) => f,
+    let bytes = match fs::read(&filepath) {
+        Ok(b) => b,
         Err(_) => return (Vec::new(), default_genre),
     };
 
-    let reader = BufReader::new(file);
-    let lines: Vec<String> = reader.lines().filter_map(|l| l.ok()).collect();
+    if bytes.is_empty() {
+        return (Vec::new(), default_genre);
+    }
+
+    // 1. Strip UTF-8 BOM if present
+    let raw_bytes = if bytes.starts_with(&[0xEF, 0xBB, 0xBF]) {
+        &bytes[3..]
+    } else {
+        &bytes[..]
+    };
+
+    // 2. Multi-encoding decoding (UTF-8 -> Windows-1251 -> Lossy)
+    let content = match std::str::from_utf8(raw_bytes) {
+        Ok(s) => s.to_string(),
+        Err(_) => {
+            let (decoded, _, has_errors) = WINDOWS_1251.decode(raw_bytes);
+            if !has_errors {
+                decoded.into_owned()
+            } else {
+                String::from_utf8_lossy(raw_bytes).into_owned()
+            }
+        }
+    };
+
+    let lines: Vec<String> = content.lines().map(|l| l.to_string()).collect();
 
     let mut blank_lines = 0;
     let mut short_lines = 0;

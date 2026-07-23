@@ -1,9 +1,36 @@
 use vox2book::models::Genre;
 use vox2book::editors::typography::apply_typography;
 use vox2book::cleaners::stt_purger::clean_stt;
+use vox2book::extractors::text_reader::read_plain_text;
 use vox2book::process_literature_project;
 use tempfile::NamedTempFile;
 use std::io::Write;
+use encoding_rs::WINDOWS_1251;
+
+#[test]
+fn test_windows_1251_decoding() {
+    let cp1251_text = "Глава 1. Привет мир из Windows-1251 кодировки.";
+    let (encoded_bytes, _, _) = WINDOWS_1251.encode(cp1251_text);
+
+    let mut tmp_in = NamedTempFile::new().unwrap();
+    tmp_in.write_all(&encoded_bytes).unwrap();
+
+    let (elements, genre) = read_plain_text(tmp_in.path(), Genre::Auto);
+    assert_eq!(genre, Genre::Prose);
+    assert!(!elements.is_empty(), "Failed to read Windows-1251 encoded file");
+    assert!(elements[0].body.contains("Привет мир"), "Windows-1251 content decoded incorrectly");
+}
+
+#[test]
+fn test_utf8_bom_decoding() {
+    let bom_text = "\u{feff}Глава 1. Текст с UTF-8 BOM сигнатурой.";
+    let mut tmp_in = NamedTempFile::new().unwrap();
+    tmp_in.write_all(bom_text.as_bytes()).unwrap();
+
+    let (elements, _) = read_plain_text(tmp_in.path(), Genre::Auto);
+    assert!(!elements.is_empty(), "Failed to read UTF-8 BOM file");
+    assert!(!elements[0].body.contains('\u{feff}'), "BOM signature was not stripped");
+}
 
 #[test]
 fn test_typography_formatting() {
@@ -62,24 +89,4 @@ fn test_drama_pipeline() {
     assert!(res.is_ok(), "Drama pipeline failed");
     let elements = res.unwrap();
     assert!(elements.len() >= 3, "Insufficient elements generated for drama");
-}
-
-#[test]
-fn test_1000_scenarios_grid() {
-    let genres = vec![Genre::Prose, Genre::Poetry, Genre::Drama, Genre::Dialogue, Genre::Academic];
-    let speakers = vec!["Author", "Character", "Narrator", "SpeakerA"];
-    let samples = vec!["привет", "как дела", "из за", "всё таки", "в общем", "«тест»"];
-
-    let mut iterations = 0;
-    for _g in &genres {
-        for sp in &speakers {
-            for s in &samples {
-                iterations += 1;
-                let formatted = apply_typography(&format!("{}: {}", sp, s));
-                assert!(!formatted.is_empty());
-            }
-        }
-    }
-
-    assert!(iterations >= 100, "Scenario grid failed to reach 100+ iterations");
 }

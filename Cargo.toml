@@ -1,6 +1,6 @@
 [package]
 name = "vox2book"
-version = "1.1.0"
+version = "1.2.1"
 edition = "2021"
 authors = ["kir-spec <https://github.com/kir-spec>"]
 description = "Universal Literature Processing & Automated Publishing Engine"
@@ -15,6 +15,9 @@ dialoguer = "0.11"
 chrono = "0.4"
 eframe = "0.27"
 rfd = "0.14"
+encoding_rs = "0.8"
+zip = "0.6"
+quick-xml = "0.31"
 
 [dev-dependencies]
 tempfile = "3.8"
