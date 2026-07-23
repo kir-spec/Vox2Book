@@ -1,4 +1,11 @@
-# Vox2Book — Universal Literature & Publishing Engine
+<div align="center">
+
+# 📚 Vox2Book — Universal Literature & Publishing Engine
+
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 <p align="center">
   <b>Vox2Book</b> is an advanced, multi-genre literature processing, proofreading, and automated book publishing engine.
@@ -6,20 +13,28 @@
   It transforms raw voice transcriptions, chat logs, prose, poetry, and plays into publication-ready <b>DOCX</b> manuscripts.
 </p>
 
+</div>
+
 ---
 
 ## 🌐 Language Options / Выбор языка / Вибір мови
 
-- [English Documentation](#1-english-documentation)
-- [Русскоязычная документация](#2-русскоязычная-документация)
-- [Українськомовна документація](#3-українськомовна-документація)
+<div align="center">
+
+| Language / Язык / Мова | Status / Статус | Documentation / Документация |
+| :--- | :---: | :--- |
+| **English** | 🟢 Ready | [View English Documentation](#1-english-documentation) |
+| **Русский** | 🟢 Готово | [Перейти к русской документации](#2-русскоязычная-документация) |
+| **Українська** | 🟢 Готово | [Перейти до української документації](#3-українськомовна-документація) |
+
+</div>
 
 ---
 
 ## 1. English Documentation
 
-<details open>
-<summary><b>📖 Click to expand / collapse English Documentation</b></summary>
+<details>
+<summary><b>📖 Click to expand English Documentation (Expand / Collapse)</b></summary>
 
 <br>
 
@@ -132,8 +147,8 @@ python -m unittest discover -s tests
 
 ## 2. Русскоязычная документация
 
-<details open>
-<summary><b>📖 Нажмите для разворота / сворачивания русской документации</b></summary>
+<details>
+<summary><b>📖 Нажмите для разворота русской документации (Развернуть / Свернуть)</b></summary>
 
 <br>
 
@@ -213,8 +228,8 @@ python -m unittest discover -s tests
 
 ## 3. Українськомовна документація
 
-<details open>
-<summary><b>📖 Натисніть для розгортання / згортання української документації</b></summary>
+<details>
+<summary><b>📖 Натисніть для розгортання української документації (Розгорнути / Згорнути)</b></summary>
 
 <br>
 
@@ -232,7 +247,7 @@ python -m unittest discover -s tests
    - **`prose` (Проза, романи, повісті)**: автоматичне виявлення розділів (`Глава 1`, `Частина I`), оформлення діалогів із тире (`—`), абзацні відступи 18pt, гарнітура *Times New Roman 12pt*.
    - **`poetry` (Поезія, збірки віршів)**: збереження строф, віршованого розміру, римування, лівий відступ строф 36pt, гарнітура *Georgia 11.5pt* без міжрядкових розривів.
    - **`drama` (Драматургія, п'єси, сценарії)**: імена персонажів великими жирними літерами (`КІР.`, `АНФІЯ.`), ремарки в дужках курсивом `(...)`, гарнітура *Arial 11pt*.
-   - **`dialogue` (Усні транскрипції, діалоги, інтерв'ю)**: хронологічні позначки дат (`📅 19 січня 2026 р.`), прив'язка авторів, колірний поділ спікерів, метадані часу (`[18:29] [Голосове]:`).
+   - **`dialogue` (Усні транскрипції, діалоги, інтерв'ю)**: хронологічні позначки дат (`📅 19 січня 2026 р.`), прив'язка авторів, колірний поділ спікерів, метадані часу (`[18:29] [Голосовое]:`).
    - **`academic` (Статті, есе, наукові праці)**: ієрархічні заголовки H1/H2/H3, міжрядковий інтервал 1.5, *Times New Roman 12pt*.
    - **`auto`**: інтелектуальне автовизначення жанру на основі структури тексту.
 
