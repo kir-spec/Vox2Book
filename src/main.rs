@@ -1,14 +1,14 @@
 use std::env;
 use std::path::PathBuf;
 use clap::Parser;
-use dialoguer::Input;
+use vox2book::gui::run_gui;
 use vox2book::models::Genre;
 use vox2book::process_literature_project;
 
 #[derive(Parser, Debug)]
 #[command(name = "vox2book")]
 #[command(author = "kir-spec <https://github.com/kir-spec>")]
-#[command(version = "1.0.0")]
+#[command(version = "1.1.0")]
 #[command(about = "Vox2Book — Universal Literature Processing & Publishing Engine")]
 struct Cli {
     #[arg(short, long, help = "Path to input text file or folder (.txt, .md, .docx)")]
@@ -25,6 +25,9 @@ struct Cli {
 
     #[arg(short, long, help = "Book subtitle")]
     subtitle: Option<String>,
+
+    #[arg(long, help = "Force CLI mode instead of GUI window")]
+    cli: bool,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -46,68 +49,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             process_literature_project(&dragged_path, &out_path, genre, None, None)?;
 
             println!("\n✅ Done! Book saved to: {:?}", out_path);
-            println!("Press ENTER to exit...");
-            let mut dummy = String::new();
-            std::io::stdin().read_line(&mut dummy)?;
             return Ok(());
         }
     }
 
-    // Mode 2: CLI Arguments
-    let cli = Cli::parse();
-
-    if let Some(input_path) = cli.input {
-        let genre = Genre::from_str(&cli.genre);
-        process_literature_project(&input_path, &cli.output, genre, cli.title.as_deref(), cli.subtitle.as_deref())?;
-        return Ok(());
+    // Mode 2: Explicit CLI Arguments
+    if args.len() > 1 && (args.iter().any(|a| a.starts_with('-')) || args.contains(&"--cli".to_string())) {
+        let cli = Cli::parse();
+        if let Some(input_path) = cli.input {
+            let genre = Genre::from_str(&cli.genre);
+            process_literature_project(&input_path, &cli.output, genre, cli.title.as_deref(), cli.subtitle.as_deref())?;
+            return Ok(());
+        }
     }
 
-    // Mode 3: Interactive Double-Click / Prompt Mode (No args provided)
-    println!("=====================================================");
-    println!("      📚 Vox2Book Engine — Interactive Assistant     ");
-    println!("=====================================================");
-
-    let input_str: String = Input::new()
-        .with_prompt("Drag and drop file/folder here or type path")
-        .interact_text()?;
-
-    let clean_path = input_str.trim().trim_matches('"').trim_matches('\'');
-    let input_path = PathBuf::from(clean_path);
-
-    if !input_path.exists() {
-        eprintln!("Error: Path does not exist: {:?}", input_path);
-        return Ok(());
+    // Mode 3: Desktop Graphical User Interface Window (GUI) by default!
+    println!("Launching Vox2Book Graphical Window Interface...");
+    if let Err(e) = run_gui() {
+        eprintln!("GUI Error: {}", e);
     }
-
-    println!("\nSelect Genre:");
-    println!("  [1] Prose / Novel (Default)");
-    println!("  [2] Poetry / Verse Collection");
-    println!("  [3] Drama / Theatre Play");
-    println!("  [4] Dialogue / Oral Chronicle");
-    println!("  [5] Auto-detect");
-
-    let choice: String = Input::new()
-        .with_prompt("Choice [1-5]")
-        .default("5".to_string())
-        .interact_text()?;
-
-    let genre = match choice.trim() {
-        "1" => Genre::Prose,
-        "2" => Genre::Poetry,
-        "3" => Genre::Drama,
-        "4" => Genre::Dialogue,
-        _ => Genre::Auto,
-    };
-
-    let mut out_path = input_path.clone();
-    out_path.set_extension("docx");
-
-    process_literature_project(&input_path, &out_path, genre, None, None)?;
-
-    println!("\n✅ Successfully created manuscript: {:?}", out_path);
-    println!("Press ENTER to exit...");
-    let mut dummy = String::new();
-    std::io::stdin().read_line(&mut dummy)?;
 
     Ok(())
 }

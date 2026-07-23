@@ -5,6 +5,7 @@ pub mod cleaners;
 pub mod editors;
 pub mod validators;
 pub mod builders;
+pub mod gui;
 
 use std::path::Path;
 use crate::models::{Genre, LiteratureElement};
