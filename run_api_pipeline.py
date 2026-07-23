@@ -8,6 +8,11 @@ def main():
     print("   📚 Vox2Book — Direct Neural API Pipeline Launcher    ")
     print("=========================================================")
 
+    # Ensure required folder structure exists
+    os.makedirs("inputs/raw_texts", exist_ok=True)
+    os.makedirs("inputs/audio", exist_ok=True)
+    os.makedirs("output/books", exist_ok=True)
+
     config_path = "config.json"
     if not os.path.exists(config_path):
         default_config = {
@@ -28,8 +33,25 @@ def main():
 
     print(f"Config Loaded -> Provider: {config.get('api_provider')}, Model: {config.get('model')}")
 
-    input_file = sys.argv[1] if len(sys.argv) > 1 else "audio_1458@01-06-2026_22-44-40.txt"
-    output_file = sys.argv[2] if len(sys.argv) > 2 else "output/book_api_processed.docx"
+    # Determine input file path
+    if len(sys.argv) > 1:
+        input_file = sys.argv[1]
+    else:
+        # Pick first available file in inputs/raw_texts/ or fallback
+        raw_files = [os.path.join("inputs/raw_texts", f) for f in os.listdir("inputs/raw_texts") if f.endswith(('.txt', '.md', '.docx'))]
+        if raw_files:
+            input_file = raw_files[0]
+        else:
+            input_file = "inputs/raw_texts/sample.txt"
+            with open(input_file, "w", encoding="utf-8") as f:
+                f.write("Поместите ваш исходный текст сюда.")
+
+    # Determine output file path
+    if len(sys.argv) > 2:
+        output_file = sys.argv[2]
+    else:
+        base_name = os.path.splitext(os.path.basename(input_file))[0]
+        output_file = os.path.join("output/books", f"{base_name}_manuscript.docx")
 
     if not os.path.exists(input_file):
         print(f"Error: Input file '{input_file}' not found.")
