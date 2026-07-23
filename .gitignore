@@ -20,7 +20,10 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
-# Temporary test outputs & logs
+# User data & generated outputs
+Анфи/
+output/
+*.docx
 *.log
 *.tmp
 temp/

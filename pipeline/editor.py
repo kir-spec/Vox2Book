@@ -1,9 +1,9 @@
 import re
 
-def proofread_text(text, speaker="Kir"):
+def proofread_text(text, speaker=None):
     """
     Performs literary proofreading, typography formatting, punctuation, 
-    and gender agreement for a transcript paragraph.
+    and general sentence structure formatting for a transcript paragraph.
     """
     if not text:
         return ""
@@ -22,7 +22,6 @@ def proofread_text(text, speaker="Kir"):
     
     # Separate spelling for introductory phrases
     text = re.sub(r'\bвобщем\b', 'в общем', text, flags=re.IGNORECASE)
-    text = re.sub(r'\bвобщем\b', 'в общем', text, flags=re.IGNORECASE)
     text = re.sub(r'\bтоесть\b', 'то есть', text, flags=re.IGNORECASE)
     text = re.sub(r'\bврядли\b', 'вряд ли', text, flags=re.IGNORECASE)
     text = re.sub(r'\bкакбудто\b', 'как будто', text, flags=re.IGNORECASE)
@@ -33,7 +32,7 @@ def proofread_text(text, speaker="Kir"):
     # Em-dash
     text = re.sub(r'(\s+)-\s+', r' — ', text)
     
-    # Commas before conjunctions if missing (common conjunctions: что, чтобы, потому что, если, когда, но, а)
+    # Commas before conjunctions if missing
     text = re.sub(r'(?<![.,!?:;—\s])\s+(что|чтобы|потому что|так как|если|когда|который|которая|которое|которые)\b', r', \1', text, flags=re.IGNORECASE)
     text = re.sub(r'(?<![.,!?:;—\s])\s+(но|зато)\b', r', \1', text, flags=re.IGNORECASE)
     

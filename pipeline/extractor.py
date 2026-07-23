@@ -5,14 +5,15 @@ import html
 from datetime import datetime
 from bs4 import BeautifulSoup
 
-def parse_html_chat_export(export_dir):
+def parse_html_chat_export(export_dir, speaker_map=None):
     """
     Parses Telegram HTML export files (messages*.html) in export_dir using stateful speaker tracking.
     Handles joined messages where Telegram omits <div class="from_name"> on consecutive messages from the same sender.
+    speaker_map: optional dict mapping raw HTML sender names to canonical speaker names.
     Returns:
       audio_map: dict mapping audio_base_name (e.g. "audio_1000@06-02-2026_21-19-33")
-                 to {'speaker': 'Kir'|'Амфи', 'dt': datetime, 'timestamp': 'DD.MM.YYYY HH:MM:SS'}
-      text_messages: list of text message dicts from HTML belonging to Kir/Амфи.
+                 to {'speaker': speaker_name, 'dt': datetime, 'timestamp': 'DD.MM.YYYY HH:MM:SS'}
+      text_messages: list of text message dicts from HTML.
     """
     html_files = sorted(glob.glob(os.path.join(export_dir, "messages*.html")))
     audio_map = {}
@@ -29,12 +30,18 @@ def parse_html_chat_export(export_dir):
             from_div = div.find('div', class_='from_name')
             if from_div:
                 speaker_raw = from_div.get_text(strip=True)
-                if "Music" in speaker_raw:
-                    current_speaker = "Kir"
-                elif "Алиса" in speaker_raw:
-                    current_speaker = "Амфи"
+                if speaker_map:
+                    # Apply speaker_map if matched
+                    matched = False
+                    for k, v in speaker_map.items():
+                        if k.lower() in speaker_raw.lower():
+                            current_speaker = v
+                            matched = True
+                            break
+                    if not matched:
+                        current_speaker = speaker_raw
                 else:
-                    current_speaker = None  # Channel / Other
+                    current_speaker = speaker_raw
                     
             if not current_speaker:
                 continue
@@ -118,7 +125,7 @@ def load_voice_messages_for_years(voice_base_dir, target_years, audio_map):
             else:
                 dt = datetime(int(target_years[0]), 1, 1, 0, 0, 0)
                 time_str = "00:00"
-            speaker = "Kir"
+            speaker = "Speaker"
             
         messages.append({
             'speaker': speaker,
@@ -133,20 +140,18 @@ def load_voice_messages_for_years(voice_base_dir, target_years, audio_map):
     return messages
 
 
-def extract_and_merge_for_years(export_dir, voice_base_dir, target_years=[2024, 2025], include_text_msgs=True):
+def extract_and_merge_for_years(export_dir, voice_base_dir, target_years=[2024, 2025], include_text_msgs=True, speaker_map=None):
     """
     Extracts voice and text messages for target_years, correlates with HTML export using stateful speaker tracking,
     and sorts chronologically.
     """
-    audio_map, text_msgs = parse_html_chat_export(export_dir)
+    audio_map, text_msgs = parse_html_chat_export(export_dir, speaker_map=speaker_map)
     voice_msgs = load_voice_messages_for_years(voice_base_dir, target_years, audio_map)
     
     all_msgs = list(voice_msgs)
     if include_text_msgs:
-        # Filter text messages for target_years
         text_target = [m for m in text_msgs if m['dt'].year in target_years]
         all_msgs.extend(text_target)
         
-    # Sort chronologically by datetime
     all_msgs.sort(key=lambda x: x['dt'])
     return all_msgs

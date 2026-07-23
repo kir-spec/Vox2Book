@@ -2,11 +2,12 @@ import os
 import docx
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from config import MONTHS_RU, GENRE_PRESETS
+from config import MONTHS_RU, GENRE_PRESETS, DEFAULT_SPEAKER_COLORS
 
 def build_docx_document(elements, output_path, genre="prose", title=None, subtitle=None):
     """
     Universal DOCX document generator supporting prose, poetry, drama, dialogue, and academic.
+    Dynamically maps speaker colors for multi-speaker dialogues.
     """
     doc = docx.Document()
     preset = GENRE_PRESETS.get(genre, GENRE_PRESETS['prose'])
@@ -39,14 +40,23 @@ def build_docx_document(elements, output_path, genre="prose", title=None, subtit
         r_sub.font.size = Pt(13)
         r_sub.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
         
+    # Speaker color registry
+    speaker_color_map = {}
+    color_palette = DEFAULT_SPEAKER_COLORS
+    
     # 3. Process Elements
     current_date_key = None
     
     for item in elements:
         itype = item.get('type')
         body = item.get('edited_body', item.get('body', '')).strip()
-        speaker = item.get('speaker', 'Kir')
+        speaker = item.get('speaker', 'Speaker')
         
+        # Dynamically assign speaker color
+        if speaker and speaker not in speaker_color_map:
+            color_idx = len(speaker_color_map) % len(color_palette)
+            speaker_color_map[speaker] = RGBColor(*color_palette[color_idx])
+            
         if genre == 'dialogue' and item.get('type') == 'message':
             dt = item.get('dt')
             if dt:
@@ -77,7 +87,7 @@ def build_docx_document(elements, output_path, genre="prose", title=None, subtit
             r_sp.bold = True
             r_sp.font.name = "Calibri"
             r_sp.font.size = Pt(11)
-            r_sp.font.color.rgb = RGBColor(0x1F, 0x49, 0x7D) if speaker == "Kir" else RGBColor(0x80, 0x00, 0x40)
+            r_sp.font.color.rgb = speaker_color_map.get(speaker, RGBColor(0x1F, 0x49, 0x7D))
             
             r_meta = p_msg.add_run(f" [{time_str}] [{m_type}]: ")
             r_meta.bold = True
@@ -128,7 +138,7 @@ def build_docx_document(elements, output_path, genre="prose", title=None, subtit
                 r_c.bold = True
                 r_c.font.name = "Arial"
                 r_c.font.size = Pt(11)
-                r_c.font.color.rgb = RGBColor(0x1F, 0x49, 0x7D)
+                r_c.font.color.rgb = speaker_color_map.get(speaker, RGBColor(0x1F, 0x49, 0x7D))
             elif itype == 'stage_direction':
                 p_sd = doc.add_paragraph()
                 p_sd.paragraph_format.space_before = Pt(2)

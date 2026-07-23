@@ -1,4 +1,4 @@
-# Vox2Book — Универсальный литературный и издательский конвейер
+# Vox2Book — Universal Literature & Publishing Engine Configuration
 
 PROJECT_NAME = "Vox2Book"
 PROJECT_DESCRIPTION = "Universal Literature Processing & Publishing Engine (Prose, Poetry, Drama, Dialogue, Academic)"
@@ -36,7 +36,15 @@ MONTHS_RU = {
     9: 'сентября', 10: 'октября', 11: 'ноября', 12: 'декабря'
 }
 
-# Жанровые пресеты оформления (Styling Presets)
+DEFAULT_SPEAKER_COLORS = [
+    (0x1F, 0x49, 0x7D),  # Dark Blue
+    (0x80, 0x00, 0x40),  # Burgundy / Magenta
+    (0x2E, 0x75, 0xB6),  # Medium Blue
+    (0x70, 0x30, 0xA0),  # Purple
+    (0xC6, 0x59, 0x11),  # Dark Orange
+]
+
+# Genre Styling Presets
 GENRE_PRESETS = {
     'dialogue': {
         'title': 'Диалоги и устная речь',

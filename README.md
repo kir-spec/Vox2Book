@@ -51,14 +51,14 @@ Whether you are converting raw Speech-to-Text (STT) voice transcriptions, multi-
 1. **Multi-Genre Literature Processing (`--genre`)**:
    - **`prose` (Fiction, Non-fiction, Novels)**: Chapter detection (`Chapter 1`, `Part I`), dialogue dashes (`—`), 18pt first-line paragraph indents, Times New Roman 12pt styling.
    - **`poetry` (Poetry, Rhymes, Verse)**: Stanza preservation, metric line breaks, 36pt stanza indents, Georgia 11.5pt styling without paragraph gaps.
-   - **`drama` (Plays, Scripts, Theatre)**: Character names in bold uppercase (`KIR.`, `AMFI.`), stage directions in italics/brackets `(...)`, Arial 11pt styling.
-   - **`dialogue` (Voice Transcriptions, Interviews, Chat Chronicles)**: Chronological calendar day headers (`📅 19 January 2026`), stateful speaker attribution, color-coded speaker styling, metadata time tags (`[18:29] [Voice]:`).
+   - **`drama` (Plays, Scripts, Theatre)**: Character names in bold uppercase (`AUTHOR.`, `CHARACTER.`), stage directions in italics/brackets `(...)`, Arial 11pt styling.
+   - **`dialogue` (Voice Transcriptions, Interviews, Chat Chronicles)**: Chronological calendar day headers (`📅 19 January`), stateful speaker attribution, color-coded speaker styling, metadata time tags (`[18:29] [Voice]:`).
    - **`academic` (Articles, Essays, Research Papers)**: Hierarchical H1/H2/H3 headings, double/1.5 line spacing, Times New Roman 12pt.
    - **`auto`**: Intelligent auto-detection of literature genre based on text syntax and line density.
 
 2. **Stateful Speaker Attribution Engine**:
    - Maintains continuous speaker state tracking across joined message blocks in Telegram HTML exports (where consecutive messages omit explicit sender names).
-   - Accurately maps profiles (`Music` → `Kir`, `Алиса` → `Амфи`) with zero attribution loss.
+   - Accurately maps profiles using custom `--speaker-map` with zero attribution loss.
 
 3. **8-Stage Publishing Audit & Cleanup Pipeline**:
    - **Orthography Audit**: Hyphenated particles (`-то`, `-нибудь`, `всё-таки`, `из-за`), separate spelling of introductory phrases.
@@ -117,23 +117,22 @@ pip install -r requirements.txt
 
 - **Process a Book / Novel (Prose Mode)**:
   ```bash
-  python run_pipeline.py --input "novel.txt" --genre prose --title "My Novel" --output "novel.docx"
+  python run_pipeline.py --input "novel.txt" --genre prose --title "My Novel" --output "output/novel.docx"
   ```
 
 - **Process a Poetry Collection (Poetry Mode)**:
   ```bash
-  python run_pipeline.py --input "poems.txt" --genre poetry --title "Selected Poems" --output "poems.docx"
+  python run_pipeline.py --input "poems.txt" --genre poetry --title "Selected Poems" --output "output/poems.docx"
   ```
 
 - **Process a Play / Script (Drama Mode)**:
   ```bash
-  python run_pipeline.py --input "script.txt" --genre drama --title "Three-Act Play" --output "play.docx"
+  python run_pipeline.py --input "script.txt" --genre drama --title "Three-Act Play" --output "output/play.docx"
   ```
 
 - **Process Messenger & STT Dialogue Chronicles**:
   ```bash
-  python run_pipeline.py --years 2024,2025
-  python run_pipeline.py --years 2026
+  python run_pipeline.py --input "chat_export/" --genre dialogue --title "Oral Chronicle" --output "output/dialogues.docx"
   ```
 
 #### 3. Run Automated Unit Tests
@@ -165,14 +164,14 @@ python -m unittest discover -s tests
 1. **Многожанровая обработка литературы (`--genre`)**:
    - **`prose` (Проза, романы, повествования)**: автоматическое выявление глав (`Глава 1`, `Часть I`), оформление диалогов с тире (`—`), абзацные отступы 18pt, гарнитура *Times New Roman 12pt*.
    - **`poetry` (Поэзия, сборники стихотворений)**: сохранение строф, стихотворного размера, рифмовки, левый отступ строф 36pt, гарнитура *Georgia 11.5pt* без межстрочных разрывов.
-   - **`drama` (Драматургия, пьесы, сценарии)**: имена персонажей прописными жирными буквами (`КИР.`, `АНФИЯ.`), ремарки в скобках курсивом `(...)`, гарнитура *Arial 11pt*.
-   - **`dialogue` (Устные транскрибации, диалоги, интервью)**: хронологические метки дат (`📅 19 января 2026 г.`), привязка авторов, цветовое разделение спикеров, метаданные времени (`[18:29] [Голосовое]:`).
+   - **`drama` (Драматургия, пьесы, сценарии)**: имена персонажей прописными жирными буквами (`АВТОР.`, `ПЕРСОНАЖ.`), ремарки в скобках курсивом `(...)`, гарнитура *Arial 11pt*.
+   - **`dialogue` (Устные транскрибации, диалоги, интервью)**: хронологические метки дат (`📅 19 января`), привязка авторов, цветовое разделение спикеров, метаданные времени (`[18:29] [Голосовое]:`).
    - **`academic` (Статьи, эссе, научные работы)**: иерархические заголовки H1/H2/H3, межстрочный интервал 1.5, *Times New Roman 12pt*.
    - **`auto`**: интеллектуальное автоопределение жанра на основе структуры текста.
 
 2. **Сквозное отслеживание состояния спикеров (`Stateful Tracking`)**:
    - Корректная обработка объединённых (`joined`) сообщений в экспортах Telegram HTML (где у последовательных сообщений одного автора отсутствует явный заголовок имени).
-   - Точная привязка профилей (`Music` → `Kir`, `Алиса` → `Амфи`) с нулевой потерей данных.
+   - Точная гибкая привязка профилей с помощью параметра `--speaker-map` без потери данных.
 
 3. **Обязательный 8-этапный издательский аудит**:
    - **Орфография**: дефисное написание частиц (`-то`, `-нибудь`, `всё-таки`, `из-за`), раздельное написание вводных слов (`в общем`, `то есть`, `вряд ли`).
@@ -198,23 +197,22 @@ pip install -r requirements.txt
 
 - **Обработка книги / романов (Проза)**:
   ```bash
-  python run_pipeline.py --input "роман.txt" --genre prose --title "Мой Роман" --output "роман.docx"
+  python run_pipeline.py --input "роман.txt" --genre prose --title "Мой Роман" --output "output/роман.docx"
   ```
 
 - **Обработка поэтического сборника (Поэзия)**:
   ```bash
-  python run_pipeline.py --input "стихи.txt" --genre poetry --title "Сборник стихов" --output "стихи.docx"
+  python run_pipeline.py --input "стихи.txt" --genre poetry --title "Сборник стихов" --output "output/стихи.docx"
   ```
 
 - **Обработка пьесы (Драматургия)**:
   ```bash
-  python run_pipeline.py --input "пьеса.txt" --genre drama --title "Пьеса" --output "пьеса.docx"
+  python run_pipeline.py --input "пьеса.txt" --genre drama --title "Пьеса" --output "output/пьеса.docx"
   ```
 
 - **Обработка хроник мессенджеров и транскрибаций**:
   ```bash
-  python run_pipeline.py --years 2024,2025
-  python run_pipeline.py --years 2026
+  python run_pipeline.py --input "чат_экспорт/" --genre dialogue --title "Устная хроника" --output "output/диалоги.docx"
   ```
 
 #### 3. Запуск автоматических тестов
@@ -237,7 +235,7 @@ python -m unittest discover -s tests
 
 **Vox2Book** — професійний програмний комплекс та універсальний літературно-видавничий конвеєр мовою Python. Двигун призначений для автоматичної обробки, вичитки, типографіки, аудиту якості та генерації готових друкованих макетів книг у форматі **DOCX**.
 
-**Vox2Book** однаково успішно працює з надиктованими голосовими розшифровками (Speech-to-Text), логами месенджерів (Telegram HTML), художньою прозою, поезією, драматургією та академічними статтями.
+**Vox2Book** одинаково успішно працює з надиктованими голосовими розшифровками (Speech-to-Text), логами месенджерів (Telegram HTML), художньою прозою, поезією, драматургією та академічними статтями.
 
 ---
 
@@ -246,14 +244,14 @@ python -m unittest discover -s tests
 1. **Багатожанрова обробка літератури (`--genre`)**:
    - **`prose` (Проза, романи, повісті)**: автоматичне виявлення розділів (`Глава 1`, `Частина I`), оформлення діалогів із тире (`—`), абзацні відступи 18pt, гарнітура *Times New Roman 12pt*.
    - **`poetry` (Поезія, збірки віршів)**: збереження строф, віршованого розміру, римування, лівий відступ строф 36pt, гарнітура *Georgia 11.5pt* без міжрядкових розривів.
-   - **`drama` (Драматургія, п'єси, сценарії)**: імена персонажів великими жирними літерами (`КІР.`, `АНФІЯ.`), ремарки в дужках курсивом `(...)`, гарнітура *Arial 11pt*.
-   - **`dialogue` (Усні транскрипції, діалоги, інтерв'ю)**: хронологічні позначки дат (`📅 19 січня 2026 р.`), прив'язка авторів, колірний поділ спікерів, метадані часу (`[18:29] [Голосовое]:`).
+   - **`drama` (Драматургія, п'єси, сценарії)**: імена персонажів великими жирними літерами (`АВТОР.`, `ПЕРСОНАЖ.`), ремарки в дужках курсивом `(...)`, гарнітура *Arial 11pt*.
+   - **`dialogue` (Усні транскрипції, діалоги, інтерв'ю)**: хронологічні позначки дат (`📅 19 січня`), прив'язка авторів, колірний поділ спікерів, метадані часу (`[18:29] [Голосовое]:`).
    - **`academic` (Статті, есе, наукові праці)**: ієрархічні заголовки H1/H2/H3, міжрядковий інтервал 1.5, *Times New Roman 12pt*.
    - **`auto`**: інтелектуальне автовизначення жанру на основі структури тексту.
 
 2. **Наскрізне відстеження стану спікерів (`Stateful Tracking`)**:
    - Коректна обробка об'єднаних (`joined`) повідомлень в експортах Telegram HTML (де у послідовних повідомленнях одного автора відсутній явлений заголовок імені).
-   - Точна прив'язка профілів (`Music` → `Kir`, `Аліса` → `Амфи`) із нульовою втратою даних.
+   - Точна прив'язка профілів за допомогою параметра `--speaker-map` із нульовою втратою даних.
 
 3. **Обов'язковий 8-етапний видавничий аудит**:
    - **Орфографія**: дефісне написання часток (`-то`, `-небудь`, `все-таки`, `з-за`), роздільне написання вступних слів.
@@ -266,7 +264,7 @@ python -m unittest discover -s tests
 
 ---
 
-### Варіанти запуску
+### Варианти запуску
 
 #### 1. Встановлення
 ```bash
@@ -279,23 +277,22 @@ pip install -r requirements.txt
 
 - **Обробка книги / романів (Проза)**:
   ```bash
-  python run_pipeline.py --input "роман.txt" --genre prose --title "Мій Роман" --output "роман.docx"
+  python run_pipeline.py --input "роман.txt" --genre prose --title "Мій Роман" --output "output/роман.docx"
   ```
 
 - **Обробка поетичної збірки (Поезія)**:
   ```bash
-  python run_pipeline.py --input "вірші.txt" --genre poetry --title "Збірка віршів" --output "вірші.docx"
+  python run_pipeline.py --input "вірші.txt" --genre poetry --title "Збірка віршів" --output "output/вірші.docx"
   ```
 
 - **Обробка п'єси (Драматургія)**:
   ```bash
-  python run_pipeline.py --input "п'єса.txt" --genre drama --title "П'єса" --output "п'єса.docx"
+  python run_pipeline.py --input "п'єса.txt" --genre drama --title "П'єса" --output "output/п'єса.docx"
   ```
 
 - **Обробка хронік месенджерів та транскрипцій**:
   ```bash
-  python run_pipeline.py --years 2024,2025
-  python run_pipeline.py --years 2026
+  python run_pipeline.py --input "чат_експорт/" --genre dialogue --title "Усна хроніка" --output "output/діалоги.docx"
   ```
 
 #### 3. Запуск автоматичних тестів
