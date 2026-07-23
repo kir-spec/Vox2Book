@@ -4,7 +4,7 @@
 
 ### *The Ultimate AI Engine for Turning Dictaphone Transcripts into Publishing-Ready Word Manuscripts*
 
-[![Release](https://img.shields.io/badge/Release-v6.0.0%20Multilingual%20Edition-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![Release](https://img.shields.io/badge/Release-v6.1.0%20Localized%20Multilingual-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
 [![AI Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%26%20Private-0099FF.svg?style=for-the-badge&logo=security)](https://lmstudio.ai)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 [![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
@@ -46,15 +46,15 @@ Keep your creative manuscripts completely confidential! Connect Vox2Book directl
 Every compiled manuscript comes pre-formatted to professional book standards:
 * **Classic Fonts**: *Times New Roman* 12pt body text with 1.15 line spacing.
 * **Red-Line Indents**: Professional 18pt first-line paragraph indents.
-* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation (`из-за`, `из-под`, `всё-таки`).
+* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation (`out-of-date`, `well-known`).
 
 ### 🧠 4. Automatic Dictaphone Jargon Purger
-Whisper STT frequently mishears technical terms. Vox2Book automatically detects and replaces dictaphone jargon:
-* `"те из бы"` / `"юсб"` ➔ `USB`
-* `"ссд"` ➔ `SSD-накопитель`
-* `"в стране джетал"` ➔ `Western Digital`
-* `"а дата"` ➔ `ADATA`
-* `"35 размер"` ➔ `3.5-дюймовый`
+Whisper STT frequently mishears technical terms. Vox2Book automatically detects and replaces English dictaphone jargon:
+* `"you es bee"` / `"usb drive"` ➔ `USB`
+* `"es es dee"` / `"solid state drive"` ➔ `SSD`
+* `"west digital"` ➔ `Western Digital`
+* `"a data"` ➔ `ADATA`
+* `"three point five inch"` ➔ `3.5-inch`
 
 ---
 
@@ -110,8 +110,8 @@ E:\coding\работа с литературой\
 * **Типографика**: Автоматические книжные кавычки `«ёлочки»`, длинные тире ` — ` и дефисные частицы (`из-за`, `из-под`, `всё-таки`).
 
 ### 🧠 4. Умный исправитель диктофонного сленга
-Whisper часто ошибается на технических терминах. Vox2Book автоматически распознает и исправляет оговорки:
-* `"те из бы"` ➔ `USB`
+Whisper часто ошибается на технических терминах. Vox2Book автоматически распознает и исправляет оговорки на русском языке:
+* `"те из бы"` / `"юсб"` ➔ `USB`
 * `"ссд"` ➔ `SSD-накопитель`
 * `"в стране джетал"` ➔ `Western Digital`
 * `"а дата"` ➔ `ADATA`
@@ -152,5 +152,15 @@ Whisper часто ошибается на технических термина
 ### 🎨 3. Видавнича типографіка Word
 Автоматичні книжкові лапки `«...»`, довгі тире ` — `, червоні рядки 18pt та шрифти *Times New Roman 12pt*.
 
-### 🧠 4. Збереження в `output/books/`
+### 🧠 4. Розумне виправлення диктофонного сленгу
+Whisper часто помиляється на технічних термінах. Vox2Book автоматично розпізнає та виправляє помилки укр мовою:
+* `"те із би"` / `"юсб"` ➔ `USB`
+* `"ссд"` ➔ `SSD-накопичувач`
+* `"вестерн діжитал"` ➔ `Western Digital`
+* `"а дата"` ➔ `ADATA`
+* `"3,5 дюйма"` ➔ `3.5-дюймовий`
+
+---
+
+## ⚖️ Збереження в `output/books/`
 Усі готові вичитані книги автоматично зберігаються у папку `output/books/`.
