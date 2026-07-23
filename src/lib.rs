@@ -10,6 +10,7 @@ pub mod logger;
 pub mod llm;
 
 use std::path::Path;
+use crate::config::AppConfig;
 use crate::models::{Genre, LiteratureElement};
 use crate::extractors::auto::extract_content;
 use crate::cleaners::spam::is_spam;
@@ -20,7 +21,7 @@ use crate::editors::drama::process_drama;
 use crate::validators::quality::validate_cuts;
 use crate::builders::docx_builder::build_docx_document;
 use crate::logger::VoxLogger;
-use crate::llm::{process_with_ollama, smart_offline_restructure};
+use crate::llm::call_neural_api;
 
 pub fn process_literature_project<P: AsRef<Path>>(
     input_path: P,
@@ -32,8 +33,10 @@ pub fn process_literature_project<P: AsRef<Path>>(
     let in_str = input_path.as_ref().to_string_lossy().to_string();
     let out_str = output_path.as_ref().to_string_lossy().to_string();
 
+    let app_config = AppConfig::load_or_default("config.json");
+
     VoxLogger::info("Engine", &format!("Starting publication pipeline for input: '{}'", in_str));
-    VoxLogger::info("Engine", &format!("Requested genre mode: '{}'", genre));
+    VoxLogger::info("API Config", &format!("Provider: '{}', Model: '{}'", app_config.api_provider, app_config.model));
 
     // 1. Extraction
     let (raw_elements, final_genre) = extract_content(&input_path, genre);
@@ -43,30 +46,28 @@ pub fn process_literature_project<P: AsRef<Path>>(
         VoxLogger::warn("Extractor", "No text elements could be extracted from input. Document may be empty.");
     }
 
-    // 2. Pre-process text (STT Header purge & tech terms restructuring)
+    // 2. Pre-process & filter spam
     let mut preprocessed = Vec::new();
     for elem in raw_elements {
         if is_spam(&elem.body) {
             continue;
         }
         let mut clean_elem = elem;
-        clean_elem.body = smart_offline_restructure(&clean_elem.body);
         clean_elem.body = clean_stt(&clean_elem.body);
         if !clean_elem.body.trim().is_empty() {
             preprocessed.push(clean_elem);
         }
     }
 
-    // 3. Try Ollama AI Neural Network if available, or fallback to offline restructuring
+    // 3. Call Neural API (OpenAI / DeepSeek / Anthropic / Ollama)
     let mut final_elements = preprocessed;
-
-    // Check if Ollama AI is reachable for deep neural proofreading
     let raw_text_combined: String = final_elements.iter().map(|e| e.body.as_str()).collect::<Vec<_>>().join("\n\n");
-    if raw_text_combined.len() > 30 {
-        VoxLogger::info("AI Engine", "Attempting deep neural proofreading via Ollama AI (llama3)...");
-        match process_with_ollama(&raw_text_combined, "llama3") {
+
+    if raw_text_combined.len() > 20 {
+        VoxLogger::info("API Client", &format!("Sending text to Neural API ({}) for literary proofreading...", app_config.api_provider));
+        match call_neural_api(&raw_text_combined, &app_config) {
             Ok(ai_processed_text) => {
-                VoxLogger::info("AI Engine", "[SUCCESS] Ollama AI neural proofreading complete!");
+                VoxLogger::info("API Client", "[SUCCESS] Received clean literary text from Neural API!");
                 let mut ai_elements = Vec::new();
                 for para in ai_processed_text.split("\n\n") {
                     let trimmed = para.trim();
@@ -84,7 +85,7 @@ pub fn process_literature_project<P: AsRef<Path>>(
                 }
             }
             Err(e) => {
-                VoxLogger::info("AI Engine", &format!("Ollama AI unavailable ({}), using smart offline restructuring engine.", e));
+                VoxLogger::warn("API Client", &format!("Neural API notice: {}. Proceeding with local formatting engine.", e));
             }
         }
     }
@@ -115,7 +116,10 @@ pub fn process_literature_project<P: AsRef<Path>>(
 
     // 6. DOCX Generation
     VoxLogger::info("Builder", &format!("Building manuscript DOCX at: '{}'", out_str));
-    build_docx_document(&processed, &output_path, &final_genre, title, subtitle)?;
+    let doc_title = title.or(if app_config.title.is_empty() { None } else { Some(&app_config.title) });
+    let doc_subtitle = subtitle.or(if app_config.subtitle.is_empty() { None } else { Some(&app_config.subtitle) });
+
+    build_docx_document(&processed, &output_path, &final_genre, doc_title, doc_subtitle)?;
 
     if let Ok(metadata) = std::fs::metadata(&output_path) {
         VoxLogger::info("Builder", &format!("[SUCCESS] DOCX manuscript generated successfully! File size: {} bytes", metadata.len()));

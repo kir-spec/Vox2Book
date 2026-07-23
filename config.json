@@ -1,0 +1,9 @@
+{
+  "api_provider": "openai",
+  "api_key": "YOUR_API_KEY_HERE",
+  "model": "gpt-4o-mini",
+  "ollama_url": "http://localhost:11434",
+  "genre": "prose",
+  "title": "",
+  "subtitle": ""
+}
