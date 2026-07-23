@@ -4,7 +4,7 @@
 
 ### *The Ultimate AI Engine for Turning Dictaphone Transcripts into Publishing-Ready Word Manuscripts*
 
-[![Release](https://img.shields.io/badge/Release-v5.0.0%20Marketing%20Edition-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![Release](https://img.shields.io/badge/Release-v6.0.0%20Multilingual%20Edition-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
 [![AI Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%26%20Private-0099FF.svg?style=for-the-badge&logo=security)](https://lmstudio.ai)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 [![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
@@ -24,10 +24,9 @@
 
 <br/>
 
-<details>
-<summary><strong>🇬🇧 English Overview (Primary Language) — Click to Expand</strong></summary>
+---
 
-<br/>
+# 🇬🇧 English Documentation (Primary Language)
 
 ## 🔥 Why Authors, Creators & Editors Love Vox2Book AI
 
@@ -84,14 +83,11 @@ E:\coding\работа с литературой\
 └── pipeline.py                  # 🚀 Multi-Stage Virtual Editorial Board Chain
 ```
 
-</details>
-
 <br/>
 
-<details>
-<summary><strong>🇷🇺 Русская документация (Маркетинговый обзор) — Нажмите для раскрытия</strong></summary>
+---
 
-<br/>
+# 🇷🇺 Русская документация (Второй язык)
 
 ## 🔥 Почему авторы и блогеры выбирают Vox2Book AI
 
@@ -133,29 +129,11 @@ Whisper часто ошибается на технических термина
 | **Поддержка кодировок** | Превращает в кракозябры файлы в кодировке Windows-1251 (CP1251). | **Любые файлы**: Распознает `.txt` (UTF-8, Windows-1251), `.docx`, `.md`, `.html`. |
 | **Сохранение результатов** | Файлы путаются или теряются в загрузках. | **Порядок в папках**: Все готовые книги автоматически сохраняются в `output/books/`. |
 
+<br/>
+
 ---
 
-## 📂 Наглядная структура папок проекта
-
-```ascii
-E:\coding\работа с литературой\
-├── inputs/                      # 📥 ВХОДНЫЕ МАТЕРИАЛЫ
-│   ├── raw_texts/               # Положите сюда тексты и расшифровки (.txt, .md, .docx)
-│   └── audio/                   # Положите сюда аудиозаписи (.mp3, .wav, .ogg)
-├── output/                      # 📤 ВЫХОДНЫЕ МАТЕРИАЛЫ
-│   └── books/                   # СЮДА сохраняются готовые книги Word (.docx)
-├── config.json                  # 🔑 Настройки API (LM Studio, Ollama, OpenAI, DeepSeek, Claude)
-└── pipeline.py                  # 🚀 Цепочка виртуальных корректоров и фильтров
-```
-
-</details>
-
-<br/>
-
-<details>
-<summary><strong>🇺🇦 Українська документація (Маркетинговий огляд) — Натисніть для розгортання</strong></summary>
-
-<br/>
+# 🇺🇦 Українська документація (Третій мова)
 
 ## 🔥 Чому автори обирають Vox2Book AI
 
@@ -165,9 +143,14 @@ E:\coding\работа с литературой\
 
 ## ⚡ 4 Ключові переваги
 
-1. **Від диктофона до книги**: Автоматичний поділ на розділи, абзаци та діалоги.
-2. **100% Конфіденційно та Оффлайн**: Робота через **LM Studio** та **Ollama** без інтернету.
-3. **Видавнича типографіка**: Книжкові лапки `«...»`, довгі тире ` — ` та шрифти Word.
-4. **Авто-збереження в `output/books/`**: Усі готові книги автоматично зберігаються у папку `output/books/`.
+### 🎙️ 1. Від диктофона до книги
+Створюйте книги голосом! Vox2Book автоматично розбиває монолог на розділи, абзаци та виправляє помилки усної мови.
 
-</details>
+### 🔒 2. 100% Конфіденційно та Оффлайн
+Зберігайте повну приватність за допомогою **LM Studio** та **Ollama**, що працюють локально на вашому ПК без інтернету.
+
+### 🎨 3. Видавнича типографіка Word
+Автоматичні книжкові лапки `«...»`, довгі тире ` — `, червоні рядки 18pt та шрифти *Times New Roman 12pt*.
+
+### 🧠 4. Збереження в `output/books/`
+Усі готові вичитані книги автоматично зберігаються у папку `output/books/`.
