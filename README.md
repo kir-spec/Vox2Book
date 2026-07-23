@@ -1,21 +1,25 @@
 <div align="center">
 
 # 🚀 Vox2Book AI — From Voice Recordings to Printed Books in Seconds
+### 🇷🇺 Vox2Book AI — От голосовых записей к печатным книгам за секунды
+### 🇺🇦 Vox2Book AI — Від голосових записів до друкованих книг за секунди
 
-### *The Ultimate AI Engine for Turning Dictaphone Transcripts into Publishing-Ready Word Manuscripts*
+<br/>
 
-[![Release](https://img.shields.io/badge/Release-v6.1.0%20Localized%20Multilingual-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![Release](https://img.shields.io/badge/Release-v7.0.0%20Trilingual%20Landing-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
 [![AI Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%26%20Private-0099FF.svg?style=for-the-badge&logo=security)](https://lmstudio.ai)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 [![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
 
 <br/>
 
-**Transform messy, unpunctuated voice transcripts (Whisper STT) and raw drafts into crisp, beautifully formatted printed books. Fully compatible with LM Studio, Ollama, OpenAI, DeepSeek, and Anthropic Claude.**
+**🇬🇧 Transform messy, unpunctuated voice transcripts (Whisper STT) and raw drafts into crisp, beautifully formatted printed books.**  
+**🇷🇺 Превратите сырые устные расшифровки монологов (Whisper STT) и черновики в вычитанные печатные книги в формате DOCX.**  
+**🇺🇦 Перетворіть сирі аудіо-монологи (Whisper STT) та черновики на готові до друку книги у форматі DOCX.**
 
 ---
 
-### 🌐 Quick Navigation & Product Guides
+### 🌐 Quick Navigation & Product Guides / Быстрая навигация
 [✨ **Why Vox2Book Beats Copy-Pasting Prompts**](docs/PROJECT_VS_PROMPT.md) • [📂 **Smart Workspace Layout**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Download Latest Release**](https://github.com/kir-spec/Vox2Book/releases)
 
 ---
@@ -24,9 +28,10 @@
 
 <br/>
 
----
+<details>
+<summary><strong>🇬🇧 English Documentation — Click to Expand / Collapse</strong></summary>
 
-# 🇬🇧 English Documentation (Primary Language)
+<br/>
 
 ## 🔥 Why Authors, Creators & Editors Love Vox2Book AI
 
@@ -46,7 +51,7 @@ Keep your creative manuscripts completely confidential! Connect Vox2Book directl
 Every compiled manuscript comes pre-formatted to professional book standards:
 * **Classic Fonts**: *Times New Roman* 12pt body text with 1.15 line spacing.
 * **Red-Line Indents**: Professional 18pt first-line paragraph indents.
-* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation (`out-of-date`, `well-known`).
+* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation.
 
 ### 🧠 4. Automatic Dictaphone Jargon Purger
 Whisper STT frequently mishears technical terms. Vox2Book automatically detects and replaces English dictaphone jargon:
@@ -83,11 +88,14 @@ E:\coding\работа с литературой\
 └── pipeline.py                  # 🚀 Multi-Stage Virtual Editorial Board Chain
 ```
 
+</details>
+
 <br/>
 
----
+<details>
+<summary><strong>🇷🇺 Русская документация — Нажмите для раскрытия / сворачивания</strong></summary>
 
-# 🇷🇺 Русская документация (Второй язык)
+<br/>
 
 ## 🔥 Почему авторы и блогеры выбирают Vox2Book AI
 
@@ -129,11 +137,14 @@ Whisper часто ошибается на технических термина
 | **Поддержка кодировок** | Превращает в кракозябры файлы в кодировке Windows-1251 (CP1251). | **Любые файлы**: Распознает `.txt` (UTF-8, Windows-1251), `.docx`, `.md`, `.html`. |
 | **Сохранение результатов** | Файлы путаются или теряются в загрузках. | **Порядок в папках**: Все готовые книги автоматически сохраняются в `output/books/`. |
 
+</details>
+
 <br/>
 
----
+<details>
+<summary><strong>🇺🇦 Українська документація — Натисніть для розгортання / згортання</strong></summary>
 
-# 🇺🇦 Українська документація (Третій мова)
+<br/>
 
 ## 🔥 Чому автори обирають Vox2Book AI
 
@@ -164,3 +175,5 @@ Whisper часто помиляється на технічних терміна
 
 ## ⚖️ Збереження в `output/books/`
 Усі готові вичитані книги автоматично зберігаються у папку `output/books/`.
+
+</details>
