@@ -6,7 +6,7 @@
 
 <br/>
 
-[![Release](https://img.shields.io/badge/Release-v8.0.0%20Universal%20AI-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![Release](https://img.shields.io/badge/Release-23.07.2026-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
 [![Universal AI](https://img.shields.io/badge/AI%20Compatibility-Antigravity%20%7C%20Cursor%20%7C%20LM%20Studio%20%7C%20Ollama%20%7C%20OpenAI%20%7C%20Claude-0099FF.svg?style=for-the-badge&logo=openai)](https://github.com/kir-spec/Vox2Book)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 [![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
@@ -20,7 +20,7 @@
 ---
 
 ### 🌐 Quick Navigation & Product Guides / Быстрая навигация
-[✨ **Why Vox2Book Beats Copy-Pasting Prompts**](docs/PROJECT_VS_PROMPT.md) • [📂 **Smart Workspace Layout**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Download Latest Release**](https://github.com/kir-spec/Vox2Book/releases)
+[✨ **Why Vox2Book Beats Copy-Pasting Prompts**](docs/PROJECT_VS_PROMPT.md) • [📂 **Smart Workspace Layout**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Download Official Release 23.07.2026**](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
 
 ---
 
