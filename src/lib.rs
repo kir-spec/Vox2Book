@@ -7,6 +7,7 @@ pub mod validators;
 pub mod builders;
 pub mod gui;
 pub mod logger;
+pub mod llm;
 
 use std::path::Path;
 use crate::models::{Genre, LiteratureElement};
@@ -19,6 +20,7 @@ use crate::editors::drama::process_drama;
 use crate::validators::quality::validate_cuts;
 use crate::builders::docx_builder::build_docx_document;
 use crate::logger::VoxLogger;
+use crate::llm::{process_with_ollama, smart_offline_restructure};
 
 pub fn process_literature_project<P: AsRef<Path>>(
     input_path: P,
@@ -41,50 +43,77 @@ pub fn process_literature_project<P: AsRef<Path>>(
         VoxLogger::warn("Extractor", "No text elements could be extracted from input. Document may be empty.");
     }
 
-    // 2. Spam & STT Purification
-    let mut filtered = Vec::new();
-    let mut spam_count = 0;
-
+    // 2. Pre-process text (STT Header purge & tech terms restructuring)
+    let mut preprocessed = Vec::new();
     for elem in raw_elements {
         if is_spam(&elem.body) {
-            spam_count += 1;
             continue;
         }
         let mut clean_elem = elem;
+        clean_elem.body = smart_offline_restructure(&clean_elem.body);
         clean_elem.body = clean_stt(&clean_elem.body);
-        filtered.push(clean_elem);
+        if !clean_elem.body.trim().is_empty() {
+            preprocessed.push(clean_elem);
+        }
     }
 
-    VoxLogger::info("Cleaners", &format!("Filtered {} spam elements, retained {} valid elements", spam_count, filtered.len()));
+    // 3. Try Ollama AI Neural Network if available, or fallback to offline restructuring
+    let mut final_elements = preprocessed;
 
-    // 3. Genre-Specific Editing & Typography
+    // Check if Ollama AI is reachable for deep neural proofreading
+    let raw_text_combined: String = final_elements.iter().map(|e| e.body.as_str()).collect::<Vec<_>>().join("\n\n");
+    if raw_text_combined.len() > 30 {
+        VoxLogger::info("AI Engine", "Attempting deep neural proofreading via Ollama AI (llama3)...");
+        match process_with_ollama(&raw_text_combined, "llama3") {
+            Ok(ai_processed_text) => {
+                VoxLogger::info("AI Engine", "[SUCCESS] Ollama AI neural proofreading complete!");
+                let mut ai_elements = Vec::new();
+                for para in ai_processed_text.split("\n\n") {
+                    let trimmed = para.trim();
+                    if !trimmed.is_empty() {
+                        ai_elements.push(LiteratureElement {
+                            element_type: crate::models::ElementType::Paragraph,
+                            body: trimmed.to_string(),
+                            edited_body: trimmed.to_string(),
+                            speaker: None,
+                        });
+                    }
+                }
+                if !ai_elements.is_empty() {
+                    final_elements = ai_elements;
+                }
+            }
+            Err(e) => {
+                VoxLogger::info("AI Engine", &format!("Ollama AI unavailable ({}), using smart offline restructuring engine.", e));
+            }
+        }
+    }
+
+    // 4. Genre-Specific Editing & Typography
     let processed = match final_genre {
         Genre::Poetry => {
             VoxLogger::info("Editors", "Applying Poetry & Stanza formatting pipeline");
-            process_poetry(filtered)
+            process_poetry(final_elements)
         }
         Genre::Drama => {
             VoxLogger::info("Editors", "Applying Drama & Stage Direction formatting pipeline");
-            process_drama(filtered)
+            process_drama(final_elements)
         }
         _ => {
             VoxLogger::info("Editors", "Applying Prose & Chapter formatting pipeline");
-            process_prose(filtered)
+            process_prose(final_elements)
         }
     };
 
-    // 4. Quality Validation
+    // 5. Quality Validation
     let issues = validate_cuts(&processed);
     if issues.is_empty() {
         VoxLogger::info("Validator", "Quality audit passed with zero cut-off issues.");
     } else {
         VoxLogger::warn("Validator", &format!("Quality audit detected {} potential sentence cut-offs.", issues.len()));
-        for (line_num, conjunction, snippet) in issues.iter().take(3) {
-            VoxLogger::warn("Validator", &format!("Line #{}: cut-off at '{}' -> Snippet: '{}'", line_num, conjunction, snippet));
-        }
     }
 
-    // 5. DOCX Generation
+    // 6. DOCX Generation
     VoxLogger::info("Builder", &format!("Building manuscript DOCX at: '{}'", out_str));
     build_docx_document(&processed, &output_path, &final_genre, title, subtitle)?;
 
