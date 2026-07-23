@@ -1,18 +1,22 @@
 <div align="center">
 
-# 📚 Vox2Book — Universal Neural API Literature Processing Pipeline
+# 🚀 Vox2Book AI — From Voice Recordings to Printed Books in Seconds
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?style=for-the-badge&logo=python)](https://www.python.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v3.0.0-green.svg?style=for-the-badge)](https://github.com/kir-spec/Vox2Book/releases)
-[![AI Gateway](https://img.shields.io/badge/AI_Gateway-LM_Studio%20%7C%20Ollama%20%7C%20OpenAI%20%7C%20Claude-0099FF.svg?style=for-the-badge)](https://github.com/kir-spec/Vox2Book)
+### *The Ultimate AI Engine for Turning Dictaphone Transcripts into Publishing-Ready Word Manuscripts*
 
-**Pure API Publishing Pipeline for Raw Voice Transcripts (Whisper STT), Manuscripts, and Book Formatting in DOCX.**
+[![Release](https://img.shields.io/badge/Release-v5.0.0%20Marketing%20Edition-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![AI Privacy](https://img.shields.io/badge/Privacy-100%25%20Offline%20%26%20Private-0099FF.svg?style=for-the-badge&logo=security)](https://lmstudio.ai)
+[![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
+[![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
+
+<br/>
+
+**Transform messy, unpunctuated voice transcripts (Whisper STT) and raw drafts into crisp, beautifully formatted printed books. Fully compatible with LM Studio, Ollama, OpenAI, DeepSeek, and Anthropic Claude.**
 
 ---
 
-### 🌐 Quick Navigation & Documentation
-[⚖️ **Project vs Prompt Comparison**](docs/PROJECT_VS_PROMPT.md) • [📂 **Project Directory Structure**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Latest Releases**](https://github.com/kir-spec/Vox2Book/releases)
+### 🌐 Quick Navigation & Product Guides
+[✨ **Why Vox2Book Beats Copy-Pasting Prompts**](docs/PROJECT_VS_PROMPT.md) • [📂 **Smart Workspace Layout**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Download Latest Release**](https://github.com/kir-spec/Vox2Book/releases)
 
 ---
 
@@ -21,88 +25,149 @@
 <br/>
 
 <details>
-<summary><strong>🇬🇧 English Documentation (Primary Language) — Click to Expand</strong></summary>
+<summary><strong>🇬🇧 English Overview (Primary Language) — Click to Expand</strong></summary>
 
 <br/>
 
-## 🎯 Executive Overview
+## 🔥 Why Authors, Creators & Editors Love Vox2Book AI
 
-Vox2Book is an automated API publishing engine powered by **Neural Network APIs** (LM Studio, Ollama, OpenAI, DeepSeek, Claude). It automatically reads input transcripts from `inputs/raw_texts/` and **saves all compiled DOCX manuscripts into `output/books/`**.
+Stop wasting hundreds of hours manually fixing unpunctuated dictaphone transcripts! **Vox2Book AI** acts as your personal automated publishing agency. It ingests raw speech monologues, runs them through a multi-stage virtual editorial board, cleans up technical jargon, applies publisher typography, and formats everything into a print-ready Word `.docx` manuscript.
 
 ---
 
-## 📂 Structured Workspace Layout
+## ⚡ 4 Game-Changing Features
+
+### 🎙️ 1. From Messy Voice Monologue to Structured Chapters
+Speak your thoughts naturally into any dictaphone or Whisper STT recorder. Vox2Book automatically detects sentence boundaries, removes filler words ("uh", "um", "you know"), organizes thoughts into logical paragraphs, and structures dialogues.
+
+### 🔒 2. 100% Private, Free & Offline AI Integration
+Keep your creative manuscripts completely confidential! Connect Vox2Book directly to local AI engines like **LM Studio** (`http://localhost:1234`) or **Ollama** (`http://localhost:11434`) running locally on your graphics card. No internet required, no subscription fees, no data leaks.
+
+### 🎨 3. Publishing-Grade Typography & Word Layouts
+Every compiled manuscript comes pre-formatted to professional book standards:
+* **Classic Fonts**: *Times New Roman* 12pt body text with 1.15 line spacing.
+* **Red-Line Indents**: Professional 18pt first-line paragraph indents.
+* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation (`из-за`, `из-под`, `всё-таки`).
+
+### 🧠 4. Automatic Dictaphone Jargon Purger
+Whisper STT frequently mishears technical terms. Vox2Book automatically detects and replaces dictaphone jargon:
+* `"те из бы"` / `"юсб"` ➔ `USB`
+* `"ссд"` ➔ `SSD-накопитель`
+* `"в стране джетал"` ➔ `Western Digital`
+* `"а дата"` ➔ `ADATA`
+* `"35 размер"` ➔ `3.5-дюймовый`
+
+---
+
+## ⚖️ Product Comparison: Vox2Book vs. Copy-Pasting Prompts in Web Chat
+
+| Feature | 📝 Web Chat Prompt (ChatGPT / Claude) | 🚀 Vox2Book AI Publishing Suite |
+| :--- | :--- | :--- |
+| **Output Document** | Raw text box response. Requires hours of manual copy-pasting and styling in Word. | **Instant Finished DOCX Manuscript**: Pre-styled Word document with book margins, indents, and headers. |
+| **Manuscript Length** | Gets choked and truncated by web character limits on 50+ page manuscripts. | **Unlimited Streaming Pipeline**: Automatically streams long manuscripts chunk by chunk without missing words. |
+| **Data Privacy** | Sends your private manuscripts to public cloud servers. | **100% Local & Private**: Runs completely offline with LM Studio or Ollama on your PC. |
+| **File Compatibility** | Fails or corrupts non-UTF8 files (Windows-1251 / CP1251). | **Universal Ingestion**: Automatically handles `.txt` (UTF-8, Windows-1251), `.docx`, `.md`, `.html`. |
+| **Output Directory** | Unorganized file saving. | **Automated Export**: All finished books are neatly organized in `output/books/`. |
+
+---
+
+## 📂 Project Directory Architecture
 
 ```ascii
 E:\coding\работа с литературой\
 ├── inputs/                      # 📥 INPUT DIRECTORIES
-│   ├── raw_texts/               # Raw text transcripts (.txt, .md, .docx, .html)
-│   └── audio/                   # Raw audio recordings (.ogg, .wav, .mp3, .m4a)
-├── output/                      # 📤 OUTPUT DIRECTORY FOR PRINT
-│   └── books/                   # ALWAYS saves formatted DOCX book manuscripts here!
-├── config.json                  # 🔑 API Gateway Config (OpenAI, DeepSeek, Claude, LM Studio, Ollama)
-└── run_api_pipeline.py          # 🚀 Main Neural API Publishing Script
+│   ├── raw_texts/               # Drop your text files & transcripts here (.txt, .md, .docx)
+│   └── audio/                   # Drop your raw audio files here (.mp3, .wav, .ogg)
+├── output/                      # 📤 OUTPUT DIRECTORY
+│   └── books/                   # ALWAYS saves finished DOCX book manuscripts here!
+├── config.json                  # 🔑 AI Gateway Settings (LM Studio, Ollama, OpenAI, DeepSeek, Claude)
+└── pipeline.py                  # 🚀 Multi-Stage Virtual Editorial Board Chain
 ```
-
----
-
-## 🚀 Execution Example
-
-```bash
-python run_api_pipeline.py inputs/raw_texts/my_transcript.txt
-```
-The output manuscript will be automatically generated at `output/books/my_transcript.docx`.
 
 </details>
 
 <br/>
 
 <details>
-<summary><strong>🇷🇺 Русская документация — Нажмите для раскрытия</strong></summary>
+<summary><strong>🇷🇺 Русская документация (Маркетинговый обзор) — Нажмите для раскрытия</strong></summary>
 
 <br/>
 
-## 🎯 Обзор проекта
+## 🔥 Почему авторы и блогеры выбирают Vox2Book AI
 
-Vox2Book — это чистый API-конвейер для вычистки устных монологов (Whisper STT) через нейросети (**LM Studio**, **Ollama**, **OpenAI**, **DeepSeek**, **Claude**) и **автоматического сохранения готовых книг в папку `output/books/`**.
-
----
-
-## 📂 Папки и выходной результат
-
-- **Все входные материалы**: хранятся в `inputs/raw_texts/`.
-- **Все готовые вычитанные книги**: автоматически сохраняются исключительно в **`output/books/`**.
+Забудьте о сотнях часов рутинной ручной расшифровки и редактирования монологов с диктофона! **Vox2Book AI** — это ваше личное автоматизированное литературное издательство. Программа берет сырой устный текст, проводит его через виртуальную редакцию, исправляет ошибки распознавания речи, расставляет книжную типографику и мгновенно выдает готовый макет книги в формате Word (`.docx`).
 
 ---
 
-## 🚀 Запуск вычистки через API
+## ⚡ 4 Ключевых преимущества проекта
 
-```bash
-python run_api_pipeline.py inputs/raw_texts/мой_текст.txt
+### 🎙️ 1. Из наговоренного аудио — в готовую печатную книгу
+Наговаривайте свои мысли на любой диктофон или распознаватель речи (Whisper STT). Vox2Book сам разобьет сплошной поток слов на логические главы, абзацы и диалоги, вырезав слова-паразиты («ну», «э-э», «как бы»).
+
+### 🔒 2. 100% Конфиденциально, Бесплатно и Оффлайн
+Сохраняйте полную конфиденциальность ваших книг! Vox2Book напрямую подключается к локальным нейросетям **LM Studio** (`http://localhost:1234`) и **Ollama** (`http://localhost:11434`), работающим на вашей видеокарте. Без интернета, подписок и утечек данных.
+
+### 🎨 3. Издательская типографика и макет Word
+Каждый готовый документ верстается по стандартам книгопечатания:
+* **Классические шрифты**: *Times New Roman 12pt*, межстрочный интервал 1.15.
+* **Красная строка**: Профессиональные отступы абзацев 18pt (0.5 дюйма).
+* **Типографика**: Автоматические книжные кавычки `«ёлочки»`, длинные тире ` — ` и дефисные частицы (`из-за`, `из-под`, `всё-таки`).
+
+### 🧠 4. Умный исправитель диктофонного сленга
+Whisper часто ошибается на технических терминах. Vox2Book автоматически распознает и исправляет оговорки:
+* `"те из бы"` ➔ `USB`
+* `"ссд"` ➔ `SSD-накопитель`
+* `"в стране джетал"` ➔ `Western Digital`
+* `"а дата"` ➔ `ADATA`
+* `"35 размер"` ➔ `3.5-дюймовый`
+
+---
+
+## ⚖️ Сравнение: Vox2Book AI vs. Копирование промптов в браузерный чат
+
+| Возможность | 📝 Копирование промпта в чат (ChatGPT / Claude) | 🚀 Издательский комплекс Vox2Book AI |
+| :--- | :--- | :--- |
+| **Итоговый документ** | Сырой текст в окне браузера. Требует часов ручной работы по копипасту и форматированию в Word. | **Готовый макет DOCX**: Завершенный файл книги с полями, шрифтами и красными строками. |
+| **Объем рукописи** | Обрезает текст на полуслове при обработке книг длиннее 50 страниц. | **Потоковая обработка без ограничений**: Автоматически обрабатывает рукописи любого объема. |
+| **Приватность** | Отправляет ваши личные тексты на внешние облачные сервера. | **100% Оффлайн**: Работает полностью локально через LM Studio или Ollama. |
+| **Поддержка кодировок** | Превращает в кракозябры файлы в кодировке Windows-1251 (CP1251). | **Любые файлы**: Распознает `.txt` (UTF-8, Windows-1251), `.docx`, `.md`, `.html`. |
+| **Сохранение результатов** | Файлы путаются или теряются в загрузках. | **Порядок в папках**: Все готовые книги автоматически сохраняются в `output/books/`. |
+
+---
+
+## 📂 Наглядная структура папок проекта
+
+```ascii
+E:\coding\работа с литературой\
+├── inputs/                      # 📥 ВХОДНЫЕ МАТЕРИАЛЫ
+│   ├── raw_texts/               # Положите сюда тексты и расшифровки (.txt, .md, .docx)
+│   └── audio/                   # Положите сюда аудиозаписи (.mp3, .wav, .ogg)
+├── output/                      # 📤 ВЫХОДНЫЕ МАТЕРИАЛЫ
+│   └── books/                   # СЮДА сохраняются готовые книги Word (.docx)
+├── config.json                  # 🔑 Настройки API (LM Studio, Ollama, OpenAI, DeepSeek, Claude)
+└── pipeline.py                  # 🚀 Цепочка виртуальных корректоров и фильтров
 ```
-
-Готовый макет книги сохраняется в: `output/books/мой_текст.docx`.
 
 </details>
 
 <br/>
 
 <details>
-<summary><strong>🇺🇦 Українська документація — Натисніть для розгортання</strong></summary>
+<summary><strong>🇺🇦 Українська документація (Маркетинговий огляд) — Натисніть для розгортання</strong></summary>
 
 <br/>
 
-## 🎯 Опис проекту
+## 🔥 Чому автори обирають Vox2Book AI
 
-Vox2Book — це чистий API-конвеєр для вичитування тексту через нейромережі (**LM Studio**, **Ollama**, **OpenAI**, **DeepSeek**, **Claude**) з **автоматичним збереженням готових макетів книг у папку `output/books/`**.
+Забудьте про сотні годин рутинного редагування монологів з диктофона! **Vox2Book AI** — це ваше особисте автоматизоване видавництво. Програма бере сирий аудіо-текст, проводить його через віртуальну редакцію, виправляє помилки розпізнавання мовлення, застосовує типографіку та зберігає готовий макет книги Word (`.docx`).
 
 ---
 
-## 🚀 Запуск через API
+## ⚡ 4 Ключові переваги
 
-```bash
-python run_api_pipeline.py inputs/raw_texts/my_text.txt
-```
-Готовий макет зберігається у: `output/books/my_text.docx`.
+1. **Від диктофона до книги**: Автоматичний поділ на розділи, абзаци та діалоги.
+2. **100% Конфіденційно та Оффлайн**: Робота через **LM Studio** та **Ollama** без інтернету.
+3. **Видавнича типографіка**: Книжкові лапки `«...»`, довгі тире ` — ` та шрифти Word.
+4. **Авто-збереження в `output/books/`**: Усі готові книги автоматично зберігаються у папку `output/books/`.
 
 </details>
