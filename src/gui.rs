@@ -1,21 +1,18 @@
 use eframe::egui;
 use rfd::FileDialog;
 use std::path::PathBuf;
+use crate::config::AppConfig;
 use crate::models::{Genre, LiteratureElement};
 use crate::process_literature_project;
 use crate::logger::VoxLogger;
-
-#[derive(PartialEq, Clone, Debug)]
-pub enum AiProvider {
-    OllamaLocal,
-    OfflineEngine,
-}
 
 pub struct Vox2BookApp {
     input_path: String,
     output_path: String,
     genre: Genre,
-    ai_provider: AiProvider,
+    api_provider: String,
+    api_key: String,
+    model_name: String,
     title: String,
     subtitle: String,
     status_message: String,
@@ -28,14 +25,17 @@ pub struct Vox2BookApp {
 
 impl Default for Vox2BookApp {
     fn default() -> Self {
+        let config = AppConfig::load_or_default("config.json");
         Self {
             input_path: String::new(),
             output_path: String::new(),
             genre: Genre::Auto,
-            ai_provider: AiProvider::OllamaLocal,
-            title: String::new(),
-            subtitle: String::new(),
-            status_message: "Готово к работе. Выберите файл или введите текст.".to_string(),
+            api_provider: config.api_provider,
+            api_key: config.api_key,
+            model_name: config.model,
+            title: config.title,
+            subtitle: config.subtitle,
+            status_message: "Готово к работе. Выберите файл для вычистки.".to_string(),
             is_success: false,
             processed_elements: Vec::new(),
             last_saved_path: None,
@@ -78,6 +78,21 @@ impl Vox2BookApp {
         self.is_success = false;
         VoxLogger::info("GUI", &format!("Selected input path: {:?}", path));
     }
+
+    fn save_current_config(&self) {
+        let cfg = AppConfig {
+            api_provider: self.api_provider.clone(),
+            api_key: self.api_key.clone(),
+            model: self.model_name.clone(),
+            ollama_url: "http://localhost:11434".to_string(),
+            genre: self.genre.to_string(),
+            title: self.title.clone(),
+            subtitle: self.subtitle.clone(),
+        };
+        if let Ok(json_str) = serde_json::to_string_pretty(&cfg) {
+            let _ = std::fs::write("config.json", json_str);
+        }
+    }
 }
 
 impl eframe::App for Vox2BookApp {
@@ -116,14 +131,14 @@ impl eframe::App for Vox2BookApp {
                                 .color(egui::Color32::from_rgb(0, 153, 255)),
                         );
                         ui.label(
-                            egui::RichText::new("v2.1.0 (Hybrid AI & Rust)")
+                            egui::RichText::new("v2.3.1 (API Gateway)")
                                 .size(11.0)
                                 .strong()
                                 .color(egui::Color32::from_rgb(229, 169, 60)),
                         );
                     });
                     ui.label(
-                        egui::RichText::new("Универсальный ИИ-комплекс вычистки устной речи и верстки книг в DOCX")
+                        egui::RichText::new("Шлюз нейросетей (OpenAI, DeepSeek, Claude, Ollama) и верстальщик книг")
                             .size(12.0)
                             .color(egui::Color32::from_rgb(156, 163, 175)),
                     );
@@ -134,7 +149,55 @@ impl eframe::App for Vox2BookApp {
             ui.separator();
             ui.add_space(6.0);
 
-            // 1. File Input Drop Zone
+            // 1. Neural API Connection Settings Card
+            ui.group(|ui| {
+                ui.label(egui::RichText::new("🔑 Подключение к Нейросети и API Ключи:").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                ui.add_space(4.0);
+
+                ui.horizontal(|ui| {
+                    ui.label("Провайдер API:");
+                    if ui.selectable_label(self.api_provider == "openai", "OpenAI (GPT-4o)").clicked() {
+                        self.api_provider = "openai".to_string();
+                        self.model_name = "gpt-4o-mini".to_string();
+                        self.save_current_config();
+                    }
+                    if ui.selectable_label(self.api_provider == "deepseek", "DeepSeek API").clicked() {
+                        self.api_provider = "deepseek".to_string();
+                        self.model_name = "deepseek-chat".to_string();
+                        self.save_current_config();
+                    }
+                    if ui.selectable_label(self.api_provider == "anthropic", "Claude API").clicked() {
+                        self.api_provider = "anthropic".to_string();
+                        self.model_name = "claude-3-5-sonnet-20240620".to_string();
+                        self.save_current_config();
+                    }
+                    if ui.selectable_label(self.api_provider == "ollama", "Ollama (Локально)").clicked() {
+                        self.api_provider = "ollama".to_string();
+                        self.model_name = "llama3".to_string();
+                        self.save_current_config();
+                    }
+                });
+
+                ui.add_space(4.0);
+
+                if self.api_provider != "ollama" {
+                    egui::Grid::new("api_key_grid").num_columns(2).spacing([10.0, 4.0]).show(ui, |ui| {
+                        ui.label("API Ключ:");
+                        let mut key_edit = self.api_key.clone();
+                        if ui.add_sized([ui.available_width(), 24.0], egui::TextEdit::singleline(&mut key_edit).password(true).hint_text("Вставьте API Ключ (sk-...)")).changed() {
+                            self.api_key = key_edit;
+                            self.save_current_config();
+                        }
+                        ui.end_row();
+                    });
+                } else {
+                    ui.label(egui::RichText::new("🌐 Адрес подключения Ollama: http://localhost:11434 (Ключ не требуется)").size(11.5).color(egui::Color32::from_rgb(16, 185, 129)));
+                }
+            });
+
+            ui.add_space(6.0);
+
+            // 2. File Input Drop Zone
             egui::Frame::none()
                 .fill(egui::Color32::from_rgb(21, 28, 40))
                 .rounding(egui::Rounding::same(8.0))
@@ -160,20 +223,7 @@ impl eframe::App for Vox2BookApp {
                     );
                 });
 
-            ui.add_space(8.0);
-
-            // 2. AI Mode Selector Card
-            ui.group(|ui| {
-                ui.label(egui::RichText::new("Режим вычистки и нейросети (AI Engine):").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
-                ui.add_space(4.0);
-
-                ui.horizontal(|ui| {
-                    ui.selectable_value(&mut self.ai_provider, AiProvider::OllamaLocal, "🤖 Локальный ИИ (Ollama / Llama3)");
-                    ui.selectable_value(&mut self.ai_provider, AiProvider::OfflineEngine, "⚡ Автономный движок (Без ИИ - Мгновенно)");
-                });
-            });
-
-            ui.add_space(8.0);
+            ui.add_space(6.0);
 
             // 3. Genre Selector Cards
             ui.group(|ui| {
@@ -189,14 +239,14 @@ impl eframe::App for Vox2BookApp {
                 });
             });
 
-            ui.add_space(8.0);
+            ui.add_space(6.0);
 
             // 4. Metadata Settings
             ui.group(|ui| {
                 ui.label(egui::RichText::new("Настройки книги и экспорта:").size(13.0).strong().color(egui::Color32::from_rgb(16, 185, 129)));
                 ui.add_space(4.0);
 
-                egui::Grid::new("meta_grid").num_columns(2).spacing([12.0, 6.0]).show(ui, |ui| {
+                egui::Grid::new("meta_grid").num_columns(2).spacing([12.0, 4.0]).show(ui, |ui| {
                     ui.label("Название книги:");
                     ui.add_sized([ui.available_width(), 24.0], egui::TextEdit::singleline(&mut self.title).hint_text("Необязательно"));
                     ui.end_row();
@@ -220,20 +270,22 @@ impl eframe::App for Vox2BookApp {
                 });
             });
 
-            ui.add_space(12.0);
+            ui.add_space(10.0);
 
             // 5. Action Button
             ui.vertical_centered(|ui| {
                 let btn = egui::Button::new(
-                    egui::RichText::new("🚀 ВЫЧИТАТЬ ТЕКСТ И СФОРМИРОВАТЬ МАКЕТ DOCX")
+                    egui::RichText::new("🚀 ВЫЧИТАТЬ ЧЕРЕЗ API И СФОРМИРОВАТЬ МАКЕТ DOCX")
                         .size(15.0)
                         .strong()
                         .color(egui::Color32::WHITE),
                 )
                 .fill(egui::Color32::from_rgb(0, 120, 255))
-                .min_size(egui::vec2(380.0, 44.0));
+                .min_size(egui::vec2(400.0, 42.0));
 
                 if ui.add(btn).clicked() {
+                    self.save_current_config();
+
                     if self.input_path.trim().is_empty() {
                         self.status_message = "❌ Ошибка: Пожалуйста, выберите входной файл!".to_string();
                         self.is_success = false;
@@ -258,7 +310,7 @@ impl eframe::App for Vox2BookApp {
                             Ok(elements) => {
                                 self.processed_elements = elements.clone();
                                 self.last_saved_path = Some(out_p.clone());
-                                self.status_message = format!("✅ Успешно вычитано и отформатировано! Элементов: {}. Сохранено: {:?}", elements.len(), out_p);
+                                self.status_message = format!("✅ Успешно обработано через {}! Элементов: {}. Сохранено: {:?}", self.api_provider, elements.len(), out_p);
                                 self.is_success = true;
                                 self.show_preview = true;
                             }
@@ -271,7 +323,7 @@ impl eframe::App for Vox2BookApp {
                 }
             });
 
-            ui.add_space(8.0);
+            ui.add_space(6.0);
 
             // 6. Status Banner
             let banner_color = if self.is_success {
@@ -318,18 +370,18 @@ impl eframe::App for Vox2BookApp {
 
             // 7. Preview Panel
             if self.show_preview && !self.processed_elements.is_empty() {
-                ui.add_space(6.0);
+                ui.add_space(4.0);
                 egui::Frame::none()
                     .fill(egui::Color32::from_rgb(18, 24, 34))
                     .rounding(egui::Rounding::same(8.0))
                     .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(0, 153, 255)))
                     .inner_margin(egui::Margin::same(8.0))
                     .show(ui, |ui| {
-                        ui.label(egui::RichText::new("🔍 Результаты обработки (До → После):").size(12.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
-                        ui.add_space(4.0);
+                        ui.label(egui::RichText::new("🔍 Результаты обработки через API (До → После):").size(12.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                        ui.add_space(2.0);
 
                         egui::ScrollArea::vertical()
-                            .max_height(110.0)
+                            .max_height(100.0)
                             .auto_shrink([false, false])
                             .show(ui, |ui| {
                                 for (idx, elem) in self.processed_elements.iter().enumerate().take(8) {
@@ -350,7 +402,7 @@ impl eframe::App for Vox2BookApp {
 
             // 8. Logs Panel
             if self.show_logs {
-                ui.add_space(6.0);
+                ui.add_space(4.0);
                 egui::Frame::none()
                     .fill(egui::Color32::from_rgb(10, 14, 20))
                     .rounding(egui::Rounding::same(6.0))
@@ -361,7 +413,7 @@ impl eframe::App for Vox2BookApp {
                         ui.add_space(2.0);
 
                         egui::ScrollArea::vertical()
-                            .max_height(100.0)
+                            .max_height(90.0)
                             .auto_shrink([false, false])
                             .show(ui, |ui| {
                                 for entry in VoxLogger::get_logs() {
@@ -384,14 +436,14 @@ impl eframe::App for Vox2BookApp {
 pub fn run_gui() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_title("Vox2Book — Universal Literature Engine")
-            .with_inner_size([690.0, 610.0])
-            .with_min_inner_size([600.0, 520.0]),
+            .with_title("Vox2Book — API Gateway & Literature Publishing Engine")
+            .with_inner_size([720.0, 640.0])
+            .with_min_inner_size([650.0, 540.0]),
         ..Default::default()
     };
 
     eframe::run_native(
-        "Vox2Book — Universal Literature Engine",
+        "Vox2Book — API Gateway & Literature Publishing Engine",
         options,
         Box::new(|cc| Box::new(Vox2BookApp::new(cc))),
     )
