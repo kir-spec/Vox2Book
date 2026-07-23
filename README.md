@@ -2,10 +2,11 @@
 
 [![Rust](https://img.shields.io/badge/Rust-1.75%2B-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v2.2.0-green.svg)](https://github.com/kir-spec/Vox2Book/releases)
+[![Release](https://img.shields.io/badge/release-v2.5.0-green.svg)](https://github.com/kir-spec/Vox2Book/releases)
 
 Vox2Book — это универсальный издательский комплекс нового поколения, созданный на **Rust** и интегрированный с **нейросетевыми промптами (LLM Master Prompts)** для превращения сырых устных расшифровок аудиозаписей (Whisper STT) и обычных текстов в вычитанные книги и печатные макеты в формате **DOCX**.
 
+⚖️ **В чём разница между использованием «Просто Промпта» и Проектом Vox2Book?**: [docs/PROJECT_VS_PROMPT.md](docs/PROJECT_VS_PROMPT.md)  
 📂 **Структура проекта и руководство по работе в IDE (Antigravity / Cursor / VS Code)**: [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)  
 📖 **Подробное руководство пользователя по всем режимам**: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
 
@@ -25,10 +26,20 @@ E:\coding\работа с литературой\
 ├── prompts/                     # 🧠 ИИ-ПРОМПТЫ И ОБУЧАЮЩИЕ ИНСТРУКЦИИ
 │   └── MASTER_LLM_PROMPT.md    # Мастер-промпт главного редактора для нейросетей
 │
-├── config.json                  # 🔑 Настройка ключей API (OpenAI, DeepSeek, Claude, Ollama)
+├── config.json                  # 🔑 Настройка ключей API (OpenAI, DeepSeek, Claude, LM Studio, Ollama)
 ├── run_api_pipeline.py          # 🚀 Быстрый запуск вычистки через API
 └── vox2book.exe                 # 🚀 Исполняемый графический и CLI файл проекта
 ```
+
+---
+
+<details>
+<summary><strong>⚖️ В чём разница между «Просто Промптом» и Проектом Vox2Book?</strong></summary>
+
+- **Просто Промпт в чате**: Выдает сырой текст в окне браузера. Вам нужно вручную копировать его, вставлять в Word, настраивать шрифты, отступы и исправлять кавычки. Большие книги нейросеть обрезает из-за лимита длины.
+- **Проект Vox2Book**: Автоматически считывает любые файлы/папки, вычитывает через нейросети (LM Studio, Ollama, OpenAI, DeepSeek, Claude), выполняет книжную типографику (`«...»`, ` — `) и мгновенно создает готовый макет книги Word (`.docx`).
+
+</details>
 
 ---
 
@@ -49,23 +60,8 @@ E:\coding\работа с литературой\
 <details>
 <summary><strong>🇬🇧 English Documentation</strong></summary>
 
-### Workspace Setup (Antigravity IDE / Cursor / VS Code)
-1. Open your IDE and select `File` -> `Open Folder...` -> `E:\coding\работа с литературой`.
-2. Put input text files into `inputs/raw_texts/` and audio into `inputs/audio/`.
-3. Configure `config.json` with your preferred AI provider (`openai`, `deepseek`, `anthropic`, `ollama`).
-4. Run `python run_api_pipeline.py` or launch `vox2book.exe`. Output manuscripts are saved in `output/books/`.
-
-</details>
-
----
-
-<details>
-<summary><strong>🇺🇦 Українська документація</strong></summary>
-
-### Налаштування середовища (Antigravity IDE / Cursor / VS Code)
-1. Відкрийте папку проекту `E:\coding\работа с литературой` в IDE.
-2. Покладіть вхідні файли у папку `inputs/raw_texts/`.
-3. Налаштуйте `config.json` та запустіть `python run_api_pipeline.py` або `vox2book.exe`.
-4. Готові макети книг збережуться у папці `output/books/`.
+### Why Vox2Book vs Just a Prompt?
+Read our detailed comparison guide: [docs/PROJECT_VS_PROMPT.md](docs/PROJECT_VS_PROMPT.md).
+Vox2Book automates multi-encoding file reading, context streaming, typography cleanup (`«...»`, ` — `), and Word XML layout compilation into finished `.docx` book manuscripts.
 
 </details>
