@@ -1,1 +1,0 @@
-# Typography package initialization

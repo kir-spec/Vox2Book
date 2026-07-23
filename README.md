@@ -1,25 +1,25 @@
 <div align="center">
 
-# 📚 Vox2Book — Universal Literature & Publishing Engine
+# 📚 Vox2Book — Universal Literature & Publishing Engine (Rust Edition)
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Rust 1.75+](https://img.shields.io/badge/rust-1.75+-orange.svg)](https://www.rust-lang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code Style: Rustfmt](https://img.shields.io/badge/code%20style-rustfmt-000000.svg)](https://github.com/rust-lang/rustfmt)
 
 <p align="center">
-  <b>Vox2Book</b> is an advanced, multi-genre literature processing, proofreading, and automated book publishing engine.
+  <b>Vox2Book</b> is a high-performance, multi-genre literature processing, proofreading, and automated book publishing engine written in pure <b>Rust</b>.
   <br>
-  It transforms raw voice transcriptions, chat logs, prose, poetry, and plays into publication-ready <b>DOCX</b> manuscripts.
+  It transforms raw voice transcriptions, prose, poetry, and plays into publication-ready <b>DOCX</b> manuscripts with zero dependencies.
 </p>
+
+</div>
 
 ---
 
 ### 🌐 Select Language / Выберите язык / Оберіть мову
 
 [**English Documentation**](#1-english-documentation) &nbsp;•&nbsp; [**Русская документация**](#2-русскоязычная-документация) &nbsp;•&nbsp; [**Українська документація**](#3-українськомовна-документація)
-
-</div>
 
 ---
 
@@ -32,9 +32,9 @@
 
 ### Overview
 
-**Vox2Book** is an enterprise-grade Python software engine designed for comprehensive literary processing, text cleanup, publishing typography, quality auditing, and DOCX document generation. 
+**Vox2Book** is a high-speed Rust software engine designed for comprehensive literary processing, text cleanup, publishing typography, quality auditing, and DOCX document generation. 
 
-Whether you are converting raw Speech-to-Text (STT) voice transcriptions, multi-speaker messenger exports (Telegram HTML), classic fiction novels, poetic stanzas, or theatrical plays, **Vox2Book** automatically analyzes, cleanses, formats, and builds beautifully styled manuscripts.
+Built as a single standalone executable (`vox2book.exe`), it requires **no Python interpreter, no external dependencies, and no installation**.
 
 ---
 
@@ -44,25 +44,19 @@ Whether you are converting raw Speech-to-Text (STT) voice transcriptions, multi-
    - **`prose` (Fiction, Non-fiction, Novels)**: Chapter detection (`Chapter 1`, `Part I`), dialogue dashes (`—`), 18pt first-line paragraph indents, Times New Roman 12pt styling.
    - **`poetry` (Poetry, Rhymes, Verse)**: Stanza preservation, metric line breaks, 36pt stanza indents, Georgia 11.5pt styling without paragraph gaps.
    - **`drama` (Plays, Scripts, Theatre)**: Character names in bold uppercase (`AUTHOR.`, `CHARACTER.`), stage directions in italics/brackets `(...)`, Arial 11pt styling.
-   - **`dialogue` (Voice Transcriptions, Interviews, Chat Chronicles)**: Chronological calendar day headers (`📅 19 January`), stateful speaker attribution, color-coded speaker styling, metadata time tags (`[18:29] [Voice]:`).
+   - **`dialogue` (Voice Transcriptions, Interviews, Chat Chronicles)**: Chronological calendar day headers (`📅 19 January`), stateful speaker attribution, color-coded speaker styling.
    - **`academic` (Articles, Essays, Research Papers)**: Hierarchical H1/H2/H3 headings, double/1.5 line spacing, Times New Roman 12pt.
    - **`auto`**: Intelligent auto-detection of literature genre based on text syntax and line density.
 
-2. **Stateful Speaker Attribution Engine**:
-   - Maintains continuous speaker state tracking across joined message blocks in Telegram HTML exports (where consecutive messages omit explicit sender names).
-   - Accurately maps profiles using custom `--speaker-map` with zero attribution loss.
+2. **3 Flexible Launch Modes**:
+   - 🖱️ **Drag-and-Drop**: Drag any `.txt`, `.md`, or folder onto `vox2book.exe` to instantly generate `book.docx`.
+   - 💬 **Interactive Assistant**: Double-click `vox2book.exe` to open an interactive CLI wizard.
+   - ⚡ **Command Line Interface**: `vox2book.exe --input "novel.txt" --genre prose --output "novel.docx"`.
 
-3. **8-Stage Publishing Audit & Cleanup Pipeline**:
-   - **Orthography Audit**: Hyphenated particles (`-то`, `-нибудь`, `всё-таки`, `из-за`), separate spelling of introductory phrases.
-   - **Punctuation Audit**: Russian guillemets (`«...»`), em-dashes (` — `), conjunction comma placement.
-   - **Syntax & Stream-of-Consciousness Restructuring**: Splits unpunctuated continuous oral speech into clear, grammatically complete sentences.
-   - **Brand & Proper Name Protection**: White-list protection for technical terms, audio gear, and software (*Telegram, Windows, Apple, iPad, iPhone, YouTube, Audient, Yamaha, Edifier, LitRes, Spotify, Deezer, XLR*).
-   - **STT Noise & Hallucination Purger**: Eliminates Whisper hallucinations (*Quiz河, quero..., göra, sings, DimaTorzok*), removes UI artifacts (*"Send.", "Screen reader..."*), corrects phonetic STT glitches (*"пахевизм" → "пофигизм"*).
-   - **Terminal Cut-off Control (`check_cuts`)**: Prevents sentences from abruptly ending on conjunctions/prepositions.
-   - **Gender Agreement**: Validates past-tense verb endings per speaker gender.
-
-4. **1000+ Automated Scenario Test Suite**:
-   - Full test coverage included in `tests/test_universal_pipeline.py`.
+3. **High-Speed Rust Audit & Cleanup Pipeline**:
+   - **Orthography & Typography**: Guillemets (`«...»`), em-dashes (` — `), hyphenated particles (`-то`, `-нибудь`, `всё-таки`, `из-за`).
+   - **STT Noise & Hallucination Purger**: Fast regex purification removing Whisper hallucinations (*Quiz河, quiero..., göra, sings*).
+   - **Terminal Cut-off Control (`check_cuts`)**: Sentences cut-off prevention.
 
 ---
 
@@ -71,65 +65,45 @@ Whether you are converting raw Speech-to-Text (STT) voice transcriptions, multi-
 ```
 Vox2Book/
 ├── README.md                          # Trilingual documentation
-├── requirements.txt                   # Dependencies (python-docx, beautifulsoup4)
-├── config.py                          # Global configuration, genre presets, white-lists
-├── run_pipeline.py                    # Main CLI & API entry point
-├── pipeline/                          # Core engine package
-│   ├── engine.py                      # Master Orchestration Pipeline
-│   ├── extractors/                    # Multi-format Input Extractors
-│   │   ├── auto_extractor.py          # Auto-detects input file formats
-│   │   ├── telegram_html.py           # Messenger HTML export parser
-│   │   └── text_reader.py             # Plain Text, Markdown & Book parser
-│   ├── cleaners/                      # Spam & Noise Purification
-│   ├── editors/                       # Genre Literary Editors & Typography
-│   │   ├── prose_editor.py            # Fiction & Prose Processor
-│   │   ├── poetry_editor.py           # Verse & Stanza Processor
-│   │   ├── drama_editor.py            # Play & Script Processor
-│   │   └── typography.py              # Russian Typography Engine
-│   ├── validators/                    # Quality & Cut-off Auditors
-│   │   └── quality_validator.py       # Sentence integrity & check_cuts
-│   └── builders/                      # Layout Generators
-│       └── docx_builder.py            # Multi-genre DOCX Builder
-└── tests/                             # Automated Test Suite
-    └── test_universal_pipeline.py
+├── Cargo.toml                         # Rust package manifest & dependencies
+├── Cargo.lock                         # Locked dependency versions
+├── src/                               # Core Rust engine
+│   ├── main.rs                        # CLI, Drag-and-Drop & Prompt Entry
+│   ├── lib.rs                         # Library entry point
+│   ├── config.rs                      # Genre presets & typography patterns
+│   ├── models.rs                      # Literature data structures
+│   ├── extractors/                    # File readers & genre auto-detector
+│   ├── cleaners/                      # Spam & STT purger
+│   ├── editors/                       # Typography & genre editors
+│   ├── validators/                    # Quality auditors
+│   └── builders/                      # DOCX manuscript builder (docx-rs)
+├── tests/                             # Rust test suite (cargo test)
+│   └── universal_rust_tests.rs
+└── archive/                           # Archived legacy Python implementation
+    └── python_legacy_v1.zip
 ```
 
 ---
 
 ### Installation & Usage
 
-#### 1. Installation
+#### 1. Build from Source
 ```bash
 git clone https://github.com/kir-spec/Vox2Book.git
 cd Vox2Book
-pip install -r requirements.txt
+cargo build --release
 ```
 
 #### 2. CLI Execution Examples
-
-- **Process a Book / Novel (Prose Mode)**:
-  ```bash
-  python run_pipeline.py --input "novel.txt" --genre prose --title "My Novel" --output "output/novel.docx"
-  ```
-
-- **Process a Poetry Collection (Poetry Mode)**:
-  ```bash
-  python run_pipeline.py --input "poems.txt" --genre poetry --title "Selected Poems" --output "output/poems.docx"
-  ```
-
-- **Process a Play / Script (Drama Mode)**:
-  ```bash
-  python run_pipeline.py --input "script.txt" --genre drama --title "Three-Act Play" --output "output/play.docx"
-  ```
-
-- **Process Messenger & STT Dialogue Chronicles**:
-  ```bash
-  python run_pipeline.py --input "chat_export/" --genre dialogue --title "Oral Chronicle" --output "output/dialogues.docx"
-  ```
-
-#### 3. Run Automated Unit Tests
 ```bash
-python -m unittest discover -s tests
+# Process a Novel (Prose Mode)
+./target/release/vox2book --input "novel.txt" --genre prose --output "novel.docx"
+
+# Process a Poetry Collection
+./target/release/vox2book --input "poems.txt" --genre poetry --output "poems.docx"
+
+# Run Test Suite
+cargo test
 ```
 
 </details>
@@ -145,71 +119,43 @@ python -m unittest discover -s tests
 
 ### Обзор проекта
 
-**Vox2Book** — профессиональный программный комплекс и универсальный литературно-издательский конвейер на языке Python. Движок предназначен для автоматической обработки, вычистки, типографики, аудита качества и генерации готовых печатных макетов книг в формате **DOCX**.
+**Vox2Book** — высокопроизводительный программный комплекс и универсальный литературно-издательский конвейер на языке **Rust**. Движок предназначен для автоматической обработки, вычистки, типографики, аудита качества и генерации готовых печатных макетов книг в формате **DOCX**.
 
-**Vox2Book** одинаково успешно работает с надиктованными голосовыми расшифровками (Speech-to-Text), логами мессенджеров (Telegram HTML), художественной прозой, поэзией, драматургией и академическими статьями.
+Скомпилирован в **один автономный исполняемый файл (`vox2book.exe`)**, не требующий Python, библиотек или установки.
 
 ---
 
 ### Архитектурные возможности ядра
 
 1. **Многожанровая обработка литературы (`--genre`)**:
-   - **`prose` (Проза, романы, повествования)**: автоматическое выявление глав (`Глава 1`, `Часть I`), оформление диалогов с тире (`—`), абзацные отступы 18pt, гарнитура *Times New Roman 12pt*.
-   - **`poetry` (Поэзия, сборники стихотворений)**: сохранение строф, стихотворного размера, рифмовки, левый отступ строф 36pt, гарнитура *Georgia 11.5pt* без межстрочных разрывов.
-   - **`drama` (Драматургия, пьесы, сценарии)**: имена персонажей прописными жирными буквами (`АВТОР.`, `ПЕРСОНАЖ.`), ремарки в скобках курсивом `(...)`, гарнитура *Arial 11pt*.
-   - **`dialogue` (Устные транскрибации, диалоги, интервью)**: хронологические метки дат (`📅 19 января`), привязка авторов, цветовое разделение спикеров, метаданные времени (`[18:29] [Голосовое]:`).
+   - **`prose` (Проза, романы, повествования)**: выявление глав (`Глава 1`, `Часть I`), оформление диалогов с тире (`—`), абзацные отступы 18pt, *Times New Roman 12pt*.
+   - **`poetry` (Поэзия, сборники стихотворений)**: сохранение строф, стихотворного размера, рифмовки, левый отступ 36pt, *Georgia 11.5pt*.
+   - **`drama` (Драматургия, пьесы, сценарии)**: имена персонажей прописными жирными буквами (`АВТОР.`, `ПЕРСОНАЖ.`), ремарки в скобках курсивом, *Arial 11pt*.
+   - **`dialogue` (Устные транскрибации, диалоги, интервью)**: хронологические метки дат (`📅 19 января`), привязка авторов, цветовое разделение спикеров.
    - **`academic` (Статьи, эссе, научные работы)**: иерархические заголовки H1/H2/H3, межстрочный интервал 1.5, *Times New Roman 12pt*.
-   - **`auto`**: интеллектуальное автоопределение жанра на основе структуры текста.
 
-2. **Сквозное отслеживание состояния спикеров (`Stateful Tracking`)**:
-   - Корректная обработка объединённых (`joined`) сообщений в экспортах Telegram HTML (где у последовательных сообщений одного автора отсутствует явный заголовок имени).
-   - Точная гибкая привязка профилей с помощью параметра `--speaker-map` без потери данных.
-
-3. **Обязательный 8-этапный издательский аудит**:
-   - **Орфография**: дефисное написание частиц (`-то`, `-нибудь`, `всё-таки`, `из-за`), раздельное написание вводных слов (`в общем`, `то есть`, `вряд ли`).
-   - **Типографика**: кавычки-ёлочки (`«...»`), длинное тире (` — `), коррекция знаков препинания.
-   - **Синтаксис монологов**: разбор сплошного устного потока речи без точек на законченные предложения.
-   - **Белые списки брендов и имён**: защита технических терминов и брендов (*Telegram, Windows, Apple, iPad, iPhone, YouTube, Audient, Yamaha, Edifier, LitRes, Spotify, Deezer, XLR*).
-   - **Очистка шумов STT и галлюцинаций**: удаление артефактов Whisper (*Quiz河, quero..., göra, sings, DimaTorzok*), удаление дикторских меток (*"Отправить.", "Экранный диктор..."*), коррекция опечаток STT (*"пахевизм" → "пофигизм"*).
-   - **Контроль обрывов фраз (`check_cuts`)**: пресечение обрывов предложений на союзах и предлогах.
-   - **Гендерное согласование**: проверка окончаний глаголов прошедшего времени по полу спикера.
+2. **3 удобных режима запуска**:
+   - 🖱️ **Drag-and-Drop**: перетаскивание любого файла мышкой прямо на `vox2book.exe`.
+   - 💬 **Интерактивный помощник**: при обычном двойном клике откроется удобное меню.
+   - ⚡ **Консоль**: `vox2book.exe --input "роман.txt" --genre prose --output "роман.docx"`.
 
 ---
 
-### Варианты запуска
+### Структура проекта
 
-#### 1. Установка
-```bash
-git clone https://github.com/kir-spec/Vox2Book.git
-cd Vox2Book
-pip install -r requirements.txt
+```
+Vox2Book/
+├── README.md                          # Документация на трех языках
+├── Cargo.toml                         # Спецификация Rust
+├── src/                               # Исходный код Rust ядра
+├── tests/                             # Автоматические тесты (cargo test)
+└── archive/                           # Архив наследуемой Python версии
+    └── python_legacy_v1.zip
 ```
 
-#### 2. Команды запуска
-
-- **Обработка книги / романов (Проза)**:
-  ```bash
-  python run_pipeline.py --input "роман.txt" --genre prose --title "Мой Роман" --output "output/роман.docx"
-  ```
-
-- **Обработка поэтического сборника (Поэзия)**:
-  ```bash
-  python run_pipeline.py --input "стихи.txt" --genre poetry --title "Сборник стихов" --output "output/стихи.docx"
-  ```
-
-- **Обработка пьесы (Драматургия)**:
-  ```bash
-  python run_pipeline.py --input "пьеса.txt" --genre drama --title "Пьеса" --output "output/пьеса.docx"
-  ```
-
-- **Обработка хроник мессенджеров и транскрибаций**:
-  ```bash
-  python run_pipeline.py --input "чат_экспорт/" --genre dialogue --title "Устная хроника" --output "output/диалоги.docx"
-  ```
-
-#### 3. Запуск автоматических тестов
+#### Запуск автотестов
 ```bash
-python -m unittest discover -s tests
+cargo test
 ```
 
 </details>
@@ -225,71 +171,28 @@ python -m unittest discover -s tests
 
 ### Огляд проєкту
 
-**Vox2Book** — професійний програмний комплекс та універсальний літературно-видавничий конвеєр мовою Python. Двигун призначений для автоматичної обробки, вичитки, типографіки, аудиту якості та генерації готових друкованих макетів книг у форматі **DOCX**.
+**Vox2Book** — високопродуктивний програмний комплекс та універсальний літературно-видавничий конвеєр мовою **Rust**. Двигун призначений для автоматичної обробки, вичитки, типографіки, аудиту якості та генерації готових друкованих макетів книг у форматі **DOCX**.
 
-**Vox2Book** однаково успішно працює з надиктованими голосовими розшифровками (Speech-to-Text), логами месенджерів (Telegram HTML), художньою прозою, поезією, драматургією та академічними статтями.
-
----
-
-### Архітектурні можливості ядра
-
-1. **Багатожанрова обробка літератури (`--genre`)**:
-   - **`prose` (Проза, романи, повісті)**: автоматичне виявлення розділів (`Глава 1`, `Частина I`), оформлення діалогів із тире (`—`), абзацні відступи 18pt, гарнітура *Times New Roman 12pt*.
-   - **`poetry` (Поезія, збірки віршів)**: збереження строф, віршованого розміру, римування, лівий відступ строф 36pt, гарнітура *Georgia 11.5pt* без міжрядкових розривів.
-   - **`drama` (Драматургія, п'єси, сценарії)**: імена персонажів великими жирними літерами (`АВТОР.`, `ПЕРСОНАЖ.`), ремарки в дужках курсивом `(...)`, гарнітура *Arial 11pt*.
-   - **`dialogue` (Усні транскрипції, діалоги, інтерв'ю)**: хронологічні позначки дат (`📅 19 січня`), прив'язка авторів, колірний поділ спікерів, метадані часу (`[18:29] [Голосовое]:`).
-   - **`academic` (Статті, есе, наукові праці)**: ієрархічні заголовки H1/H2/H3, міжрядковий інтервал 1.5, *Times New Roman 12pt*.
-   - **`auto`**: інтелектуальне автовизначення жанру на основі структури тексту.
-
-2. **Наскрізне відстеження стану спікерів (`Stateful Tracking`)**:
-   - Коректна обробка об'єднаних (`joined`) повідомлень в експортах Telegram HTML (де у послідовних повідомленнях одного автора відсутній явлений заголовок імені).
-   - Точна прив'язка профілів за допомогою параметра `--speaker-map` із нульовою втратою даних.
-
-3. **Обов'язковий 8-етапний видавничий аудит**:
-   - **Орфографія**: дефісне написання часток (`-то`, `-небудь`, `все-таки`, `з-за`), роздільне написання вступних слів.
-   - **Типографіка**: лапки-ялинки (`«...»`), довге тире (` — `), корекція розділових знаків.
-   - **Синтаксис монологів**: розбір суцільного усного потоку мовлення без крапок на закінчені пропозиції.
-   - **Білі списки брендів та імен**: захист технічних термінів та брендів (*Telegram, Windows, Apple, iPad, iPhone, YouTube, Audient, Yamaha, Edifier, LitRes, Spotify, Deezer, XLR*).
-   - **Очищення шумів STT та галюцинацій**: видалення артефактів Whisper (*Quiz河, quero..., göra, sings, DimaTorzok*), видалення дикторських позначок (*"Отправить.", "Экранный диктор..."*), корекція помилок STT.
-   - **Контроль обривів фраз (`check_cuts`)**: припинення обривів речень на сполучниках і прийменниках.
-   - **Гендерне узгодження**: перевірка закінчень дієслів минулого часу за статтю спікера.
+Скомпільований в **один автономний виконуваний файл (`vox2book.exe`)**, який не потребує Python або встановлення сторонніх бібліотек.
 
 ---
 
 ### Варіанти запуску
 
-#### 1. Встановлення
+#### 1. Збірка з вихідного коду
 ```bash
 git clone https://github.com/kir-spec/Vox2Book.git
 cd Vox2Book
-pip install -r requirements.txt
+cargo build --release
 ```
 
 #### 2. Команди запуску
-
-- **Обробка книги / романів (Проза)**:
-  ```bash
-  python run_pipeline.py --input "роман.txt" --genre prose --title "Мій Роман" --output "output/роман.docx"
-  ```
-
-- **Обробка поетичної збірки (Поезія)**:
-  ```bash
-  python run_pipeline.py --input "вірші.txt" --genre poetry --title "Збірка віршів" --output "output/вірші.docx"
-  ```
-
-- **Обробка п'єси (Драматургія)**:
-  ```bash
-  python run_pipeline.py --input "п'єса.txt" --genre drama --title "П'єса" --output "output/п'єса.docx"
-  ```
-
-- **Обробка хронік месенджерів та транскрипцій**:
-  ```bash
-  python run_pipeline.py --input "чат_експорт/" --genre dialogue --title "Усна хроніка" --output "output/діалоги.docx"
-  ```
-
-#### 3. Запуск автоматичних тестів
 ```bash
-python -m unittest discover -s tests
+# Обробка роману (Проза)
+./target/release/vox2book --input "роман.txt" --genre prose --output "роман.docx"
+
+# Запуск тестів
+cargo test
 ```
 
 </details>
