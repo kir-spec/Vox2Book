@@ -1,7 +1,7 @@
 use eframe::egui;
 use rfd::FileDialog;
 use std::path::PathBuf;
-use crate::models::Genre;
+use crate::models::{Genre, LiteratureElement};
 use crate::process_literature_project;
 use crate::logger::VoxLogger;
 
@@ -13,9 +13,10 @@ pub struct Vox2BookApp {
     subtitle: String,
     status_message: String,
     is_success: bool,
-    processed_count: usize,
+    processed_elements: Vec<LiteratureElement>,
     last_saved_path: Option<PathBuf>,
     show_logs: bool,
+    show_preview: bool,
 }
 
 impl Default for Vox2BookApp {
@@ -28,9 +29,10 @@ impl Default for Vox2BookApp {
             subtitle: String::new(),
             status_message: "Готово к работе. Выберите или перетащите файл книги.".to_string(),
             is_success: false,
-            processed_count: 0,
+            processed_elements: Vec::new(),
             last_saved_path: None,
             show_logs: false,
+            show_preview: false,
         }
     }
 }
@@ -108,14 +110,14 @@ impl eframe::App for Vox2BookApp {
                                 .color(egui::Color32::from_rgb(0, 153, 255)),
                         );
                         ui.label(
-                            egui::RichText::new("v1.3.0")
+                            egui::RichText::new("v1.3.1 (Literary Engine)")
                                 .size(11.0)
                                 .strong()
                                 .color(egui::Color32::from_rgb(229, 169, 60)),
                         );
                     });
                     ui.label(
-                        egui::RichText::new("Издательский конвейер и верстальщик нового поколения")
+                        egui::RichText::new("Профессиональная литературная вычистка, исправление синтаксиса и макетирование")
                             .size(12.0)
                             .color(egui::Color32::from_rgb(156, 163, 175)),
                     );
@@ -217,7 +219,7 @@ impl eframe::App for Vox2BookApp {
             // 5. Hero Launch Action Button
             ui.vertical_centered(|ui| {
                 let btn = egui::Button::new(
-                    egui::RichText::new("🚀 СФОРМИРОВАТЬ ПЕЧАТНЫЙ МАКЕТ DOCX")
+                    egui::RichText::new("🚀 ВЫЧИТАТЬ ТЕКСТ И СФОРМИРОВАТЬ МАКЕТ DOCX")
                         .size(15.0)
                         .strong()
                         .color(egui::Color32::WHITE),
@@ -248,10 +250,11 @@ impl eframe::App for Vox2BookApp {
 
                         match process_literature_project(&in_p, &out_p, self.genre.clone(), t_opt, sub_opt) {
                             Ok(elements) => {
-                                self.processed_count = elements.len();
+                                self.processed_elements = elements.clone();
                                 self.last_saved_path = Some(out_p.clone());
-                                self.status_message = format!("✅ Готово! Обработано {} элементов. Файл сохранён: {:?}", elements.len(), out_p);
+                                self.status_message = format!("✅ Текст вычитан и отформатирован! Элементов: {}. Сохранено: {:?}", elements.len(), out_p);
                                 self.is_success = true;
+                                self.show_preview = true;
                             }
                             Err(e) => {
                                 self.status_message = format!("❌ Ошибка: {}", e);
@@ -264,7 +267,7 @@ impl eframe::App for Vox2BookApp {
 
             ui.add_space(10.0);
 
-            // 6. Status Banner & Real-Time Log Viewer Toggle
+            // 6. Status Banner & Quick Actions
             let banner_color = if self.is_success {
                 egui::Color32::from_rgb(16, 185, 129) // Emerald Green
             } else if self.status_message.starts_with('❌') {
@@ -294,6 +297,10 @@ impl eframe::App for Vox2BookApp {
                                         }
                                     }
                                 }
+                                let prev_btn_text = if self.show_preview { "🔍 Скрыть сравнение" } else { "🔍 Сравнение До/После" };
+                                if ui.add(egui::Button::new(prev_btn_text)).clicked() {
+                                    self.show_preview = !self.show_preview;
+                                }
                             }
                             let log_btn_text = if self.show_logs { "📋 Скрыть логи" } else { "📋 Показать логи" };
                             if ui.add(egui::Button::new(log_btn_text)).clicked() {
@@ -303,7 +310,39 @@ impl eframe::App for Vox2BookApp {
                     });
                 });
 
-            // 7. Interactive Log Console Viewer
+            // 7. Text Comparison Preview Panel (Before vs After)
+            if self.show_preview && !self.processed_elements.is_empty() {
+                ui.add_space(8.0);
+                egui::Frame::none()
+                    .fill(egui::Color32::from_rgb(18, 24, 34))
+                    .rounding(egui::Rounding::same(8.0))
+                    .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(0, 153, 255)))
+                    .inner_margin(egui::Margin::same(10.0))
+                    .show(ui, |ui| {
+                        ui.label(egui::RichText::new("🔍 Результаты вычистки текста (Исходный текст → Исправленный текст):").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                        ui.add_space(4.0);
+
+                        egui::ScrollArea::vertical()
+                            .max_height(140.0)
+                            .auto_shrink([false, false])
+                            .show(ui, |ui| {
+                                for (idx, elem) in self.processed_elements.iter().enumerate().take(10) {
+                                    if !elem.body.is_empty() {
+                                        ui.horizontal(|ui| {
+                                            ui.label(egui::RichText::new(format!("#{}:", idx + 1)).size(11.0).strong().color(egui::Color32::from_rgb(229, 169, 60)));
+                                            ui.vertical(|ui| {
+                                                ui.label(egui::RichText::new(format!("Было:  {}", elem.body)).size(11.0).color(egui::Color32::from_rgb(239, 68, 68)));
+                                                ui.label(egui::RichText::new(format!("Стало: {}", elem.edited_body)).size(11.0).color(egui::Color32::from_rgb(16, 185, 129)));
+                                            });
+                                        });
+                                        ui.separator();
+                                    }
+                                }
+                            });
+                    });
+            }
+
+            // 8. Interactive Log Console Viewer
             if self.show_logs {
                 ui.add_space(8.0);
                 egui::Frame::none()
@@ -316,7 +355,7 @@ impl eframe::App for Vox2BookApp {
                         ui.add_space(4.0);
 
                         egui::ScrollArea::vertical()
-                            .max_height(140.0)
+                            .max_height(120.0)
                             .auto_shrink([false, false])
                             .show(ui, |ui| {
                                 for entry in VoxLogger::get_logs() {
@@ -340,8 +379,8 @@ pub fn run_gui() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("Vox2Book — Universal Literature Engine")
-            .with_inner_size([670.0, 580.0])
-            .with_min_inner_size([580.0, 480.0]),
+            .with_inner_size([690.0, 570.0])
+            .with_min_inner_size([600.0, 500.0]),
         ..Default::default()
     };
 

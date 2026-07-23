@@ -1,11 +1,27 @@
 use vox2book::models::Genre;
 use vox2book::editors::typography::apply_typography;
+use vox2book::editors::literary::proofread_literary_text;
 use vox2book::cleaners::stt_purger::clean_stt;
 use vox2book::extractors::text_reader::read_plain_text;
 use vox2book::process_literature_project;
 use tempfile::NamedTempFile;
 use std::io::Write;
 use encoding_rs::WINDOWS_1251;
+
+#[test]
+fn test_literary_proofreading_engine() {
+    let raw = "я я пошел в магазин ну потому что мне нужно было купить хлеба но я забыл деньги или.";
+    let (cleaned, stats) = proofread_literary_text(raw);
+    println!("DEBUG CLEANED OUTPUT: '{}'", cleaned);
+
+    assert!(!cleaned.contains("я я"), "Repeated words were not removed");
+    assert!(!cleaned.contains(" ну "), "Filler word 'ну' was not removed");
+    assert!(cleaned.contains(", потому что"), "Comma before subordinate conjunction was not inserted");
+    assert!(cleaned.contains(", но"), "Comma before 'но' was not inserted");
+    assert!(!cleaned.ends_with("или."), "Cut-off conjunction 'или.' at sentence end was not trimmed");
+    assert!(cleaned.starts_with('Я'), "First sentence character was not capitalized");
+    assert!(stats.commas_added >= 2, "Comma statistics failed");
+}
 
 #[test]
 fn test_windows_1251_decoding() {
