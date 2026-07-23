@@ -1,3 +1,7 @@
+# Executable binaries
+vox2book.exe
+*.exe
+
 # Rust build artifacts
 target/
 Cargo.lock
