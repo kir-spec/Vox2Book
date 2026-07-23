@@ -5,10 +5,17 @@ use crate::models::{Genre, LiteratureElement};
 use crate::process_literature_project;
 use crate::logger::VoxLogger;
 
+#[derive(PartialEq, Clone, Debug)]
+pub enum AiProvider {
+    OllamaLocal,
+    OfflineEngine,
+}
+
 pub struct Vox2BookApp {
     input_path: String,
     output_path: String,
     genre: Genre,
+    ai_provider: AiProvider,
     title: String,
     subtitle: String,
     status_message: String,
@@ -25,9 +32,10 @@ impl Default for Vox2BookApp {
             input_path: String::new(),
             output_path: String::new(),
             genre: Genre::Auto,
+            ai_provider: AiProvider::OllamaLocal,
             title: String::new(),
             subtitle: String::new(),
-            status_message: "Готово к работе. Выберите или перетащите файл книги.".to_string(),
+            status_message: "Готово к работе. Выберите файл или введите текст.".to_string(),
             is_success: false,
             processed_elements: Vec::new(),
             last_saved_path: None,
@@ -66,15 +74,14 @@ impl Vox2BookApp {
             out.push("book_processed.docx");
         }
         self.output_path = out.to_string_lossy().to_string();
-        self.status_message = format!("Загружен путь: {}", path.file_name().unwrap_or_default().to_string_lossy());
+        self.status_message = format!("Загружен файл: {}", path.file_name().unwrap_or_default().to_string_lossy());
         self.is_success = false;
-        VoxLogger::info("GUI", &format!("User selected input path: {:?}", path));
+        VoxLogger::info("GUI", &format!("Selected input path: {:?}", path));
     }
 }
 
 impl eframe::App for Vox2BookApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Handle Drag & Drop
         if !ctx.input(|i| i.raw.dropped_files.is_empty()) {
             ctx.input(|i| {
                 if let Some(file) = i.raw.dropped_files.first() {
@@ -85,7 +92,6 @@ impl eframe::App for Vox2BookApp {
             });
         }
 
-        // Ultra-Premium Dark Slate Theme Palette
         let mut visuals = egui::Visuals::dark();
         visuals.window_rounding = egui::Rounding::same(12.0);
         visuals.widgets.noninteractive.bg_fill = egui::Color32::from_rgb(15, 20, 28);
@@ -97,7 +103,7 @@ impl eframe::App for Vox2BookApp {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.add_space(6.0);
 
-            // 1. Premium Header Banner
+            // Header Banner
             ui.horizontal(|ui| {
                 ui.add_space(4.0);
                 ui.label(egui::RichText::new("📚").size(28.0));
@@ -110,33 +116,33 @@ impl eframe::App for Vox2BookApp {
                                 .color(egui::Color32::from_rgb(0, 153, 255)),
                         );
                         ui.label(
-                            egui::RichText::new("v1.3.1 (Literary Engine)")
+                            egui::RichText::new("v2.1.0 (Hybrid AI & Rust)")
                                 .size(11.0)
                                 .strong()
                                 .color(egui::Color32::from_rgb(229, 169, 60)),
                         );
                     });
                     ui.label(
-                        egui::RichText::new("Профессиональная литературная вычистка, исправление синтаксиса и макетирование")
+                        egui::RichText::new("Универсальный ИИ-комплекс вычистки устной речи и верстки книг в DOCX")
                             .size(12.0)
                             .color(egui::Color32::from_rgb(156, 163, 175)),
                     );
                 });
             });
 
-            ui.add_space(8.0);
+            ui.add_space(6.0);
             ui.separator();
-            ui.add_space(8.0);
+            ui.add_space(6.0);
 
-            // 2. Drag & Drop File Zone
+            // 1. File Input Drop Zone
             egui::Frame::none()
                 .fill(egui::Color32::from_rgb(21, 28, 40))
                 .rounding(egui::Rounding::same(8.0))
                 .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(34, 46, 66)))
-                .inner_margin(egui::Margin::same(10.0))
+                .inner_margin(egui::Margin::same(8.0))
                 .show(ui, |ui| {
                     ui.horizontal(|ui| {
-                        ui.label(egui::RichText::new("📥 Входной файл или папка:").size(13.0).strong());
+                        ui.label(egui::RichText::new("📥 Входной файл / расшифровка:").size(13.0).strong());
                         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                             if ui.add(egui::Button::new("📂 Папка")).clicked() {
                                 self.select_input_folder();
@@ -150,49 +156,49 @@ impl eframe::App for Vox2BookApp {
                     ui.add_sized(
                         [ui.available_width(), 26.0],
                         egui::TextEdit::singleline(&mut self.input_path)
-                            .hint_text("Перетащите сюда файл книги (.txt, .md, .html, .docx) или выберите выше..."),
+                            .hint_text("Перетащите сюда файл текста (.txt, .md, .docx) или нажмите Выбрать..."),
                     );
                 });
 
-            ui.add_space(10.0);
+            ui.add_space(8.0);
 
-            // 3. Genre Selector Cards
+            // 2. AI Mode Selector Card
             ui.group(|ui| {
-                ui.label(egui::RichText::new("Жанровый режим оформления:").size(13.0).strong().color(egui::Color32::from_rgb(229, 169, 60)));
+                ui.label(egui::RichText::new("Режим вычистки и нейросети (AI Engine):").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
                 ui.add_space(4.0);
 
-                ui.horizontal_wrapped(|ui| {
-                    let btn_auto = ui.selectable_label(self.genre == Genre::Auto, "🤖 Авто-анализ");
-                    if btn_auto.clicked() { self.genre = Genre::Auto; }
-
-                    let btn_prose = ui.selectable_label(self.genre == Genre::Prose, "📖 Проза / Роман");
-                    if btn_prose.clicked() { self.genre = Genre::Prose; }
-
-                    let btn_poetry = ui.selectable_label(self.genre == Genre::Poetry, "✍️ Поэзия / Стихи");
-                    if btn_poetry.clicked() { self.genre = Genre::Poetry; }
-
-                    let btn_drama = ui.selectable_label(self.genre == Genre::Drama, "🎭 Драматургия / Пьеса");
-                    if btn_drama.clicked() { self.genre = Genre::Drama; }
-
-                    let btn_dialogue = ui.selectable_label(self.genre == Genre::Dialogue, "💬 Устная хроника");
-                    if btn_dialogue.clicked() { self.genre = Genre::Dialogue; }
+                ui.horizontal(|ui| {
+                    ui.selectable_value(&mut self.ai_provider, AiProvider::OllamaLocal, "🤖 Локальный ИИ (Ollama / Llama3)");
+                    ui.selectable_value(&mut self.ai_provider, AiProvider::OfflineEngine, "⚡ Автономный движок (Без ИИ - Мгновенно)");
                 });
             });
 
-            ui.add_space(10.0);
+            ui.add_space(8.0);
 
-            // 4. Formatting & Metadata Settings
+            // 3. Genre Selector Cards
             ui.group(|ui| {
-                ui.label(egui::RichText::new("Метаданные и экспортирование:").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                ui.label(egui::RichText::new("Жанровый режим макетирования:").size(13.0).strong().color(egui::Color32::from_rgb(229, 169, 60)));
+                ui.add_space(4.0);
+
+                ui.horizontal_wrapped(|ui| {
+                    ui.selectable_value(&mut self.genre, Genre::Auto, "🤖 Авто-анализ");
+                    ui.selectable_value(&mut self.genre, Genre::Prose, "📖 Проза / Роман");
+                    ui.selectable_value(&mut self.genre, Genre::Poetry, "✍️ Поэзия / Стихи");
+                    ui.selectable_value(&mut self.genre, Genre::Drama, "🎭 Драматургия");
+                    ui.selectable_value(&mut self.genre, Genre::Dialogue, "💬 Диалоги");
+                });
+            });
+
+            ui.add_space(8.0);
+
+            // 4. Metadata Settings
+            ui.group(|ui| {
+                ui.label(egui::RichText::new("Настройки книги и экспорта:").size(13.0).strong().color(egui::Color32::from_rgb(16, 185, 129)));
                 ui.add_space(4.0);
 
                 egui::Grid::new("meta_grid").num_columns(2).spacing([12.0, 6.0]).show(ui, |ui| {
                     ui.label("Название книги:");
-                    ui.add_sized([ui.available_width(), 24.0], egui::TextEdit::singleline(&mut self.title).hint_text("Например: Граф Монте-Кристо"));
-                    ui.end_row();
-
-                    ui.label("Подзаголовок:");
-                    ui.add_sized([ui.available_width(), 24.0], egui::TextEdit::singleline(&mut self.subtitle).hint_text("Например: Том I"));
+                    ui.add_sized([ui.available_width(), 24.0], egui::TextEdit::singleline(&mut self.title).hint_text("Необязательно"));
                     ui.end_row();
 
                     ui.label("Файл сохранения:");
@@ -214,9 +220,9 @@ impl eframe::App for Vox2BookApp {
                 });
             });
 
-            ui.add_space(14.0);
+            ui.add_space(12.0);
 
-            // 5. Hero Launch Action Button
+            // 5. Action Button
             ui.vertical_centered(|ui| {
                 let btn = egui::Button::new(
                     egui::RichText::new("🚀 ВЫЧИТАТЬ ТЕКСТ И СФОРМИРОВАТЬ МАКЕТ DOCX")
@@ -229,7 +235,7 @@ impl eframe::App for Vox2BookApp {
 
                 if ui.add(btn).clicked() {
                     if self.input_path.trim().is_empty() {
-                        self.status_message = "❌ Ошибка: Пожалуйста, выберите входной файл или папку!".to_string();
+                        self.status_message = "❌ Ошибка: Пожалуйста, выберите входной файл!".to_string();
                         self.is_success = false;
                     } else {
                         let in_p = PathBuf::from(self.input_path.trim());
@@ -252,7 +258,7 @@ impl eframe::App for Vox2BookApp {
                             Ok(elements) => {
                                 self.processed_elements = elements.clone();
                                 self.last_saved_path = Some(out_p.clone());
-                                self.status_message = format!("✅ Текст вычитан и отформатирован! Элементов: {}. Сохранено: {:?}", elements.len(), out_p);
+                                self.status_message = format!("✅ Успешно вычитано и отформатировано! Элементов: {}. Сохранено: {:?}", elements.len(), out_p);
                                 self.is_success = true;
                                 self.show_preview = true;
                             }
@@ -265,15 +271,15 @@ impl eframe::App for Vox2BookApp {
                 }
             });
 
-            ui.add_space(10.0);
+            ui.add_space(8.0);
 
-            // 6. Status Banner & Quick Actions
+            // 6. Status Banner
             let banner_color = if self.is_success {
-                egui::Color32::from_rgb(16, 185, 129) // Emerald Green
+                egui::Color32::from_rgb(16, 185, 129)
             } else if self.status_message.starts_with('❌') {
-                egui::Color32::from_rgb(220, 38, 38)  // Red
+                egui::Color32::from_rgb(220, 38, 38)
             } else {
-                egui::Color32::from_rgb(31, 41, 55)   // Muted Slate
+                egui::Color32::from_rgb(31, 41, 55)
             };
 
             egui::Frame::none()
@@ -310,23 +316,23 @@ impl eframe::App for Vox2BookApp {
                     });
                 });
 
-            // 7. Text Comparison Preview Panel (Before vs After)
+            // 7. Preview Panel
             if self.show_preview && !self.processed_elements.is_empty() {
-                ui.add_space(8.0);
+                ui.add_space(6.0);
                 egui::Frame::none()
                     .fill(egui::Color32::from_rgb(18, 24, 34))
                     .rounding(egui::Rounding::same(8.0))
                     .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(0, 153, 255)))
-                    .inner_margin(egui::Margin::same(10.0))
+                    .inner_margin(egui::Margin::same(8.0))
                     .show(ui, |ui| {
-                        ui.label(egui::RichText::new("🔍 Результаты вычистки текста (Исходный текст → Исправленный текст):").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                        ui.label(egui::RichText::new("🔍 Результаты обработки (До → После):").size(12.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
                         ui.add_space(4.0);
 
                         egui::ScrollArea::vertical()
-                            .max_height(140.0)
+                            .max_height(110.0)
                             .auto_shrink([false, false])
                             .show(ui, |ui| {
-                                for (idx, elem) in self.processed_elements.iter().enumerate().take(10) {
+                                for (idx, elem) in self.processed_elements.iter().enumerate().take(8) {
                                     if !elem.body.is_empty() {
                                         ui.horizontal(|ui| {
                                             ui.label(egui::RichText::new(format!("#{}:", idx + 1)).size(11.0).strong().color(egui::Color32::from_rgb(229, 169, 60)));
@@ -342,20 +348,20 @@ impl eframe::App for Vox2BookApp {
                     });
             }
 
-            // 8. Interactive Log Console Viewer
+            // 8. Logs Panel
             if self.show_logs {
-                ui.add_space(8.0);
+                ui.add_space(6.0);
                 egui::Frame::none()
                     .fill(egui::Color32::from_rgb(10, 14, 20))
                     .rounding(egui::Rounding::same(6.0))
                     .stroke(egui::Stroke::new(1.0, egui::Color32::from_rgb(34, 46, 66)))
-                    .inner_margin(egui::Margin::same(8.0))
+                    .inner_margin(egui::Margin::same(6.0))
                     .show(ui, |ui| {
-                        ui.label(egui::RichText::new("📋 Журнал событий (vox2book.log):").size(12.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
-                        ui.add_space(4.0);
+                        ui.label(egui::RichText::new("📋 Журнал событий (vox2book.log):").size(11.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
+                        ui.add_space(2.0);
 
                         egui::ScrollArea::vertical()
-                            .max_height(120.0)
+                            .max_height(100.0)
                             .auto_shrink([false, false])
                             .show(ui, |ui| {
                                 for entry in VoxLogger::get_logs() {
@@ -366,7 +372,7 @@ impl eframe::App for Vox2BookApp {
                                     } else {
                                         egui::Color32::from_rgb(209, 213, 219)
                                     };
-                                    ui.label(egui::RichText::new(entry).size(11.0).monospace().color(color));
+                                    ui.label(egui::RichText::new(entry).size(10.5).monospace().color(color));
                                 }
                             });
                     });
@@ -379,8 +385,8 @@ pub fn run_gui() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("Vox2Book — Universal Literature Engine")
-            .with_inner_size([690.0, 570.0])
-            .with_min_inner_size([600.0, 500.0]),
+            .with_inner_size([690.0, 610.0])
+            .with_min_inner_size([600.0, 520.0]),
         ..Default::default()
     };
 
