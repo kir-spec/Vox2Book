@@ -3,6 +3,7 @@
   "api_key": "YOUR_API_KEY_HERE",
   "model": "gpt-4o-mini",
   "ollama_url": "http://localhost:11434",
+  "lmstudio_url": "http://localhost:1234",
   "genre": "prose",
   "title": "",
   "subtitle": ""

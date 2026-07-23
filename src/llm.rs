@@ -29,25 +29,28 @@ pub fn call_neural_api(prompt: &str, config: &AppConfig) -> Result<String, Strin
     let provider = config.api_provider.to_lowercase();
 
     match provider.as_str() {
-        "openai" | "deepseek" => {
-            let endpoint = if provider == "deepseek" {
-                "https://api.deepseek.com/chat/completions"
+        "openai" | "deepseek" | "lmstudio" => {
+            let (endpoint, key) = if provider == "deepseek" {
+                ("https://api.deepseek.com/chat/completions".to_string(), if config.api_key.trim().is_empty() { std::env::var("OPENAI_API_KEY").unwrap_or_default() } else { config.api_key.clone() })
+            } else if provider == "lmstudio" {
+                let base_url = if config.lmstudio_url.is_empty() { "http://localhost:1234".to_string() } else { config.lmstudio_url.clone() };
+                (format!("{}/v1/chat/completions", base_url.trim_end_matches('/')), "lm-studio".to_string())
             } else {
-                "https://api.openai.com/v1/chat/completions"
+                ("https://api.openai.com/v1/chat/completions".to_string(), if config.api_key.trim().is_empty() { std::env::var("OPENAI_API_KEY").unwrap_or_default() } else { config.api_key.clone() })
             };
 
-            let key = if config.api_key.trim().is_empty() {
-                std::env::var("OPENAI_API_KEY").unwrap_or_default()
-            } else {
-                config.api_key.clone()
-            };
-
-            if key.trim().is_empty() {
+            if provider != "lmstudio" && key.trim().is_empty() {
                 return Err("Ошибка: Укажите api_key в config.json или установленный OPENAI_API_KEY".to_string());
             }
 
+            let model_name = if config.model.is_empty() {
+                if provider == "lmstudio" { "local-model" } else { "gpt-4o-mini" }
+            } else {
+                &config.model
+            };
+
             let payload = json!({
-                "model": if config.model.is_empty() { "gpt-4o-mini" } else { &config.model },
+                "model": model_name,
                 "messages": [
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": prompt}
@@ -55,10 +58,14 @@ pub fn call_neural_api(prompt: &str, config: &AppConfig) -> Result<String, Strin
                 "temperature": 0.3
             });
 
-            let res = client.post(endpoint)
-                .header("Authorization", format!("Bearer {}", key.trim()))
-                .header("Content-Type", "application/json")
-                .json(&payload)
+            let mut req = client.post(&endpoint)
+                .header("Content-Type", "application/json");
+
+            if !key.is_empty() {
+                req = req.header("Authorization", format!("Bearer {}", key.trim()));
+            }
+
+            let res = req.json(&payload)
                 .send()
                 .map_err(|e| format!("Ошибка подключения к {}: {}", endpoint, e))?;
 
@@ -144,6 +151,6 @@ pub fn call_neural_api(prompt: &str, config: &AppConfig) -> Result<String, Strin
                 Ok(content)
             }
         }
-        _ => Err(format!("Неизвестный провайдер API: {}. Допустимые: openai, deepseek, anthropic, ollama", provider)),
+        _ => Err(format!("Неизвестный провайдер API: {}. Допустимые: openai, deepseek, anthropic, ollama, lmstudio", provider)),
     }
 }

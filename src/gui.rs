@@ -85,6 +85,7 @@ impl Vox2BookApp {
             api_key: self.api_key.clone(),
             model: self.model_name.clone(),
             ollama_url: "http://localhost:11434".to_string(),
+            lmstudio_url: "http://localhost:1234".to_string(),
             genre: self.genre.to_string(),
             title: self.title.clone(),
             subtitle: self.subtitle.clone(),
@@ -131,14 +132,14 @@ impl eframe::App for Vox2BookApp {
                                 .color(egui::Color32::from_rgb(0, 153, 255)),
                         );
                         ui.label(
-                            egui::RichText::new("v2.3.1 (API Gateway)")
+                            egui::RichText::new("v2.4.0 (LM Studio & Ollama AI)")
                                 .size(11.0)
                                 .strong()
                                 .color(egui::Color32::from_rgb(229, 169, 60)),
                         );
                     });
                     ui.label(
-                        egui::RichText::new("Шлюз нейросетей (OpenAI, DeepSeek, Claude, Ollama) и верстальщик книг")
+                        egui::RichText::new("Шлюз нейросетей (LM Studio, Ollama, OpenAI, DeepSeek, Claude) и верстальщик книг")
                             .size(12.0)
                             .color(egui::Color32::from_rgb(156, 163, 175)),
                     );
@@ -154,33 +155,42 @@ impl eframe::App for Vox2BookApp {
                 ui.label(egui::RichText::new("🔑 Подключение к Нейросети и API Ключи:").size(13.0).strong().color(egui::Color32::from_rgb(0, 153, 255)));
                 ui.add_space(4.0);
 
-                ui.horizontal(|ui| {
-                    ui.label("Провайдер API:");
-                    if ui.selectable_label(self.api_provider == "openai", "OpenAI (GPT-4o)").clicked() {
+                ui.horizontal_wrapped(|ui| {
+                    ui.label("Провайдер:");
+                    if ui.selectable_label(self.api_provider == "lmstudio", "🖥️ LM Studio (Локально)").clicked() {
+                        self.api_provider = "lmstudio".to_string();
+                        self.model_name = "local-model".to_string();
+                        self.save_current_config();
+                    }
+                    if ui.selectable_label(self.api_provider == "ollama", "🤖 Ollama (Локально)").clicked() {
+                        self.api_provider = "ollama".to_string();
+                        self.model_name = "llama3".to_string();
+                        self.save_current_config();
+                    }
+                    if ui.selectable_label(self.api_provider == "openai", "☁️ OpenAI (GPT-4o)").clicked() {
                         self.api_provider = "openai".to_string();
                         self.model_name = "gpt-4o-mini".to_string();
                         self.save_current_config();
                     }
-                    if ui.selectable_label(self.api_provider == "deepseek", "DeepSeek API").clicked() {
+                    if ui.selectable_label(self.api_provider == "deepseek", "☁️ DeepSeek API").clicked() {
                         self.api_provider = "deepseek".to_string();
                         self.model_name = "deepseek-chat".to_string();
                         self.save_current_config();
                     }
-                    if ui.selectable_label(self.api_provider == "anthropic", "Claude API").clicked() {
+                    if ui.selectable_label(self.api_provider == "anthropic", "☁️ Claude API").clicked() {
                         self.api_provider = "anthropic".to_string();
                         self.model_name = "claude-3-5-sonnet-20240620".to_string();
-                        self.save_current_config();
-                    }
-                    if ui.selectable_label(self.api_provider == "ollama", "Ollama (Локально)").clicked() {
-                        self.api_provider = "ollama".to_string();
-                        self.model_name = "llama3".to_string();
                         self.save_current_config();
                     }
                 });
 
                 ui.add_space(4.0);
 
-                if self.api_provider != "ollama" {
+                if self.api_provider == "lmstudio" {
+                    ui.label(egui::RichText::new("🖥️ Адрес подключения LM Studio: http://localhost:1234/v1 (Локальный сервер)").size(11.5).color(egui::Color32::from_rgb(16, 185, 129)));
+                } else if self.api_provider == "ollama" {
+                    ui.label(egui::RichText::new("🤖 Адрес подключения Ollama: http://localhost:11434 (Локальный сервер)").size(11.5).color(egui::Color32::from_rgb(16, 185, 129)));
+                } else {
                     egui::Grid::new("api_key_grid").num_columns(2).spacing([10.0, 4.0]).show(ui, |ui| {
                         ui.label("API Ключ:");
                         let mut key_edit = self.api_key.clone();
@@ -190,8 +200,6 @@ impl eframe::App for Vox2BookApp {
                         }
                         ui.end_row();
                     });
-                } else {
-                    ui.label(egui::RichText::new("🌐 Адрес подключения Ollama: http://localhost:11434 (Ключ не требуется)").size(11.5).color(egui::Color32::from_rgb(16, 185, 129)));
                 }
             });
 
@@ -437,7 +445,7 @@ pub fn run_gui() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_title("Vox2Book — API Gateway & Literature Publishing Engine")
-            .with_inner_size([720.0, 640.0])
+            .with_inner_size([740.0, 640.0])
             .with_min_inner_size([650.0, 540.0]),
         ..Default::default()
     };
