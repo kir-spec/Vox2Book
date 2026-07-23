@@ -13,19 +13,11 @@
   It transforms raw voice transcriptions, chat logs, prose, poetry, and plays into publication-ready <b>DOCX</b> manuscripts.
 </p>
 
-</div>
-
 ---
 
-## 🌐 Language Options / Выбор языка / Вибір мови
+### 🌐 Select Language / Выберите язык / Оберіть мову
 
-<div align="center">
-
-| Language / Язык / Мова | Status / Статус | Documentation / Документация |
-| :--- | :---: | :--- |
-| **English** | 🟢 Ready | [View English Documentation](#1-english-documentation) |
-| **Русский** | 🟢 Готово | [Перейти к русской документации](#2-русскоязычная-документация) |
-| **Українська** | 🟢 Готово | [Перейти до української документації](#3-українськомовна-документація) |
+[**English Documentation**](#1-english-documentation) &nbsp;•&nbsp; [**Русская документация**](#2-русскоязычная-документация) &nbsp;•&nbsp; [**Українська документація**](#3-українськомовна-документація)
 
 </div>
 
@@ -34,7 +26,7 @@
 ## 1. English Documentation
 
 <details>
-<summary><b>📖 Click to expand English Documentation (Expand / Collapse)</b></summary>
+<summary><b>📖 English Documentation (Click to Expand / Collapse)</b></summary>
 
 <br>
 
@@ -147,7 +139,7 @@ python -m unittest discover -s tests
 ## 2. Русскоязычная документация
 
 <details>
-<summary><b>📖 Нажмите для разворота русской документации (Развернуть / Свернуть)</b></summary>
+<summary><b>📖 Документация на русском языке (Нажмите, чтобы развернуть / свернуть)</b></summary>
 
 <br>
 
@@ -227,7 +219,7 @@ python -m unittest discover -s tests
 ## 3. Українськомовна документація
 
 <details>
-<summary><b>📖 Натисніть для розгортання української документації (Розгорнути / Згорнути)</b></summary>
+<summary><b>📖 Документація українською мовою (Натисніть, щоб розгорнути / згорнути)</b></summary>
 
 <br>
 
@@ -235,7 +227,7 @@ python -m unittest discover -s tests
 
 **Vox2Book** — професійний програмний комплекс та універсальний літературно-видавничий конвеєр мовою Python. Двигун призначений для автоматичної обробки, вичитки, типографіки, аудиту якості та генерації готових друкованих макетів книг у форматі **DOCX**.
 
-**Vox2Book** одинаково успішно працює з надиктованими голосовими розшифровками (Speech-to-Text), логами месенджерів (Telegram HTML), художньою прозою, поезією, драматургією та академічними статтями.
+**Vox2Book** однаково успішно працює з надиктованими голосовими розшифровками (Speech-to-Text), логами месенджерів (Telegram HTML), художньою прозою, поезією, драматургією та академічними статтями.
 
 ---
 
@@ -264,7 +256,7 @@ python -m unittest discover -s tests
 
 ---
 
-### Варианти запуску
+### Варіанти запуску
 
 #### 1. Встановлення
 ```bash
