@@ -2,14 +2,15 @@
 
 # Vox2Book
 
-<h3>Vox2Book — издательский комплект для нейросетей: промпты, правила вычитки и скрипты, которые превращают сырой текст в оформленный рукописный DOCX.</h3>
-
 <p>
 <strong>EN</strong><br/>
-Publishing kit for AI assistants: prompts, editorial rules, and scripts that turn raw text into a formatted DOCX manuscript.<br/>
+Vox2Book — publishing kit for AI assistants: prompts, editorial rules, and scripts that turn raw text into a formatted DOCX manuscript.<br/>
+<br/>
+<strong>RU</strong><br/>
+Vox2Book — издательский комплект для нейросетей: промпты, правила вычитки и скрипты, которые превращают сырой текст в оформленный рукописный DOCX.<br/>
 <br/>
 <strong>UK</strong><br/>
-Видавничий комплект для ШІ: промпти, правила вичитки та скрипти, які перетворюють сирий текст на оформлений рукопис DOCX.
+Vox2Book — видавничий комплект для ШІ: промпти, правила вичитки та скрипти, які перетворюють сирий текст на оформлений рукопис DOCX.
 </p>
 
 <br/>
