@@ -1,147 +1,160 @@
 <div align="center">
 
-# 🚀 Vox2Book AI — From Voice Recordings to Printed Books in Seconds
-### 🇷🇺 Vox2Book AI — От голосовых записей к печатным книгам за секунды
-### 🇺🇦 Vox2Book AI — Від голосових записів до друкованих книг за секунди
+# Vox2Book
+
+### Сырой текст → литературно вычитанная книга в Word (.docx)
+
+**English:** Raw transcripts & drafts → publication-ready DOCX · **Українська:** Сирий текст → вичитана книга DOCX
 
 <br/>
 
 [![Release](https://img.shields.io/badge/Release-23.07.2026-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
-[![Universal AI](https://img.shields.io/badge/AI%20Compatibility-Antigravity%20%7C%20Cursor%20%7C%20LM%20Studio%20%7C%20Ollama%20%7C%20OpenAI%20%7C%20Claude-0099FF.svg?style=for-the-badge&logo=openai)](https://github.com/kir-spec/Vox2Book)
+[![AI](https://img.shields.io/badge/Работает%20с-Cursor%20·%20VS%20Code%20·%20LM%20Studio%20·%20Ollama%20·%20OpenAI-0099FF.svg?style=for-the-badge)](AGENTS.md)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
-[![Output](https://img.shields.io/badge/Format-Instant%20DOCX%20Manuscripts-blueviolet.svg?style=for-the-badge&logo=microsoftword)](output/books/)
-
-<br/>
-
-**🇬🇧 Universal AI Publishing Engine. Works seamlessly inside ANY AI environment & IDE (Antigravity IDE, Cursor, VS Code), Local AI servers (LM Studio, Ollama), and Cloud Neural APIs (OpenAI, DeepSeek, Claude).**  
-**🇷🇺 Универсальный ИИ-издательский комплекс. Работает в ЛЮБОЙ программе и нейросети: Antigravity IDE, Cursor, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude.**  
-**🇺🇦 Універсальний ІІ-видавничий комплекс. Працює у БУДЬ-ЯКІЙ програмі та нейромережі: Antigravity IDE, Cursor, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude.**
-
----
-
-### 🌐 Quick Navigation & Product Guides / Быстрая навигация
-[✨ **Why Vox2Book Beats Copy-Pasting Prompts**](docs/PROJECT_VS_PROMPT.md) • [📂 **Smart Workspace Layout**](docs/PROJECT_STRUCTURE.md) • [📖 **Complete User Guide**](docs/USER_GUIDE.md) • [🚀 **Download Official Release 23.07.2026**](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
-
----
 
 </div>
 
-<br/>
+---
 
-<details>
-<summary><strong>🇬🇧 English Documentation — Click to Expand / Collapse</strong></summary>
+## Что это за проект
 
-<br/>
+**Vox2Book** — это **издательский комплект для нейросетей**: готовые промпты, правила вычитки и скрипт сборки, которые превращают **любой сырой текст** в **оформленный рукописный DOCX**.
 
-## 🔥 Universal Compatibility Across ALL AI Programs & IDEs
+| На входе | На выходе |
+|----------|-----------|
+| Расшифровки Whisper / диктовки | Абзацы, диалоги, типографика |
+| Черновики, статьи, эссе | Times New Roman 12, интервал 1.15 |
+| Экспорты чатов, монологи | Файл в `output/books/*.docx` |
 
-Vox2Book AI is engineered for total flexibility. It runs seamlessly inside **ANY AI environment or program**:
-* **AI Coding IDEs & Agents**: **Antigravity IDE**, **Cursor**, **VS Code**, **Windsurf**.
-* **Local Offline AI Desktop Servers**: **LM Studio** (`localhost:1234`), **Ollama** (`localhost:11434`), **Jan AI**, **KoboldCPP**.
-* **Cloud AI Models & APIs**: **OpenAI (GPT-4o)**, **DeepSeek API**, **Anthropic Claude**, **Google Gemini**.
+**Важно:** Vox2Book **не заменяет** распознавание речи. Сначала получите текст (Whisper, Telegram, диктофон с STT) — затем отдайте его Vox2Book на литературную правку.
+
+**Главный принцип:** смысл автора сохраняется на 100%; исправляются орфография, синтаксис, структура и оформление. Ошибки STT правятся **только в контексте фразы**, а не слепой заменой слов.
 
 ---
 
-## ⚡ 4 Game-Changing Features
+## Как это работает (3 шага)
 
-### 🎙️ 1. From Messy Voice Monologues to Structured Books
-Speak your thoughts naturally into any dictaphone or Whisper STT recorder. Vox2Book automatically detects sentence boundaries, removes filler words ("uh", "um"), organizes thoughts into logical paragraphs, and structures dialogues.
-
-### 🤖 2. Works in ANY AI Software & IDE
-Whether you prefer working inside **Antigravity IDE**, **Cursor**, **VS Code**, or local AI servers like **LM Studio** and **Ollama**, Vox2Book fits directly into your favorite workflow.
-
-### 🎨 3. Publishing-Grade Typography & Word Layouts
-Every compiled manuscript comes pre-formatted to professional book standards:
-* **Classic Fonts**: *Times New Roman* 12pt body text with 1.15 line spacing.
-* **Red-Line Indents**: Professional 18pt first-line paragraph indents.
-* **Punctuation Correction**: Automatic guillemets (`«...»`), em-dashes (` — `), and particle hyphenation.
-
-### 🧠 4. Automatic Dictaphone Jargon Purger
-Whisper STT frequently mishears technical terms. Vox2Book automatically detects and replaces English dictaphone jargon:
-* `"you es bee"` / `"usb drive"` ➔ `USB`
-* `"es es dee"` / `"solid state drive"` ➔ `SSD`
-* `"west digital"` ➔ `Western Digital`
-* `"a data"` ➔ `ADATA`
-* `"three point five inch"` ➔ `3.5-inch`
-
----
-
-## 📂 Project Directory Architecture
-
-```ascii
-E:\coding\работа с литературой\
-├── inputs/                      # 📥 INPUT DIRECTORIES
-│   ├── raw_texts/               # Drop your text files & transcripts here (.txt, .md, .docx)
-│   └── audio/                   # Drop your raw audio files here (.mp3, .wav, .ogg)
-├── output/                      # 📤 OUTPUT DIRECTORY
-│   └── books/                   # ALWAYS saves finished DOCX book manuscripts here!
-├── config.json                  # 🔑 AI Gateway Settings (Antigravity, Cursor, LM Studio, Ollama, Cloud)
-└── pipeline.py                  # 🚀 Multi-Stage Virtual Editorial Board Chain
+```
+1. Положите исходник в inputs/raw_texts/
+2. Скопируйте промпт из prompts/ru|en|uk/START_USER_PROMPT.md в чат с ИИ
+3. Заберите готовый .docx из output/books/
 ```
 
-</details>
+Нейросеть читает инструкции из репозитория (`AGENTS.md`, системный промпт редактора, 8 аудитов качества) и правит текст как профессиональный корректор.
 
-<br/>
-
-<details>
-<summary><strong>🇷🇺 Русская документация — Нажмите для раскрытия / сворачивания</strong></summary>
-
-<br/>
-
-## 🔥 Универсальная совместимость с ЛЮБОЙ программой и Нейросетью
-
-Vox2Book AI разработан для максимальной свободы автора. Программа работает в **абсолютно ЛЮБОЙ среде и нейросетевой программе**:
-* **ИИ-редакторы и IDE**: **Antigravity IDE**, **Cursor**, **VS Code**, **Windsurf**.
-* **Локальные ИИ-серверы на ПК**: **LM Studio** (`http://localhost:1234`), **Ollama** (`http://localhost:11434`), **Jan AI**, **KoboldCPP**.
-* **Облачные Нейросети и API**: **OpenAI (GPT-4o)**, **DeepSeek API**, **Anthropic Claude**, **Google Gemini**.
+Опционально: `pipeline.py` — автоматическая цепочка (очистка STT → ИИ → типографика → DOCX) через OpenAI, DeepSeek, LM Studio или Ollama.
 
 ---
 
-## ⚡ 4 Ключевых преимущества проекта
+## С чего начать за 1 минуту
 
-### 🎙️ 1. Из наговоренного аудио — в готовую печатную книгу
-Наговаривайте свои мысли на любой диктофон или распознаватель речи (Whisper STT). Vox2Book сам разобьет сплошной поток слов на логические главы, абзацы и диалоги, вырезав слова-паразиты («ну», «э-э», «как бы»).
+| Шаг | Действие |
+|-----|----------|
+| 1 | Клонируйте репозиторий и откройте папку в **Cursor**, **VS Code** или другой IDE |
+| 2 | Выберите язык инструкций: [`prompts/ru/`](prompts/ru/) · [`prompts/en/`](prompts/en/) · [`prompts/uk/`](prompts/uk/) |
+| 3 | Откройте **`START_USER_PROMPT.md`** в выбранной папке и вставьте текст в чат с ИИ |
+| 4 | Укажите файл из `inputs/raw_texts/` (или положите его туда) |
+| 5 | Получите результат в **`output/books/`** |
 
-### 🤖 2. Работает в ЛЮБОЙ программе и среде
-Используйте Vox2Book там, где вам удобно: прямо в **Antigravity IDE**, **Cursor**, **VS Code**, локально через **LM Studio** / **Ollama** или через облачные API.
-
-### 🎨 3. Издательская типографика и макет Word
-Каждый готовый документ верстается по стандартам книгопечатания:
-* **Классические шрифты**: *Times New Roman 12pt*, межстрочный интервал 1.15.
-* **Красная строка**: Профессиональные отступы абзацев 18pt (0.5 дюйма).
-* **Типографика**: Автоматические книжные кавычки `«ёлочки»`, длинные тире ` — ` и дефисные частицы (`из-за`, `из-под`, `всё-таки`).
-
-### 🧠 4. Умный исправитель диктофонного сленга
-Whisper часто ошибается на технических терминах. Vox2Book автоматически распознает и исправляет оговорки на русском языке:
-* `"те из бы"` / `"юсб"` ➔ `USB`
-* `"ссд"` ➔ `SSD-накопитель`
-* `"в стране джетал"` ➔ `Western Digital`
-* `"а дата"` ➔ `ADATA`
-* `"35 размер"` ➔ `3.5-дюймовый`
-
-</details>
-
-<br/>
-
-<details>
-<summary><strong>🇺🇦 Українська документація — Натисніть для розгортання / згортання</strong></summary>
-
-<br/>
-
-## 🔥 Універсальна сумісність з БУДЬ-ЯКОЮ програмою та нейромережею
-
-Vox2Book AI працює у **будь-якому середовищі**:
-* **ІІ-редактори та IDE**: **Antigravity IDE**, **Cursor**, **VS Code**, **Windsurf**.
-* **Локальні ІІ-сервери**: **LM Studio**, **Ollama**, **Jan AI**.
-* **Хмарні нейромережі**: **OpenAI (GPT-4o)**, **DeepSeek**, **Claude**, **Gemini**.
+Краткий указатель: [`00_START_HERE__СКОПИРУЙ_ПРОМПТ/README.md`](00_START_HERE__СКОПИРУЙ_ПРОМПТ/README.md)
 
 ---
 
-## ⚡ 4 Ключові переваги
+## Для кого
 
-1. **Від диктофона до книги**: Автоматичний поділ на розділи та виправлення помилок мовлення.
-2. **Працює у будь-якій програмі**: Antigravity IDE, Cursor, VS Code, LM Studio, Ollama.
-3. **Видавнича типографіка Word**: Книжкові лапки `«...»`, тире ` — `, червоні рядки 18pt.
-4. **Збереження в `output/books/`**: Усі готові книги зберігаються у `output/books/`.
+- Авторы, которые **наговаривают** книги и статьи в диктофон
+- Редакторы расшифровок **голосовых сообщений** и интервью
+- Все, кому нужен **единый стандарт** литературной вычитки в любой нейросети
+
+Работает с **любым ИИ**: Cursor, Antigravity IDE, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude — без привязки к одному вендору.
+
+---
+
+## Структура репозитория
+
+```text
+Vox2Book/
+├── inputs/raw_texts/     ← сюда исходники (.txt, .md, .docx)
+├── output/books/         ← сюда готовые рукописи .docx
+├── prompts/ru|en|uk/     ← промпты и сценарий для ИИ (по языкам)
+├── prompts/glossary/     ← правила контекстной правки STT-ошибок
+├── docs/ru|en|uk/        ← 8 аудитов качества, справка
+├── config.json           ← настройки API (если используете pipeline.py)
+├── pipeline.py           ← автоматический конвейер (опционально)
+└── AGENTS.md             ← точка входа для любой нейросети
+```
+
+---
+
+## Навигация
+
+| | Русский | English | Українська |
+|---|---------|---------|------------|
+| **Старт в чате** | [START_USER_PROMPT](prompts/ru/START_USER_PROMPT.md) | [START](prompts/en/START_USER_PROMPT.md) | [START](prompts/uk/START_USER_PROMPT.md) |
+| **Промпт редактора** | [UNIVERSAL_EDITOR](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) | [UNIVERSAL_EDITOR](prompts/en/UNIVERSAL_EDITOR_SYSTEM.md) | [UNIVERSAL_EDITOR](prompts/uk/UNIVERSAL_EDITOR_SYSTEM.md) |
+| **Справка** | [docs/ru/](docs/ru/) | [docs/en/](docs/en/) | [docs/uk/](docs/uk/) |
+| **STT / опечатки** | [руководство](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) | [guide](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [посібник](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) |
+
+---
+
+<details>
+<summary><strong>🇬🇧 English — full description</strong></summary>
+
+<br/>
+
+## What Vox2Book is
+
+**Vox2Book** is a **publishing kit for AI assistants**: prompts, editorial rules, and an optional build script that turn **raw text** into a **formatted DOCX manuscript**.
+
+**Input:** Whisper transcripts, chat exports, drafts, articles, dialogues.  
+**Output:** Edited prose in `output/books/*.docx` (Times New Roman 12, 1.15 spacing, book typography).
+
+Vox2Book does **not** perform speech recognition — transcribe first, then edit here.
+
+**Core rule:** preserve 100% of the author's meaning; fix grammar, structure, and layout. STT errors are corrected **in sentence context only**, never by global word replacement.
+
+## Quick start
+
+1. Open the repo in Cursor, VS Code, or any IDE.  
+2. Pick a language folder: `prompts/en/` (or `ru/`, `uk/`).  
+3. Copy `START_USER_PROMPT.md` into your AI chat.  
+4. Point to a file in `inputs/raw_texts/`.  
+5. Collect the result from `output/books/`.
+
+Works with **any AI**: Cursor, LM Studio, Ollama, OpenAI, DeepSeek, Claude.
 
 </details>
+
+<details>
+<summary><strong>🇺🇦 Українська — повний опис</strong></summary>
+
+<br/>
+
+## Що таке Vox2Book
+
+**Vox2Book** — **видавничий комплект для ШІ**: промпти, правила вичитки та опційний скрипт збірки, що перетворюють **сирий текст** на **оформлений рукопис DOCX**.
+
+**Вхід:** розшифровки Whisper, чернетки, чати, статті, діалоги.  
+**Вихід:** вичитаний текст у `output/books/*.docx`.
+
+Vox2Book **не розпізнає мовлення** — спочатку отримайте текст, потім вичитуйте тут.
+
+**Головне правило:** зміст автора — 100%; виправляються орфографія, структура й оформлення. Помилки STT — **лише в контексті речення**.
+
+## Швидкий старт
+
+1. Відкрийте репозиторій у Cursor, VS Code або іншій IDE.  
+2. Оберіть мову: `prompts/uk/` (або `ru/`, `en/`).  
+3. Скопіюйте `START_USER_PROMPT.md` у чат із ШІ.  
+4. Вкажіть файл у `inputs/raw_texts/`.  
+5. Заберіть результат з `output/books/`.
+
+</details>
+
+<br/>
+
+<div align="center">
+
+**Лицензия:** [MIT](LICENSE) · **Релиз:** [23.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
+
+</div>
