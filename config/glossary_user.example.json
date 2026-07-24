@@ -1,0 +1,97 @@
+{
+  "_comment": "Скопируйте в glossary_user.json и заполните. ИИ не подхватывает файл сам — укажите в чате: «используй config/glossary_user.json».",
+  "_rules": {
+    "context_only": true,
+    "never_global_replace": true,
+    "on_ambiguity": "ask_user_or_mark_in_audit"
+  },
+  "proper_nouns": [
+    {
+      "heard": "Амфи|амфи",
+      "correct": "Анфи",
+      "context_hint": "имя собеседника в диалогах",
+      "notes": "типичная STT-ошибка имени"
+    },
+    {
+      "heard": "Кир|кир",
+      "correct": "Kir",
+      "context_hint": "имя собеседника",
+      "notes": "латиница по выбору автора"
+    }
+  ],
+  "stt_homophones": [
+    {
+      "heard": "юсб|те из бы|ю эс би",
+      "correct": "USB",
+      "context_hint": "кабель, порт, флешка",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "ссд|с с д",
+      "correct": "SSD",
+      "context_hint": "накопитель, диск",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "валясь",
+      "correct": "валяюсь",
+      "context_hint": "болезнь, усталость, лежу дома",
+      "wrong_fix": "не заменять на «в общем»",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "расставлю температура",
+      "correct": "у меня температура",
+      "context_hint": "здоровье + возможно отдельная фраза про разъём",
+      "example": "«расставлю температура короче валясь» → «У меня температура, я валяюсь»",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "виндовс|винда",
+      "correct": "Windows",
+      "context_hint": "операционная система",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "телега|телеграм",
+      "correct": "Telegram",
+      "context_hint": "мессенджер, чат, голосовые",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "прод|на прод|в прод",
+      "correct": "production",
+      "context_hint": "деплой, релиз, IT",
+      "wrong_fix": "не «продовольственный»",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "кафка|кафку",
+      "correct": "Kafka",
+      "context_hint": "очереди, бэкенд, логи",
+      "never_replace_globally": true
+    },
+    {
+      "heard": "мышь",
+      "correct": "мышь",
+      "context_hint": "компьютерная мышь — не животное",
+      "never_replace_globally": true
+    }
+  ],
+  "brands": [
+    { "heard": "самсунг", "correct": "Samsung" },
+    { "heard": "эпл|эппл", "correct": "Apple" },
+    { "heard": "трансценд|трансенд", "correct": "Transcend" }
+  ],
+  "stt_hallucinations_delete": [
+    "Подписывайтесь на канал",
+    "Спасибо за просмотр",
+    "Благодарю за просмотр",
+    "Продолжение следует",
+    "Редактор субтитров",
+    "Субтитры сделал",
+    "DimaTorzok"
+  ],
+  "domain_jargon": [],
+  "notes": "Guides: prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.{ru,en,uk}.md · Tables: STT_HOMOPHONES.{ru,en,uk}.md · Index: STT_HOMOPHONES.example.md"
+}
