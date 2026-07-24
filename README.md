@@ -285,21 +285,10 @@ Vox2Book/
 
 </details>
 
-<br/>
-
-## Navigation / Навигация / Навігація
-
-| | EN | RU | UK |
-|---|----|----|-----|
-| **Start** | [prompts/en/](prompts/en/) | [prompts/ru/](prompts/ru/) | [prompts/uk/](prompts/uk/) |
-| **Docs** | [docs/en/](docs/en/) | [docs/ru/](docs/ru/) | [docs/uk/](docs/uk/) |
-| **Glossary** | [STT guide](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [STT](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) | [STT](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) |
-| **Audio** | [STT](docs/en/AUDIO_TRANSCRIPTION.md) | [STT](docs/ru/AUDIO_TRANSCRIPTION.md) | [STT](docs/uk/AUDIO_TRANSCRIPTION.md) |
-
 <div align="center">
 
 <br/>
 
-**License / Лицензия / Ліцензія:** [MIT](LICENSE) · **Release:** [23.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
+[AGENTS.md](AGENTS.md) · [Release 23.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026) · [MIT](LICENSE)
 
 </div>
