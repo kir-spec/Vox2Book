@@ -31,6 +31,21 @@
 
 ---
 
+## Аудио → текст (STT)
+
+Vox2Book **не привязан к Whisper**. Если у пользователя только аудио — предложите подходящий транскрибатор:
+
+| Тип | Примеры |
+|-----|---------|
+| **Встроенный (локально)** | `python tools/transcribe_audio.py --install` — faster-whisper / Whisper |
+| **Облачные API** | OpenAI Whisper API, Google STT, Azure Speech, AWS Transcribe, AssemblyAI, Deepgram, Speechmatics, Rev.ai |
+| **Локальные альтернативы** | whisper.cpp, mlx-whisper (Mac), Vosk, GigaAM (RU) |
+| **Уже с текстом** | Экспорт **Telegram**, Descript, Otter.ai, MacWhisper → сразу в `inputs/raw_texts/` |
+
+Полная таблица: [`docs/ru/AUDIO_TRANSCRIPTION.md`](docs/ru/AUDIO_TRANSCRIPTION.md) · [EN](docs/en/AUDIO_TRANSCRIPTION.md) · [UK](docs/uk/AUDIO_TRANSCRIPTION.md)
+
+---
+
 ## Порядок чтения (пример для RU)
 
 1. `AGENTS.md`
@@ -46,11 +61,13 @@
 ## Папки проекта
 
 ```text
-inputs/raw_texts/     ← исходники
+inputs/raw_texts/     ← тексты для вычитки
+inputs/audio/       ← аудио (сначала transcribe → raw_texts)
 output/books/         ← готовые .docx
+tools/transcribe_audio.py  ← Whisper / faster-whisper → raw_texts
 prompts/ru|en|uk/     ← промпты по языкам
-docs/ru|en|uk/        ← документация по языкам
-config/               ← glossary_user.json
+docs/ru|en|uk/        ← документация (AUDIO_TRANSCRIPTION.md — для аудио)
+config/               ← glossary_user.json, transcribe.json
 ```
 
 ---

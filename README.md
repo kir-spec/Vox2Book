@@ -41,7 +41,7 @@ Publishing kit for AI assistants: prompts, editorial rules, and scripts that tur
 | Drafts, articles, essays | Times New Roman 12, 1.15 spacing |
 | Chat exports, monologues | `output/books/*.docx` |
 
-**Note:** editing works on **text**. For **audio**, run local Whisper first — see [Audio → text](#en-audio) below.
+**Note:** editing works on **text**. For **audio**, transcribe first (Whisper, OpenAI API, AssemblyAI, Telegram export, etc.) — see [Audio → text](#en-audio).
 
 **Core rule:** preserve 100% of the author's meaning. STT fixes **in sentence context only**, never global word replacement.
 
@@ -55,7 +55,9 @@ Publishing kit for AI assistants: prompts, editorial rules, and scripts that tur
 
 Optional: `pipeline.py` — automated chain via OpenAI, DeepSeek, LM Studio, or Ollama.
 
-## <a id="en-audio"></a>Audio → text (Whisper)
+## <a id="en-audio"></a>Audio → text (STT)
+
+Any transcriber works — Whisper (built-in), OpenAI API, Google/Azure/AWS, AssemblyAI, Deepgram, Telegram export, Descript, MacWhisper, GigaAM, Vosk…
 
 | Step | Command |
 |------|---------|
@@ -105,7 +107,7 @@ Vox2Book/
 | Editor prompt | [UNIVERSAL_EDITOR](prompts/en/UNIVERSAL_EDITOR_SYSTEM.md) |
 | Docs | [docs/en/](docs/en/) |
 | STT / typos | [guide](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) |
-| Audio | [Whisper](docs/en/AUDIO_TRANSCRIPTION.md) |
+| **Audio / STT** | [STT tools](docs/en/AUDIO_TRANSCRIPTION.md) |
 
 </details>
 
@@ -124,7 +126,7 @@ Vox2Book/
 | Черновики, статьи, эссе | Times New Roman 12, интервал 1.15 |
 | Экспорты чатов, монологи | `output/books/*.docx` |
 
-**Важно:** вычитка работает с **текстом**. Для **аудио** сначала запустите транскрибацию Whisper — см. [«Аудио → текст»](#ru-audio).
+**Важно:** вычитка работает с **текстом**. Для **аудио** сначала STT — Whisper (встроенный скрипт), OpenAI API, AssemblyAI, экспорт Telegram и др. — см. [«Аудио → текст»](#ru-audio).
 
 **Главный принцип:** смысл автора — 100%. Ошибки STT правятся **только в контексте фразы**, не слепой заменой слов.
 
@@ -138,7 +140,9 @@ Vox2Book/
 
 Опционально: `pipeline.py` — цепочка через OpenAI, DeepSeek, LM Studio или Ollama.
 
-## <a id="ru-audio"></a>Аудио → текст (Whisper)
+## <a id="ru-audio"></a>Аудио → текст (STT)
+
+Подходит **любой** транскрибатор: встроенный Whisper, OpenAI API, Google/Azure, AssemblyAI, Deepgram, Telegram, Descript, MacWhisper, GigaAM, Vosk…
 
 | Шаг | Команда |
 |-----|---------|
@@ -191,7 +195,7 @@ Vox2Book/
 | Промпт редактора | [UNIVERSAL_EDITOR](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) |
 | Справка | [docs/ru/](docs/ru/) |
 | STT / опечатки | [руководство](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) |
-| Аудио | [Whisper](docs/ru/AUDIO_TRANSCRIPTION.md) |
+| Аудио / STT | [транскрибаторы](docs/ru/AUDIO_TRANSCRIPTION.md) |
 
 </details>
 
@@ -224,7 +228,9 @@ Vox2Book/
 
 Опційно: `pipeline.py` — ланцюжок через OpenAI, DeepSeek, LM Studio або Ollama.
 
-## <a id="uk-audio"></a>Аудіо → текст (Whisper)
+## <a id="uk-audio"></a>Аудіо → текст (STT)
+
+Будь-який транскрибатор: Whisper (вбудований), OpenAI API, AssemblyAI, Telegram, Descript, GigaAM…
 
 | Крок | Команда |
 |------|---------|
@@ -274,7 +280,7 @@ Vox2Book/
 | Промпт редактора | [UNIVERSAL_EDITOR](prompts/uk/UNIVERSAL_EDITOR_SYSTEM.md) |
 | Довідка | [docs/uk/](docs/uk/) |
 | STT / опечатки | [посібник](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) |
-| Аудіо | [Whisper](docs/uk/AUDIO_TRANSCRIPTION.md) |
+| Аудіо / STT | [транскрибатори](docs/uk/AUDIO_TRANSCRIPTION.md) |
 
 </details>
 
@@ -287,7 +293,7 @@ Vox2Book/
 | **Start** | [prompts/en/](prompts/en/) | [prompts/ru/](prompts/ru/) | [prompts/uk/](prompts/uk/) |
 | **Docs** | [docs/en/](docs/en/) | [docs/ru/](docs/ru/) | [docs/uk/](docs/uk/) |
 | **Glossary** | [STT guide](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [STT](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) | [STT](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) |
-| **Audio** | [Whisper](docs/en/AUDIO_TRANSCRIPTION.md) | [Whisper](docs/ru/AUDIO_TRANSCRIPTION.md) | [Whisper](docs/uk/AUDIO_TRANSCRIPTION.md) |
+| **Audio** | [STT](docs/en/AUDIO_TRANSCRIPTION.md) | [STT](docs/ru/AUDIO_TRANSCRIPTION.md) | [STT](docs/uk/AUDIO_TRANSCRIPTION.md) |
 
 <div align="center">
 

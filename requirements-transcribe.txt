@@ -1,0 +1,8 @@
+# Vox2Book — optional dependencies for local speech recognition
+# Install: python tools/transcribe_audio.py --install
+
+faster-whisper>=1.1.0
+# Pulls ctranslate2; uses GPU if CUDA is available
+
+# Optional: original OpenAI Whisper backend (--backend whisper)
+# openai-whisper>=20231117

@@ -1,0 +1,11 @@
+{
+  "_comment": "Copy to config/transcribe.json to customize. Defaults work without this file.",
+  "backend": "faster-whisper",
+  "model": "large-v3-turbo",
+  "language": "ru",
+  "device": "auto",
+  "compute_type": "auto",
+  "output_dir": "inputs/raw_texts",
+  "vad_filter": true,
+  "initial_prompt": "Имена, термины, названия брендов — подставьте свои через --prompt или здесь."
+}

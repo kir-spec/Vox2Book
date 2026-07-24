@@ -7,7 +7,8 @@
 5. Pick up `.docx` from `output/books/`.
 
 **Editor prompt:** `prompts/en/UNIVERSAL_EDITOR_SYSTEM.md`  
-**STT / typos (context-only):** `prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md` + `STT_HOMOPHONES.en.md`  
+**STT / typos:** `prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`  
+**Audio → text (STT):** [`docs/en/AUDIO_TRANSCRIPTION.md`](AUDIO_TRANSCRIPTION.md) — Whisper, OpenAI API, AssemblyAI, Telegram, and more.  
 **8 audits:** [`TECHNICAL_SPECIFICATION.md`](TECHNICAL_SPECIFICATION.md)  
 **Profiles:** `prompts/en/profiles/`
 

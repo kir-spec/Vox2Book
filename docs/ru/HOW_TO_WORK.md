@@ -27,15 +27,13 @@ Vox2Book вычитывает **любой** сырой текст: расшиф
 Универсальный промпт: `prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md`  
 Профили: `prompts/ru/profiles/`  
 Ваши имена и STT-правки: `config/glossary_user.json` (см. `config/glossary_user.example.json`)  
-**Контекстная правка опечаток (обязательно для ИИ):** `prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md` + `STT_HOMOPHONES.ru.md` — исправлять **только в контексте предложения**, не по словам и не глобальной заменой.
+**Контекстная правка опечаток:** `prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md`  
+**Аудио → текст (STT):** [`docs/ru/AUDIO_TRANSCRIPTION.md`](AUDIO_TRANSCRIPTION.md) — Whisper, OpenAI API, AssemblyAI, Telegram и др.
 
----
-
-## Типы текстов
-
-| Тип | Профиль |
-|-----|---------|
-| Голос / Whisper | `prompts/ru/profiles/SPEECH_TO_TEXT.md` + `prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md` + `STT_HOMOPHONES.ru.md` |
+| Тип | Профиль / инструмент |
+|-----|----------------------|
+| **Аудио / диктофон** | `tools/transcribe_audio.py` → [`AUDIO_TRANSCRIPTION.md`](AUDIO_TRANSCRIPTION.md) |
+| Голос / Whisper (текст) | `prompts/ru/profiles/SPEECH_TO_TEXT.md` + глоссарий |
 | Диалоги / чаты | `prompts/ru/profiles/DIALOGUE_TRANSCRIPT.md` |
 | Статья / эссе | `prompts/ru/profiles/ACADEMIC_ESSAY.md` |
 | Обычая проза | только универсальный промпт |
