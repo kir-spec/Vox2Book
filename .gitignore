@@ -20,19 +20,33 @@ ENV/
 env.bak/
 venv.bak/
 
-# IDE & OS
+# IDE & OS & Agent metadata
 .idea/
 .vscode/
+.claude/
+.codebase-memory/
+.cursor/
+.zed/
 *.swp
 *.swo
 .DS_Store
 Thumbs.db
 
-# User data & generated outputs
-Анфи/
+# User data, confidential inputs & generated outputs
+inputs/
 output/
 *.docx
 *.log
 *.tmp
 temp/
 audio_*.txt
+"00_START_HERE__*"
+
+# One-off / Temporary processing scripts
+tmp_*.py
+fix_cuts.py
+tools/process_*.py
+tools/proofread_*.py
+tools/deep_*.py
+tools/merge_*.py
+tools/master_*.py

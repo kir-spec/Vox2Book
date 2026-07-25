@@ -27,22 +27,26 @@ except ImportError:
     from docx.shared import Pt, Inches
     from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-SYSTEM_PROMPT = """Ты — главный редактор литературного издательства.
-Твоя задача — взять сырую устную расшифровку аудиозаписи (Whisper STT transcript) и превратить её в вычитанный, чистый и грамотный литературный текст.
+def load_system_prompt(lang: str = "ru") -> str:
+    base = os.path.dirname(os.path.abspath(__file__))
+    lang_map = {"ru": "ru", "en": "en", "uk": "uk", "ua": "uk"}
+    folder = lang_map.get((lang or "ru")[:2].lower(), "ru")
+    path = os.path.join(base, "prompts", folder, "UNIVERSAL_EDITOR_SYSTEM.md")
+    if os.path.isfile(path):
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+        for marker in ("## Role", "## Роль"):
+            idx = text.find(marker)
+            if idx != -1:
+                return text[idx:].strip()
+        return text.strip()
+    return (
+        "You are a senior literary editor. Transform raw text into publication-quality prose. "
+        "Preserve 100% meaning. Return only the edited text."
+    )
 
-ПРАВИЛА:
-1. Разбей сплошной монолог на логические абзацы и четкие предложения с правильной пунктуацией.
-2. Исправь все ошибочные технические термины распознавания устной речи:
-   - "ссд" / "ssd" -> SSD-накопитель
-   - "те из бы" / "юсб" -> USB
-   - "а дата" -> ADATA
-   - "35 размер" -> 3.5-дюймовый
-   - "планктом" -> планктон
-   - "в стране джетал" -> Western Digital
-   - "трансценд" -> Transcend
-3. Удали слова-паразиты ("ну", "э-э", "как бы", "значит").
-4. Сохрани авторский смысл, но сделай стиль литературным.
-5. Верни ТОЛЬКО вычитанный готовый текст книги без вводных фраз."""
+
+SYSTEM_PROMPT = load_system_prompt()
 
 def apply_typography(text: str) -> str:
     """Applies Russian publishing typography rules."""
