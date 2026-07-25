@@ -1,7 +1,8 @@
 # Contextual typo & STT correction guide (for AI)
 
 > **REQUIRED READING** before editing speech transcripts, OCR, or drafts.  
-> Use with [`../en/UNIVERSAL_EDITOR_SYSTEM.md`](../en/UNIVERSAL_EDITOR_SYSTEM.md) and [`../en/profiles/SPEECH_TO_TEXT.md`](../en/profiles/SPEECH_TO_TEXT.md).
+> Use with [`../en/UNIVERSAL_EDITOR_SYSTEM.md`](../en/UNIVERSAL_EDITOR_SYSTEM.md) and [`../en/profiles/SPEECH_TO_TEXT.md`](../en/profiles/SPEECH_TO_TEXT.md).  
+> **Universal editorial spec (depersonalized client requirements):** [`UNIVERSAL_EDITORIAL_SPEC.en.md`](UNIVERSAL_EDITORIAL_SPEC.en.md)
 
 Other languages: [RU](CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) · [UK](CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md)
 
@@ -20,9 +21,14 @@ Other languages: [RU](CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) · [UK](CONTEXTUAL
 
 **Minimum context:**
 1. **Full sentence** (better: paragraph or adjacent speaker turns)
-2. **Topic** (health, IT, relationships, work…)
-3. **Speaker** (if labeled)
-4. **Project glossary** (`config/glossary_user.json`)
+2. **Dialogue window:** **≥10 messages before and 10 after** the broken STT phrase
+3. **Topic** (health, IT, relationships, work…)
+4. **Speaker** (if labeled)
+5. **Project glossary** (`config/glossary_user.json`)
+
+**STT pauses:** fix inside one thought (`, what. Means` → `, what means`); **never** merge independent sentences (`. But if` must keep the period). Canon: [`STT_PROCESSING_ALGORITHMS.en.md`](STT_PROCESSING_ALGORITHMS.en.md).
+
+**Intonation commas:** remove after verbs (`find, something`); **do not touch** `340, something rubles`.
 
 If **2+ plausible readings** remain — **do not edit**; flag in audit or ask.
 
@@ -153,6 +159,8 @@ Check whether the word exists **in this topic**; if not, search meaning across t
 4. **Stripping slang/profanity** without user request — breaks Vox2Book contract.
 5. **Importing names** from example glossaries into unrelated projects.
 6. **“Correcting” intentional dialect** to standard English without being asked.
+7. **Comma splice regex** — `([а-яё]{3,})\.\s+([а-яё])` → `, ` breaks `. But` / `. If`.
+8. **Global comma removal before “something”** — breaks `340, something rubles`.
 
 ---
 
@@ -164,6 +172,7 @@ Check whether the word exists **in this topic**; if not, search meaning across t
 | [`../../config/glossary_user.json`](../../config/glossary_user.json) | **This** project's names and fixes |
 | [`../en/profiles/SPEECH_TO_TEXT.md`](../en/profiles/SPEECH_TO_TEXT.md) | Voice profile |
 | [`../en/profiles/DIALOGUE_TRANSCRIPT.md`](../en/profiles/DIALOGUE_TRANSCRIPT.md) | Multi-speaker alignment |
+| [`STT_PROCESSING_ALGORITHMS.en.md`](STT_PROCESSING_ALGORITHMS.en.md) | Regex canon, pre-press, keep_mat |
 
 ---
 
@@ -175,3 +184,5 @@ Check whether the word exists **in this topic**; if not, search meaning across t
 - [ ] Ambiguous spans in `output/.llm_cache/*.audit.md`.
 - [ ] STT hallucinations removed.
 - [ ] No global replace across the file unless user explicitly ordered it.
+- [ ] No mass `. But` → `, but` regression.
+- [ ] Profanity not censored without explicit command (`keep_mat=True` default).

@@ -2,13 +2,13 @@
 
 > Базові правила: [`../UNIVERSAL_EDITOR_SYSTEM.md`](../UNIVERSAL_EDITOR_SYSTEM.md)  
 > **Обов'язково:** [`../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md)  
-> Таблиці: [`../../glossary/STT_HOMOPHONES.uk.md`](../../glossary/STT_HOMOPHONES.uk.md)
+> **Алгоритми STT:** [`../../glossary/STT_PROCESSING_ALGORITHMS.uk.md`](../../glossary/STT_PROCESSING_ALGORITHMS.uk.md)
 
 ---
 
 ## Залізне правило
 
-> **Прав лише в контексті — ціле речення, абзац, пара сусідніх реплік. Ніколи не «лікуй» окремі слова з таблиці.**
+> **Прав лише в контексті — ≥10 повідомлень до і після в діалогах. Ніколи не «лікуй» окремі слова з таблиці.**
 
 ---
 
@@ -37,6 +37,21 @@
 - Глобальні заміни по файлу.
 - Словник без контексту (`прод` → продуктовий у IT-чаті).
 - Чужі імена з прикладів глосарію.
+- **Comma splice regex** — `([а-яё]{3,})\.\s+([а-яё])` → `, ` ламає `. Але` / `. Якщо`.
+- **Цензура мата** без явної команди (`keep_mat=True` за замовчуванням).
+
+---
+
+## Паузи STT
+
+Див. [`STT_PROCESSING_ALGORITHMS.uk.md`](../../glossary/STT_PROCESSING_ALGORITHMS.uk.md): `, що. Значить` → виправляти; `. Але` — не склеювати.
+
+---
+
+## Мат
+
+- За замовчуванням: `keep_mat=True`
+- Цензура лише за «прибери мат» / «без 18+»
 
 ---
 
@@ -46,7 +61,7 @@
 |------|--------|
 | [`../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) | Алгоритм, бібліотеки, антипатерни (UA) |
 | [`../../glossary/STT_HOMOPHONES.uk.md`](../../glossary/STT_HOMOPHONES.uk.md) | Таблиця STT (UA) |
-| [`../../glossary/STT_HOMOPHONES.example.md`](../../glossary/STT_HOMOPHONES.example.md) | Індекс ru / en / uk |
+| [`../../glossary/STT_PROCESSING_ALGORITHMS.uk.md`](../../glossary/STT_PROCESSING_ALGORITHMS.uk.md) | Заборонені regex, comma splices, pre-press |
 | [`../../../config/glossary_user.json`](../../../config/glossary_user.json) | Глосарій проєкту |
 
 ---

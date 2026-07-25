@@ -46,7 +46,7 @@
 - **Профиль промпта**: speech_to_text / dialogue / academic / none
 - **Режим стиля**: literary / literary_lively / academic / light
 - **Действия**: cleanup, rebuild, punctuate, fix_stt, remove_garbage, fix_repetitions, restore_brands, fix_terminal, typography, audit, docx, colors
-- **Флаги**: keep_speakers, keep_timestamps, keep_mat
+   - **Флаги**: keep_speakers, keep_timestamps, **keep_mat=True по умолчанию** для dialogue/stt
 
 ---
 
@@ -59,7 +59,7 @@
 1. Режим стиля: литературный / живой / академический / лёгкий?
 2. Заголовок, подзаголовок, сохранять метки времени/спикеров?
 3. Есть `config/glossary_user.json`?
-4. Сохранять мат и сленг?
+4. Сохранять мат и сленг? **По умолчанию — да** (`keep_mat=True`); цензура только по явной команде.
 5. Один файл или вся папка?
 6. Список 2–5 неясных мест STT/OCR.
 
@@ -74,14 +74,20 @@
 2. Литературная пересборка  
    - Разбить поток на предложения/абзацы; восстановить синтаксис
    - Восстановить бренды/программы по контексту (сохраняя разговорные названия, если это стиль речи)
-   - Исправить STT-ошибки **только по контексту целого предложения**
+   - Исправить STT-ошибки **только по контексту** (±10 реплик); см. [`glossary/STT_PROCESSING_ALGORITHMS.ru.md`](../glossary/STT_PROCESSING_ALGORITHMS.ru.md) — **не** использовать comma-splice regex
 3. Профиль (если нужен)  
 4. Типографика  
-5. 8 аудитов (`docs/ru/TECHNICAL_SPECIFICATION.md`) + `check_cuts` + `check_terminal` + `check_repetitions` + `check_stt_artifacts`  
+5. **Фаза 3.5 — Контекстный аудит** (для диалогов / крупных STT-правок):
+   - Сравнить с исходником (`.bak_*`, `inputs/`) на массовые регрессии (`. Но` → `, но`).
+   - Отчёт: `output/.llm_cache/*.audit.md` или `tools/context_audit_report.md`.
+   - Эталон консервативной пересборки: `tools/contextual_rebuild_*.py`; аудит: `tools/context_audit_*.py`.
+   - Универсальное ТЗ: [`glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md`](../glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md).
+6. 8 аудитов (`docs/ru/TECHNICAL_SPECIFICATION.md`) + `check_cuts` + `check_terminal` + `check_repetitions` + `check_stt_artifacts`  
    - **check_terminal**: терминальный знак в каждом сообщении (включая заголовки, ссылки, короткие реплики)
    - **check_repetitions**: нет дублирований одного слова подряд
-   - **check_stt_artifacts**: нет остаточного машинного мусора и нерешённых STT-сбоев
-6. DOCX → `output/books/`
+   - **check_stt_artifacts**: нет остаточного машинного мусора, comma-splice регрессии (`. Но` → `, но`)
+7. DOCX → путь по умолчанию `output/books/` **или путь, указанный заказчиком** (без дубликатов)
+   - Режим **prepress_book**: убрать `Спикер [ЧЧ:ММ] [Голосовое]:`, формат `— реплика. — Спикер.` — см. `profiles/DIALOGUE_TRANSCRIPT.md`
 
 Кэш: `output/.llm_cache/*.edited.txt`, `*.audit.md`
 

@@ -53,6 +53,8 @@
 
 Глоссарий: config/glossary_user.json
 Контекстная правка STT/OCR: prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md
+Канон алгоритмов STT: prompts/glossary/STT_PROCESSING_ALGORITHMS.ru.md
+Универсальное ТЗ: prompts/glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md
 
 Если у меня АУДИО (.mp3, .ogg, голосовые) — предложи транскрибацию:
   встроенный: python tools/transcribe_audio.py --install
@@ -76,8 +78,11 @@
 
 | Фраза | Эффект |
 |-------|--------|
-| `не трогай мат` | Принудительно keep_mat=True |
-| `убери мат` | Принудительно keep_mat=False |
+| `не трогай мат` | Принудительно keep_mat=True (**по умолчанию для диалогов**) |
+| `убери мат` | Принудительно keep_mat=False (цензура) |
+| `для печати` / `допечатка` / `книжный формат` | prepress_book: убрать `Спикер [ЧЧ:ММ]`, формат `— реплика. — Спикер.`, «ёлочки», `—` |
+| `сохрани в [путь]` | единственная копия по указанному пути, без дубликата в `output/books/` |
+| `контекстный аудит` | Сравнение с исходником, отчёт регрессий STT |
 | `только пунктуацию` | Только punctuate + typography |
 | `убери мусор` | cleanup + remove_garbage + fix_repetitions |
 | `сохрани стиль автора` | Минимум rebuild, literary_lively |
@@ -98,9 +103,9 @@
 | Что говорит пользователь | Что делает программа |
 |--------------------------|---------------------|
 | `Вычитай` | Авто-жанр → полный план → docx |
-| `Вычитай, не трогай мат` | Авто-жанр → полный план → docx, keep_mat=True |
+| `Вычитай, не трогай мат` | Авто-жанр → полный план → docx, keep_mat=True (явное подтверждение) |
 | `Вычитай, только пунктуацию` | Авто-жанр → punctuate + typography → docx |
-| `Сделай книгу из Голосовые_2026.docx` | Авто-жанр (dialogue+stt) → все правки → docx + цвета |
+| `Сделай книгу из Голосовые_2026.docx` | dialogue+stt → prepress_book → docx + цвета, без меток Telegram |
 | `Убери мусор из чата.txt` | cleanup + remove_garbage + fix_repetitions |
 | `Вычитай, быстро` | cleanup + punctuate + typography → docx |
 
@@ -122,6 +127,6 @@
 - **Профиль** промпта (speech_to_text / dialogue / academic / none)
 - **Режим стиля** (literary / literary_lively / academic / light)
 - **План действий** (cleanup → fix_stt → rebuild → punctuate → typography → audit → docx)
-- **Флаги** (keep_speakers, keep_timestamps, keep_mat)
+- **Флаги** (keep_speakers, keep_timestamps, **keep_mat=True по умолчанию** для dialogue/stt)
 
 Полный каталог сценариев: [`docs/ru/SCENARIOS_CATALOG.md`](../../docs/ru/SCENARIOS_CATALOG.md)

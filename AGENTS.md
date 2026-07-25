@@ -27,7 +27,17 @@
 | EN | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [`STT_HOMOPHONES.en.md`](prompts/glossary/STT_HOMOPHONES.en.md) |
 | UK | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) | [`STT_HOMOPHONES.uk.md`](prompts/glossary/STT_HOMOPHONES.uk.md) |
 
+**Канон алгоритмов STT (regex, comma splices, pre-press, keep_mat):**
+
+| Язык | Алгоритмы | Универсальное ТЗ |
+|------|-----------|------------------|
+| RU | [`STT_PROCESSING_ALGORITHMS.ru.md`](prompts/glossary/STT_PROCESSING_ALGORITHMS.ru.md) | [`UNIVERSAL_EDITORIAL_SPEC.ru.md`](prompts/glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md) |
+| EN | [`STT_PROCESSING_ALGORITHMS.en.md`](prompts/glossary/STT_PROCESSING_ALGORITHMS.en.md) | [`UNIVERSAL_EDITORIAL_SPEC.en.md`](prompts/glossary/UNIVERSAL_EDITORIAL_SPEC.en.md) |
+| UK | [`STT_PROCESSING_ALGORITHMS.uk.md`](prompts/glossary/STT_PROCESSING_ALGORITHMS.uk.md) | [`UNIVERSAL_EDITORIAL_SPEC.uk.md`](prompts/glossary/UNIVERSAL_EDITORIAL_SPEC.uk.md) |
+
 Индекс: [`STT_HOMOPHONES.example.md`](prompts/glossary/STT_HOMOPHONES.example.md)
+
+**Универсальное ТЗ на вычитку (обезличенные требования заказчика):** см. таблицу выше, колонка «Универсальное ТЗ».
 
 ---
 

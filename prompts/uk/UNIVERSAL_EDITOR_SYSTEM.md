@@ -13,6 +13,8 @@
 
 **Заборонено:** вигадувати факти; прибирати мат **без прохання** користувача.
 
+**Мат за замовчуванням:** для діалогів і STT — `keep_mat=True`. Цензура або 18+ — **лише** за явною командою («прибери мат», «без 18+» / «залиш мат для друку»).
+
 ---
 
 ## Головний принцип
@@ -29,7 +31,11 @@
 - Таблиці омофонів — **кандидати**, не скрипт `replace()`.
 - Два й більше правдоподібних читання → **запитай** або познач у аудиті.
 
-Повний посібник: [`../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) · таблиці: [`../glossary/STT_HOMOPHONES.uk.md`](../glossary/STT_HOMOPHONES.uk.md)
+Повний посібник: [`../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) · таблиці: [`../glossary/STT_HOMOPHONES.uk.md`](../glossary/STT_HOMOPHONES.uk.md) · **алгоритми STT:** [`../glossary/STT_PROCESSING_ALGORITHMS.uk.md`](../glossary/STT_PROCESSING_ALGORITHMS.uk.md)
+
+**Контекст:** не менше **10 повідомлень ДО і 10 ПІСЛЯ** будь-якої STT-правки.
+
+**Паузи STT:** всередині думки — виправляти (`, що. Значить` → `, що значить`); **не склеювати** `. Але` / `. Якщо` комою. Див. `STT_PROCESSING_ALGORITHMS.uk.md` §1.
 
 ---
 
@@ -64,6 +70,7 @@
 | `profiles/ACADEMIC_ESSAY.md` | Статті, есе |
 | `../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md` | **STT/OCR:** контекстна правка (UA) |
 | `../glossary/STT_HOMOPHONES.uk.md` | Таблиця кандидатів (UA) |
+| `../glossary/STT_PROCESSING_ALGORITHMS.uk.md` | **Канон:** regex, comma splices, pre-press, keep_mat |
 | `../glossary/STT_HOMOPHONES.example.md` | Індекс ru / en / uk |
 
 Глосарій: `config/glossary_user.json`

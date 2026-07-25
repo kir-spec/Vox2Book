@@ -9,9 +9,9 @@
 
 | Language | Contextual guide (read first) | STT candidate table |
 |----------|------------------------------|---------------------|
-| 🇷🇺 Русский | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) | [`STT_HOMOPHONES.ru.md`](STT_HOMOPHONES.ru.md) |
-| 🇬🇧 English | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [`STT_HOMOPHONES.en.md`](STT_HOMOPHONES.en.md) |
-| 🇺🇦 Українська | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) | [`STT_HOMOPHONES.uk.md`](STT_HOMOPHONES.uk.md) |
+| 🇷🇺 Русский | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) | [`STT_HOMOPHONES.ru.md`](STT_HOMOPHONES.ru.md) · **алгоритмы:** [`STT_PROCESSING_ALGORITHMS.ru.md`](STT_PROCESSING_ALGORITHMS.ru.md) |
+| 🇬🇧 English | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | [`STT_HOMOPHONES.en.md`](STT_HOMOPHONES.en.md) · **algorithms:** [`STT_PROCESSING_ALGORITHMS.en.md`](STT_PROCESSING_ALGORITHMS.en.md) |
+| 🇺🇦 Українська | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) | [`STT_HOMOPHONES.uk.md`](STT_HOMOPHONES.uk.md) · **алгоритми:** [`STT_PROCESSING_ALGORITHMS.uk.md`](STT_PROCESSING_ALGORITHMS.uk.md) |
 
 ---
 

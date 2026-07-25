@@ -1,59 +1,59 @@
 # Dialogue & Chat Transcript Profile (optional overlay)
 
 > **Load only** for multi-speaker chats, interview transcripts, messenger exports.  
-> Universal rules: [`../UNIVERSAL_EDITOR_SYSTEM.md`](../UNIVERSAL_EDITOR_SYSTEM.md).
+> Universal rules: [`../UNIVERSAL_EDITOR_SYSTEM.md`](../UNIVERSAL_EDITOR_SYSTEM.md)  
+> Universal spec: [`../../glossary/UNIVERSAL_EDITORIAL_SPEC.en.md`](../../glossary/UNIVERSAL_EDITORIAL_SPEC.en.md)  
+> STT & pre-press canon: [`../../glossary/STT_PROCESSING_ALGORITHMS.en.md`](../../glossary/STT_PROCESSING_ALGORITHMS.en.md)
 
 ---
 
-## Structure to preserve (unless user says otherwise)
+## Two modes (user command selects)
 
-- Speaker names / labels
-- Timestamps (date, time) if present in source
-- Message type markers ([voice], [text], [Голосовое], [Текст])
-- Section headings (by day, month, chapter) if user requested them
+| Mode | When | Telegram labels | Turn format |
+|------|------|-----------------|-------------|
+| **`raw_chat`** (default) | screen, archive, working copy | **Keep** `Speaker [18:46] [Voice]:`, time, type | export style + speaker color |
+| **`prepress_book`** | “book”, “print”, “pre-press” | **Remove** time, `[Voice]`/`[Text]` | `— Reply text. — Speaker.` |
 
----
+If unspecified — **raw_chat**. Pre-press only on explicit request.
 
-## Additional rules
-
-1. **Per-speaker consistency:** same spelling of each name throughout.
-2. **Gender agreement:** align verb/adjective endings with each speaker **only when gender is known** — ask if unclear.
-3. **Turn boundaries:** one message = one block; do not merge different speakers without reason.
-4. **Voice vs typed:** voice lines get full literary reconstruction; typed lines get lighter edit (they are often already written).
-5. **Profanity & register:** preserve each speaker's level unless user requests uniform “clean” edition.
+Speaker names and colors — from `config/glossary_user.json`, not from prompt examples.
 
 ---
 
-## Optional chronology
+## Shared rules (both modes)
 
-If multiple source files exist (e.g. HTML chat + voice exports), merge by timestamp **only when user explicitly requests** chronological assembly.
-
----
-
-## Project-specific data — NOT in this prompt
-
-Speaker names (Kir, Anfia, etc.), relationship labels, and custom spelling rules belong in:
-
-- `config/glossary_user.json` or
-- a note from the user in chat
-
-**Never** assume names from other users' projects.
+1. **Full read + context:** restore broken speech using **≥10 turns before and after** each non-trivial fix.
+2. **Speaker styling (DOCX):** bold header or trailing name; **unique color** per speaker.
+3. **Voice vs typed:** voice → full literary rebuild; typed → lighter edit.
+4. **Profanity:** `keep_mat=True` by default; censor only on explicit command.
+5. Names — `config/glossary_user.json` only.
 
 ---
 
-## Typography for dialogue
+## `prepress_book` mode
 
-Russian house style:
+1. Remove `Speaker [23:41] [Voice]:`, `[Text]:`, timestamps.
+2. Book dialogue: `— Reply. — Speaker.`
+3. Typography: curly quotes, em dash ` — `, ellipsis `…`.
+4. Keep `📅` date dividers.
 
-```
-Анфи [18:29] [Голосовое]: Текст реплики.
-Kir [18:46] [Текст]: Короткий ответ.
-```
+---
 
-Or em-dash style if user prefers:
+## STT in dialogues (summary)
 
-```
-— Текст реплики, — сказала Анфи.
-```
+- Fix pauses **inside** a thought: `, what. Means` → `, what means`.
+- **Do not merge** `. But` / `. Therefore` / `. If` into commas — see `STT_PROCESSING_ALGORITHMS.en.md`.
+- Remove `find, something`, `And you, when`; keep `340, something rubles`.
 
-Follow user preference when stated.
+---
+
+## Turn agreement
+
+- Question ↔ answer must make sense in ±10-turn window.
+- Truncated turn without reply — `[cut]` or ask user.
+
+## Context audit (before book delivery)
+
+- Compare with `.bak_*` or `inputs/`; report `tools/context_audit_report.md`.
+- Reference rebuild: `tools/contextual_rebuild_*.py` (project template).
+- Full requirements: [`UNIVERSAL_EDITORIAL_SPEC.en.md`](../../glossary/UNIVERSAL_EDITORIAL_SPEC.en.md).

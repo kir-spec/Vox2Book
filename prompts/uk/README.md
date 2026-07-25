@@ -8,6 +8,9 @@
 | [`MASTER_LLM_PROMPT.md`](MASTER_LLM_PROMPT.md) | Короткий покажчик |
 | [`profiles/`](profiles/) | Профілі: мовлення, діалоги, есе |
 
+Алгоритми STT: [`../glossary/STT_PROCESSING_ALGORITHMS.uk.md`](../glossary/STT_PROCESSING_ALGORITHMS.uk.md)  
+Універсальне ТЗ: [`../glossary/UNIVERSAL_EDITORIAL_SPEC.uk.md`](../glossary/UNIVERSAL_EDITORIAL_SPEC.uk.md)
+
 Документація: [`../../docs/uk/`](../../docs/uk/)
 
 Інші мови: [Русский](../ru/) · [English](../en/)

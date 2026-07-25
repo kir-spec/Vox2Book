@@ -2,13 +2,13 @@
 
 > Universal rules: [`../UNIVERSAL_EDITOR_SYSTEM.md`](../UNIVERSAL_EDITOR_SYSTEM.md)  
 > **Required:** [`../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md)  
-> Tables: [`../../glossary/STT_HOMOPHONES.en.md`](../../glossary/STT_HOMOPHONES.en.md) · [RU guide](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) · [UK guide](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md)
+> **STT algorithms:** [`../../glossary/STT_PROCESSING_ALGORITHMS.en.md`](../../glossary/STT_PROCESSING_ALGORITHMS.en.md)
 
 ---
 
 ## Iron rule
 
-> **Fix only in context — full sentence, paragraph, adjacent speaker turns. Never word-by-word from a table.**
+> **Fix only in context — ≥10 messages before and after in dialogues. Never word-by-word from a table.**
 
 Spell-checkers (JamSpell, Yandex.Speller, SymSpell, Hunspell) suggest candidates; they do **not** replace meaning-aware editing.
 
@@ -42,6 +42,25 @@ Spell-checkers (JamSpell, Yandex.Speller, SymSpell, Hunspell) suggest candidates
 | Dictionary without context | `prod` → grocery in a dev chat |
 | Mechanical swap | homophone table without reading the sentence |
 | Foreign glossary | names from examples in another project |
+| **Comma splice regex** | `([а-яё]{3,})\.\s+([а-яё])` → `, ` breaks `. But` / `. If` |
+| **Censor profanity** | without explicit user command (`keep_mat=True` default) |
+
+---
+
+## STT pause algorithm (canon)
+
+See [`../../glossary/STT_PROCESSING_ALGORITHMS.en.md`](../../glossary/STT_PROCESSING_ALGORITHMS.en.md).
+
+- **OK:** `, what. Means` → `, what means`
+- **Forbidden:** `. But if` → `, but if`
+- Remove `find, something`, `And you, when`; keep `340, something rubles`
+
+---
+
+## Profanity
+
+- **Default:** `keep_mat=True`
+- Censor only on “remove profanity” / “kids edition” / “no 18+”
 
 ---
 
@@ -51,7 +70,7 @@ Spell-checkers (JamSpell, Yandex.Speller, SymSpell, Hunspell) suggest candidates
 |------|---------|
 | [`../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md`](../../glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) | Algorithm, libraries, anti-patterns |
 | [`../../glossary/STT_HOMOPHONES.en.md`](../../glossary/STT_HOMOPHONES.en.md) | Large EN STT table |
-| [`../../glossary/STT_HOMOPHONES.example.md`](../../glossary/STT_HOMOPHONES.example.md) | Index ru / en / uk |
+| [`../../glossary/STT_PROCESSING_ALGORITHMS.en.md`](../../glossary/STT_PROCESSING_ALGORITHMS.en.md) | Forbidden regex, comma splices, pre-press |
 | [`../../../config/glossary_user.json`](../../../config/glossary_user.json) | **This** project's names and fixes |
 
 ---

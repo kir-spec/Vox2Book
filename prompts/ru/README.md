@@ -8,6 +8,9 @@
 | [`MASTER_LLM_PROMPT.md`](MASTER_LLM_PROMPT.md) | Краткий указатель |
 | [`profiles/`](profiles/) | Профили: речь, диалоги, эссе |
 
+Глоссарий STT: [`../glossary/STT_PROCESSING_ALGORITHMS.ru.md`](../glossary/STT_PROCESSING_ALGORITHMS.ru.md) — запрещённые regex, comma splices, pre-press, keep_mat.  
+**Универсальное ТЗ:** [`../glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md`](../glossary/UNIVERSAL_EDITORIAL_SPEC.ru.md) — все требования заказчика, обезличенно.
+
 Документация: [`../../docs/ru/`](../../docs/ru/)
 
 Другие языки: [English](../en/) · [Українська](../uk/)
