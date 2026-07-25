@@ -15,13 +15,13 @@ Vox2Book — видавничий комплект для ШІ: промпти, 
 
 <br/>
 
-[![Release](https://img.shields.io/badge/Release-23.07.2026-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
+[![Release](https://img.shields.io/badge/Release-25.07.2026-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026)
 [![AI](https://img.shields.io/badge/AI-Cursor%20·%20VS%20Code%20·%20LM%20Studio%20·%20Ollama%20·%20OpenAI-0099FF.svg?style=for-the-badge)](AGENTS.md)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-[EN](#en) · [RU](#ru) · [UK](#uk) · [AGENTS.md](AGENTS.md) · [Release](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026)
+[EN](#en) · [RU](#ru) · [UK](#uk) · [AGENTS.md](AGENTS.md) · [Release](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026)
 
 </div>
 
@@ -289,6 +289,6 @@ Vox2Book/
 
 <br/>
 
-[AGENTS.md](AGENTS.md) · [Release 23.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/23.07.2026) · [MIT](LICENSE)
+[AGENTS.md](AGENTS.md) · [Release 25.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026) · [MIT](LICENSE)
 
 </div>
