@@ -52,3 +52,6 @@ tools/merge_*.py
 tools/master_*.py
 tools/apply_user_corrections_*.py
 tools/fix_anfi_*.py
+tools/fix_tea_*.py
+tools/fix_dodelku.py
+tools/verify_exact_*.py
