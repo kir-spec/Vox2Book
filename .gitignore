@@ -50,3 +50,5 @@ tools/proofread_*.py
 tools/deep_*.py
 tools/merge_*.py
 tools/master_*.py
+tools/apply_user_corrections_*.py
+tools/fix_anfi_*.py
