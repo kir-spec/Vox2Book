@@ -1,294 +1,207 @@
 <div align="center">
 
-# Vox2Book
+# 📚 Vox2Book
 
-<p>
-<strong>EN</strong><br/>
-Vox2Book — publishing kit for AI assistants: prompts, editorial rules, and scripts that turn raw text into a formatted DOCX manuscript.<br/>
-<br/>
-<strong>RU</strong><br/>
-Vox2Book — издательский комплект для нейросетей: промпты, правила вычитки и скрипты, которые превращают сырой текст в оформленный рукописный DOCX.<br/>
-<br/>
-<strong>UK</strong><br/>
-Vox2Book — видавничий комплект для ШІ: промпти, правила вичитки та скрипти, які перетворюють сирий текст на оформлений рукопис DOCX.
-</p>
+### *Universal AI Editorial Engine & Pre-press Publishing Pipeline*
+### *Универсальный ИИ-редактор и издательский конвейер вычистки рукописей*
+### *Універсальний ШІ-редактор та видавничий конвеєр вичитки рукописів*
 
 <br/>
 
-[![Release](https://img.shields.io/badge/Release-25.07.2026-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026)
-[![AI](https://img.shields.io/badge/AI-Cursor%20·%20VS%20Code%20·%20LM%20Studio%20·%20Ollama%20·%20OpenAI-0099FF.svg?style=for-the-badge)](AGENTS.md)
+[![Release](https://img.shields.io/badge/Release-v2.5.0-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
+[![Locales](https://img.shields.io/badge/Locales-RU%20%7C%20EN%20%7C%20UK-blue.svg?style=for-the-badge)](#-languages--языки--мови)
+[![STT Engine](https://img.shields.io/badge/STT-Parakeet%20%7C%20Whisper%20%7C%20Cloud-purple.svg?style=for-the-badge)](docs/ru/AUDIO_TRANSCRIPTION.md)
+[![AI Supported](https://img.shields.io/badge/AI-Claude%20%7C%20GPT--4o%20%7C%20DeepSeek%20%7C%20Ollama-FF6600.svg?style=for-the-badge)](AGENTS.md)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-[EN](#en) · [RU](#ru) · [UK](#uk) · [AGENTS.md](AGENTS.md) · [Release](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026)
-
-</div>
+**[🇷🇺 Русский](#-русский)** • **[🇬🇧 English](#-english)** • **[🇺🇦 Українська](#-українська)** • **[AGENTS.md](AGENTS.md)**
 
 ---
 
-<details id="en">
-<summary><strong>EN — description</strong></summary>
+</div>
 
-<br/>
+## 🌐 Languages / Языки / Мови
 
-## What Vox2Book is
+| Language | Description | Quick Start Prompt | System Prompt | Documentation |
+|:---|:---|:---|:---|:---|
+| 🇷🇺 **Русский** | Главная локаль издания | [`START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/ru/`](docs/ru/) |
+| 🇬🇧 **English** | Target publishing locale | [`START_USER_PROMPT.md`](prompts/en/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/en/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/en/`](docs/en/) |
+| 🇺🇦 **Українська** | Цільова видавнича локаль | [`START_USER_PROMPT.md`](prompts/uk/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/uk/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/uk/`](docs/uk/) |
 
-**Vox2Book** is a **publishing kit for AI assistants**: prompts, editorial rules, and scripts that turn **raw text** into a **formatted DOCX manuscript**.
+---
 
-| Input | Output |
-|-------|--------|
-| Whisper transcripts, dictation | Paragraphs, dialogues, typography |
-| Drafts, articles, essays | Times New Roman 12, 1.15 spacing |
-| Chat exports, monologues | `output/books/*.docx` |
+## ⚡ Workflow Architecture
 
-**Note:** editing works on **text**. For **audio**, transcribe first (Whisper, OpenAI API, AssemblyAI, Telegram export, etc.) — see [Audio → text](#en-audio).
+```mermaid
+graph TD
+    subgraph Inputs["1. Raw Input Sources"]
+        A1["🎙️ Audio & Voice Notes<br/>(.mp3, .wav, .ogg, .m4a)"]
+        A2["💬 Messenger Exports<br/>(Telegram, WhatsApp, Viber)"]
+        A3["✍️ Drafts, Essays & Monologues<br/>(.txt, .docx, .md)"]
+    end
 
-**Core rule:** preserve 100% of the author's meaning. STT fixes **in sentence context only**, never global word replacement.
+    subgraph STT["2. Transcription Layer"]
+        B1["🚀 NVIDIA Parakeet TDT (Fast Local)"]
+        B2["🎧 faster-whisper / Whisper.cpp"]
+        B3["☁️ Cloud APIs (OpenAI, Deepgram)"]
+    end
 
-## How it works (3 steps)
+    subgraph Core["3. Vox2Book AI Editorial Engine"]
+        C1["🔍 Auto-Detection & Scenario Catalog"]
+        C2["🧠 Sliding Window Audit (±10 Context)"]
+        C3["🎓 6-Level Academic Philological Audit"]
+        C4["🛡️ 8 Mandatory Quality Gates"]
+    end
 
+    subgraph Output["4. Publishing Delivery"]
+        D1["📖 Formatted DOCX Manuscript<br/>(Times New Roman 12pt, 1.15 line spacing)"]
+        D2["🎨 Unique Speaker Color Styling & Pre-press"]
+    end
+
+    A1 -->|transcribe_audio.py| STT
+    STT --> B
+    A2 --> B["Raw Text Input"]
+    A3 --> B
+    B --> Core
+    Core --> Output
 ```
-1. Put source in inputs/raw_texts/
-2. Copy prompts/en/START_USER_PROMPT.md into your AI chat
-3. Collect .docx from output/books/
+
+---
+
+## 🇷🇺 Русский
+
+### Что такое Vox2Book
+
+**Vox2Book** — профессиональный **издательский комплект для ИИ-ассистентов**: система промптов, академических правил вычитки и автоматизированных скриптов, превращающая **сырые диктовки, голосовые сообщения и экспорты чатов** в **готовые книжные макеты DOCX**.
+
+> [!IMPORTANT]
+> **Смысловая неприкосновенность (100% смысловой паритет):** Запрещено выдумывать детали или угадывать факты. Все исправления STT-омофонов и ослышек производятся **исключительно с опорой на контекстное окно ±10 реплик**.
+
+### Ключевые возможности
+
+- 🎙️ **Встроенная локальная транскрибация:** поддержка **NVIDIA Parakeet TDT ONNX** (ультра-быстро) и `faster-whisper` (`large-v3-turbo`).
+- 🤖 **Авто-определение (One-Click Launch):** алгоритм `tools/auto_detect.py` сам определяет жанр (проза, поэзия, диалог, академическая статья, код), стиль и необходимые операции.
+- 🎨 **Допечатная верстка (Pre-press Layout):** очистка от машинного мусора, ссылок и плашек ботов (`@TopSaversBot`, `720p`), удаление `Спикер [HH:MM]`, уникальная цветовая стилизация спикеров.
+- 🔞 **Политика нецензурной лексики (`keep_mat=True`):** 100% сохранение авторского колорита и живой речи по умолчанию.
+- 📚 **Постраничная вычитка (Paginated Batching):** регламент безопасной вычистки крупных книг (300+ стр.) батчами 10 / 3–5 / 1–2 страниц.
+
+### Быстрый старт (За 1 минуту)
+
+1. Положите исходный файл в `inputs/raw_texts/` (или аудио в `inputs/audio/`).
+2. Скопируйте содержимое [`prompts/ru/START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) в чат с ИИ (Cursor, Claude, ChatGPT, VS Code, LM Studio).
+3. Напишите одну команду:
+   ```text
+   Вычитай: [ИМЯ_ФАЙЛА]
+   ```
+4. Заберите верстанную книгу из **`output/books/<имя>.docx`**.
+
+### Локальная транскрибация аудио (STT)
+
+```bash
+# 1. Установка стека Parakeet (рекомендуется, супер-быстро):
+python tools/transcribe_audio.py --install-parakeet
+
+# 2. Распознавание аудио в текст:
+python tools/transcribe_audio.py inputs/audio/voice.ogg --language ru
 ```
 
-Optional: `pipeline.py` — automated chain via OpenAI, DeepSeek, LM Studio, or Ollama.
+---
 
-## <a id="en-audio"></a>Audio → text (STT)
+## 🇬🇧 English
 
-Any transcriber works — Whisper (built-in), OpenAI API, Google/Azure/AWS, AssemblyAI, Deepgram, Telegram export, Descript, MacWhisper, GigaAM, Vosk…
+### What is Vox2Book
 
-| Step | Command |
-|------|---------|
-| 1. Install (once) | `python tools/transcribe_audio.py --install` |
-| 2. Drop files | `inputs/audio/*.mp3` (`.wav`, `.ogg`, …) |
-| 3. Transcribe | `python tools/transcribe_audio.py inputs/audio/file.mp3` |
-| 4. Edit | Vox2Book prompt → `inputs/raw_texts/` → `output/books/` |
+**Vox2Book** is an enterprise-grade **publishing kit for AI assistants**: prompts, academic editorial specs, and automated workflows that transform **raw voice dictations, transcriptions, and chat exports** into **publication-ready DOCX manuscripts**.
 
-Models: `small` (CPU) · `medium` · **`large-v3-turbo`** · `large-v3`  
-Docs: [`docs/en/AUDIO_TRANSCRIPTION.md`](docs/en/AUDIO_TRANSCRIPTION.md)
+> [!NOTE]
+> **Semantic Fidelity (100% Meaning Parity):** Never invent facts or hallucinate details. All STT homophone restorations are strictly validated against a **sliding context window of at least 10 turns BEFORE and 10 turns AFTER**.
 
-## Quick start (1 minute)
+### Key Features
 
-| Step | Action |
-|------|--------|
-| 1 | Clone repo, open in **Cursor** or **VS Code** |
-| 2 | Open [`prompts/en/START_USER_PROMPT.md`](prompts/en/START_USER_PROMPT.md) |
-| 3 | Paste into AI chat, point to `inputs/raw_texts/` |
-| 4 | Result in **`output/books/`** |
+- 🎙️ **Local STT Backends:** Integrated support for **NVIDIA Parakeet TDT ONNX** (ultra-fast CPU/GPU) and `faster-whisper` (`large-v3-turbo`).
+- 🤖 **Auto-Detection Engine:** Heuristic detector (`tools/auto_detect.py`) determines genre, target style mode, and required pipeline passes automatically.
+- 🎨 **Pre-press Layout & Styling:** Cleans machine noise, bot metadata (`@TopSaversBot`, `720p`), formats direct speech (`— Dialogue text. — Speaker.`), and applies custom speaker color coding.
+- 🗣️ **Profanity Retention (`keep_mat=True`):** Preserves authentic oral disfluencies, slang, and informal voice by default.
+- 📄 **Paginated Batching Protocol:** Safe proofreading for long books (300+ pages) via 10 / 3–5 / 1–2 page batching passes.
 
-## Who it's for
+### Quick Start (1 Minute)
 
-- Authors who dictate books and articles  
-- Editors of voice messages and interviews  
-- Anyone who wants **one editorial standard** in any AI tool  
+1. Place your raw text in `inputs/raw_texts/` (or audio in `inputs/audio/`).
+2. Copy [`prompts/en/START_USER_PROMPT.md`](prompts/en/START_USER_PROMPT.md) into your AI workspace (Cursor, Claude, ChatGPT, VS Code, LM Studio).
+3. Send a single command:
+   ```text
+   Proofread: [FILENAME]
+   ```
+4. Pick up your manuscript from **`output/books/<filename>.docx`**.
 
-Works with Cursor, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude.
+### Audio Transcription (STT)
 
-## Repository layout
+```bash
+# 1. Install Parakeet stack (Recommended):
+python tools/transcribe_audio.py --install-parakeet
+
+# 2. Transcribe audio to raw text:
+python tools/transcribe_audio.py inputs/audio/dictation.mp3 --language en
+```
+
+---
+
+## 🇺🇦 Українська
+
+### Що таке Vox2Book
+
+**Vox2Book** — професійний **видавничий комплект для ШІ-асистентів**: система промптів, філологічних правил вичитки та автоматизованих скриптів, яка перетворює **сирі надиктовки, голосові повідомлення та експорти чатів** на **оформлені книжкові макети DOCX**.
+
+> [!TIP]
+> **Змістова недоторканність:** 100% збереження фактажу та авторського задуму. Відновлення слів після розпізнавання мовлення виконується **виключно в контексті ±10 сусідніх реплік**.
+
+### Ключові можливості
+
+- 🎙️ **Локальна транскрибація:** підтримка **NVIDIA Parakeet TDT ONNX** (надшвидко) та `faster-whisper`.
+- 🤖 **Авто-визначення сценарію:** модуль `tools/auto_detect.py` самостійно аналізує жанр (проза, поезія, драма, стаття, код) та обирає оптимальний план редагування.
+- 🎨 **Додрукарська верстка (Pre-press):** очищення від веб-посилань, бот-вивантажень (`720p`, `@TopSaversBot`), форматування прямої мови та індивідуальне колірне оформлення спікерів.
+- 🛡️ **6 рівнів академічного філологічного аудиту** та **8 обов'язкових контрольних перевірок**.
+
+### Швидкий старт
+
+1. Покладіть файл у `inputs/raw_texts/` (або аудіо у `inputs/audio/`).
+2. Скопіюйте [`prompts/uk/START_USER_PROMPT.md`](prompts/uk/START_USER_PROMPT.md) у чат із ШІ.
+3. Надішліть команду:
+   ```text
+   Вичитай: [ІМ'Я_ФАЙЛУ]
+   ```
+4. Заберіть готову книгу з **`output/books/<ім'я>.docx`**.
+
+---
+
+## 📁 Repository Structure
 
 ```text
 Vox2Book/
-├── inputs/audio/              ← audio (.mp3, .wav…) — step 1
-├── inputs/raw_texts/            ← transcripts & texts
-├── output/books/                ← finished .docx
-├── tools/transcribe_audio.py    ← Whisper / faster-whisper
-├── prompts/en/                ← English AI prompts
-├── docs/en/                     ← English docs
-└── AGENTS.md                    ← entry point for any AI
+├── AGENTS.md                          ← Entry point & system instructions for AI Agents
+├── prompts/                           ← Multilingual AI Prompts & Guides
+│   ├── ru/                            ← Russian prompts (START, SYSTEM, WORKFLOW)
+│   ├── en/                            ← English prompts (START, SYSTEM, WORKFLOW)
+│   ├── uk/                            ← Ukrainian prompts (START, SYSTEM, WORKFLOW)
+│   └── glossary/                      ← Universal Specs, Homophone Tables & Audit Guides
+├── docs/                              ← Detailed Technical Documentation (RU / EN / UK)
+├── tools/                             ← Python Automation Scripts & STT Loaders
+│   ├── transcribe_audio.py            ← STT Engine (Parakeet TDT / faster-whisper)
+│   ├── auto_detect.py                 ← Pure Heuristic Genre/Style Detector
+│   └── install_parakeet.ps1           ← Parakeet ONNX Installer
+├── inputs/
+│   ├── audio/                         ← Input audio files (.mp3, .wav, .ogg, .m4a)
+│   └── raw_texts/                     ← Raw text transcripts & drafts
+├── config/                            ← User Glossaries & Color Configurations
+└── output/books/                      ← Finished Publication-Ready DOCX Manuscripts
 ```
 
-## Links
-
-| | EN |
-|---|-----|
-| Start prompt | [START_USER_PROMPT](prompts/en/START_USER_PROMPT.md) |
-| Editor prompt | [UNIVERSAL_EDITOR](prompts/en/UNIVERSAL_EDITOR_SYSTEM.md) |
-| Docs | [docs/en/](docs/en/) |
-| STT / typos | [guide](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.en.md) |
-| **Audio / STT** | [STT tools](docs/en/AUDIO_TRANSCRIPTION.md) |
-
-</details>
-
-<details id="ru">
-<summary><strong>RU — описание</strong></summary>
-
-<br/>
-
-## Что это за проект
-
-**Vox2Book** — **издательский комплект для нейросетей**: промпты, правила вычитки и скрипты, которые превращают **сырой текст** в **оформленный рукописный DOCX**.
-
-| На входе | На выходе |
-|----------|-----------|
-| Расшифровки Whisper / диктовки | Абзацы, диалоги, типографика |
-| Черновики, статьи, эссе | Times New Roman 12, интервал 1.15 |
-| Экспорты чатов, монологи | `output/books/*.docx` |
-
-**Важно:** вычитка работает с **текстом**. Для **аудио** сначала STT — Whisper (встроенный скрипт), OpenAI API, AssemblyAI, экспорт Telegram и др. — см. [«Аудио → текст»](#ru-audio).
-
-**Главный принцип:** смысл автора — 100%. Ошибки STT правятся **только в контексте фразы**, не слепой заменой слов.
-
-## Как это работает (3 шага)
-
-```
-1. Положите исходник в inputs/raw_texts/
-2. Скопируйте prompts/ru/START_USER_PROMPT.md в чат с ИИ
-3. Заберите .docx из output/books/
-```
-
-Опционально: `pipeline.py` — цепочка через OpenAI, DeepSeek, LM Studio или Ollama.
-
-## <a id="ru-audio"></a>Аудио → текст (STT)
-
-Подходит **любой** транскрибатор: встроенный Whisper, OpenAI API, Google/Azure, AssemblyAI, Deepgram, Telegram, Descript, MacWhisper, GigaAM, Vosk…
-
-| Шаг | Команда |
-|-----|---------|
-| 1. Установка (один раз) | `python tools/transcribe_audio.py --install` |
-| 2. Положить файлы | `inputs/audio/*.mp3` (`.wav`, `.ogg`, …) |
-| 3. Распознать | `.\transcribe.bat inputs\audio\файл.mp3` |
-| 4. Вычитка | промпт Vox2Book → `inputs/raw_texts/` → `output/books/` |
-
-Модели: `small` (CPU) · `medium` · **`large-v3-turbo`** · `large-v3`  
-Подробно: [`docs/ru/AUDIO_TRANSCRIPTION.md`](docs/ru/AUDIO_TRANSCRIPTION.md)
-
-## С чего начать за 1 минуту
-
-| Шаг | Действие |
-|-----|----------|
-| 1 | Клонируйте репозиторий, откройте в **Cursor** или **VS Code** |
-| 2 | Откройте [`prompts/ru/START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) |
-| 3 | Вставьте в чат с ИИ, укажите файл в `inputs/raw_texts/` |
-| 4 | Результат в **`output/books/`** |
-
-Указатель: [`00_START_HERE__СКОПИРУЙ_ПРОМПТ/README.md`](00_START_HERE__СКОПИРУЙ_ПРОМПТ/README.md)
-
-## Для кого
-
-- Авторы, которые **наговаривают** книги и статьи  
-- Редакторы расшифровок **голосовых** и интервью  
-- Все, кому нужен **единый стандарт** вычитки в любой нейросети  
-
-Работает с Cursor, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude.
-
-## Структура репозитория
-
-```text
-Vox2Book/
-├── inputs/audio/              ← аудио (.mp3, .wav…) — шаг 1
-├── inputs/raw_texts/            ← транскрипты и тексты
-├── output/books/                ← готовые .docx
-├── tools/transcribe_audio.py    ← Whisper / faster-whisper
-├── transcribe.bat               ← ярлык Windows
-├── prompts/ru/                  ← промпты на русском
-├── docs/ru/                     ← документация RU
-└── AGENTS.md                    ← точка входа для нейросети
-```
-
-## Ссылки
-
-| | RU |
-|---|-----|
-| Старт в чате | [START_USER_PROMPT](prompts/ru/START_USER_PROMPT.md) |
-| Промпт редактора | [UNIVERSAL_EDITOR](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) |
-| Справка | [docs/ru/](docs/ru/) |
-| STT / опечатки | [руководство](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.ru.md) |
-| Аудио / STT | [транскрибаторы](docs/ru/AUDIO_TRANSCRIPTION.md) |
-
-</details>
-
-<details id="uk">
-<summary><strong>UK — опис</strong></summary>
-
-<br/>
-
-## Що таке Vox2Book
-
-**Vox2Book** — **видавничий комплект для ШІ**: промпти, правила вичитки та скрипти, що перетворюють **сирий текст** на **оформлений рукопис DOCX**.
-
-| Вхід | Вихід |
-|------|-------|
-| Розшифровки Whisper / диктовки | Абзаци, діалоги, типографіка |
-| Чернетки, статті, есе | Times New Roman 12, інтервал 1.15 |
-| Експорти чатів, монологи | `output/books/*.docx` |
-
-**Важливо:** вичитка працює з **текстом**. Для **аудіо** спочатку запустіть транскрибацію — див. [«Аудіо → текст»](#uk-audio).
-
-**Головне правило:** зміст автора — 100%. Помилки STT — **лише в контексті речення**.
-
-## Як це працює (3 кроки)
-
-```
-1. Покладіть джерело в inputs/raw_texts/
-2. Скопіюйте prompts/uk/START_USER_PROMPT.md у чат із ШІ
-3. Заберіть .docx з output/books/
-```
-
-Опційно: `pipeline.py` — ланцюжок через OpenAI, DeepSeek, LM Studio або Ollama.
-
-## <a id="uk-audio"></a>Аудіо → текст (STT)
-
-Будь-який транскрибатор: Whisper (вбудований), OpenAI API, AssemblyAI, Telegram, Descript, GigaAM…
-
-| Крок | Команда |
-|------|---------|
-| 1. Встановлення | `python tools/transcribe_audio.py --install` |
-| 2. Файли | `inputs/audio/*.mp3` |
-| 3. Розпізнати | `python tools/transcribe_audio.py inputs/audio/файл.mp3 --language uk` |
-| 4. Вичитка | промпт Vox2Book → `inputs/raw_texts/` → `output/books/` |
-
-Моделі: `small` · `medium` · **`large-v3-turbo`** · `large-v3`  
-Документація: [`docs/uk/AUDIO_TRANSCRIPTION.md`](docs/uk/AUDIO_TRANSCRIPTION.md)
-
-## Швидкий старт (1 хвилина)
-
-| Крок | Дія |
-|------|-----|
-| 1 | Клонуйте репозиторій, відкрийте в **Cursor** або **VS Code** |
-| 2 | Відкрийте [`prompts/uk/START_USER_PROMPT.md`](prompts/uk/START_USER_PROMPT.md) |
-| 3 | Вставте в чат, вкажіть файл у `inputs/raw_texts/` |
-| 4 | Результат у **`output/books/`** |
-
-## Для кого
-
-- Автори, які **надиктовують** тексти  
-- Редактори **голосових** та інтерв'ю  
-- Усі, кому потрібен **єдиний стандарт** вичитки в будь-якому ШІ  
-
-Працює з Cursor, VS Code, LM Studio, Ollama, OpenAI, DeepSeek, Claude.
-
-## Структура репозиторію
-
-```text
-Vox2Book/
-├── inputs/audio/              ← аудіо — крок 1
-├── inputs/raw_texts/            ← транскрипти та тексти
-├── output/books/                ← готові .docx
-├── tools/transcribe_audio.py    ← Whisper / faster-whisper
-├── prompts/uk/                  ← промпти українською
-├── docs/uk/                     ← документація UK
-└── AGENTS.md                    ← вхід для нейромережі
-```
-
-## Посилання
-
-| | UK |
-|---|-----|
-| Старт | [START_USER_PROMPT](prompts/uk/START_USER_PROMPT.md) |
-| Промпт редактора | [UNIVERSAL_EDITOR](prompts/uk/UNIVERSAL_EDITOR_SYSTEM.md) |
-| Довідка | [docs/uk/](docs/uk/) |
-| STT / опечатки | [посібник](prompts/glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) |
-| Аудіо / STT | [транскрибатори](docs/uk/AUDIO_TRANSCRIPTION.md) |
-
-</details>
+---
 
 <div align="center">
 
-<br/>
-
-[AGENTS.md](AGENTS.md) · [Release 25.07.2026](https://github.com/kir-spec/Vox2Book/releases/tag/25.07.2026) · [MIT](LICENSE)
+**[AGENTS.md](AGENTS.md)** • **[Documentation](docs/ru/TECHNICAL_SPECIFICATION.md)** • **[MIT License](LICENSE)**
 
 </div>
