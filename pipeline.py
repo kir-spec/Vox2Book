@@ -619,7 +619,7 @@ def stage2_neural_stylist(text: str, config: dict, plan: dict = None) -> str:
             model_name = model or "gpt-4o-mini"
 
         if not api_key or "YOUR_API_KEY" in api_key:
-            print(f"  [{provider}] Нет API-ключа. Перехожу на регекс-пунктуатор.")
+            print(f"  [{provider}] Подключение недоступно. Перехожу на локальную обработку (регекс-пунктуатор).")
             return stage2b_regex_punctuate(text, plan)
 
         headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
@@ -642,7 +642,7 @@ def stage2_neural_stylist(text: str, config: dict, plan: dict = None) -> str:
     # --- Anthropic / Claude ---
     elif provider in ["anthropic", "claude"]:
         if not api_key or "YOUR_API_KEY" in api_key:
-            print("  [Anthropic] Нет API-ключа. Перехожу на регекс-пунктуатор.")
+            print("  [Anthropic] Подключение недоступно. Перехожу на локальную обработку (регекс-пунктуатор).")
             return stage2b_regex_punctuate(text, plan)
 
         url = "https://api.anthropic.com/v1/messages"

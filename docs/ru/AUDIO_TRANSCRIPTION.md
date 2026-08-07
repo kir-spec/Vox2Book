@@ -25,7 +25,8 @@
 
 | Сервис | Когда удобен | Как попасть в Vox2Book |
 |--------|--------------|------------------------|
-| **OpenAI Whisper API** (`whisper-1`) | Высокое качество, уже есть ключ OpenAI | Экспорт `.txt` → `inputs/raw_texts/` |
+| **OpenAI Whisper API** (`whisper-1`) | Высокое качество, облачное распознавание | Экспорт `.txt` → `inputs/raw_texts/` |
+
 | **Google Cloud Speech-to-Text** | Google-экосистема, много языков | То же |
 | **Azure AI Speech** | Корпоративные проекты, Microsoft | То же |
 | **AWS Transcribe** | Инфраструктура Amazon | То же |
@@ -64,7 +65,7 @@
 | Ситуация | Рекомендация |
 |----------|--------------|
 | Нет GPU, нужен простой старт | `python tools/transcribe_audio.py --install` |
-| Есть ключ OpenAI | OpenAI Whisper API или наш `large-v3-turbo` локально |
+| Работа через облако | OpenAI Whisper API или локальный `large-v3-turbo` |
 | Только Mac M-series | mlx-whisper или MacWhisper → `.txt` |
 | Чистый русский, офлайн | GigaAM или `faster-whisper` + `--language ru` |
 | Много спикеров (подкаст) | AssemblyAI / Azure с diarization |

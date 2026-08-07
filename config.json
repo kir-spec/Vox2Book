@@ -1,6 +1,5 @@
 {
   "api_provider": "auto",
-  "api_key": "YOUR_API_KEY_HERE",
   "model": "auto",
   "ollama_url": "http://localhost:11434",
   "lmstudio_url": "http://localhost:1234",

@@ -23,7 +23,8 @@
 
 | Сервіс | Коли зручно |
 |--------|-------------|
-| **OpenAI Whisper API** | Якість, ключ OpenAI |
+| **OpenAI Whisper API** | Висока якість, хмарна транскрибація |
+
 | **Google Cloud Speech-to-Text** | Google, багато мов |
 | **Azure AI Speech** | Microsoft, корпоративні проєкти |
 | **AWS Transcribe** | Інфраструктура Amazon |
@@ -59,7 +60,8 @@
 | Ситуація | Рекомендація |
 |----------|--------------|
 | Без GPU | `python tools/transcribe_audio.py --install` |
-| Ключ OpenAI | Whisper API або локально `large-v3-turbo` |
+| Хмарний режим | Whisper API або локально `large-v3-turbo` |
+
 | Mac M-series | mlx-whisper / MacWhisper |
 | Рос./укр. офлайн | GigaAM або `--language uk` |
 | Багато спікерів | AssemblyAI / Azure |

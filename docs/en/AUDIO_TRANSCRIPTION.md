@@ -25,7 +25,8 @@ Any tool works — you need **text** in `inputs/raw_texts/`.
 
 | Service | Best for | Into Vox2Book |
 |---------|----------|---------------|
-| **OpenAI Whisper API** (`whisper-1`) | High quality, OpenAI key | Export `.txt` |
+| **OpenAI Whisper API** (`whisper-1`) | High quality, cloud transcription | Export `.txt` |
+
 | **Google Cloud Speech-to-Text** | Google stack, many languages | Export `.txt` |
 | **Azure AI Speech** | Enterprise, Microsoft | Export `.txt` |
 | **AWS Transcribe** | AWS infrastructure | Export `.txt` |
@@ -62,7 +63,7 @@ Any tool works — you need **text** in `inputs/raw_texts/`.
 | Situation | Suggest |
 |-----------|---------|
 | No GPU, easy start | `python tools/transcribe_audio.py --install` |
-| OpenAI API key | Whisper API or local `large-v3-turbo` |
+| Cloud workflow | Whisper API or local `large-v3-turbo` |
 | Mac M-series | mlx-whisper or MacWhisper → `.txt` |
 | Russian offline | GigaAM or faster-whisper `--language ru` |
 | Multi-speaker podcast | AssemblyAI / Azure diarization |

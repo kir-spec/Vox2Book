@@ -62,10 +62,9 @@ prompts/            ← инструкции для нейросети
 
 ---
 
-## API (необязательно)
+## Среда выполнения
 
-В чате Cursor/Claude агент правит сам.  
-Скрипты `pipeline.py` / `run_api_pipeline.py` — нужен `config.json` (OpenAI, LM Studio, Ollama…).
+Программа запускается напрямую в вашем ИИ-окружении (Cursor, VS Code, LM Studio, Ollama, Claude, ChatGPT). Все модели и подключения управляются вашей средой автоматически.
 
 ---
 
