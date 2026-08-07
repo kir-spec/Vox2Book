@@ -9,14 +9,14 @@
 <br/>
 
 [![Release](https://img.shields.io/badge/Release-v2.5.0-brightgreen.svg?style=for-the-badge&logo=github)](https://github.com/kir-spec/Vox2Book/releases)
-[![Locales](https://img.shields.io/badge/Locales-RU%20%7C%20EN%20%7C%20UK-blue.svg?style=for-the-badge)](#-languages--языки--мови)
-[![STT Engine](https://img.shields.io/badge/STT-Parakeet%20%7C%20Whisper%20%7C%20Cloud-purple.svg?style=for-the-badge)](docs/ru/AUDIO_TRANSCRIPTION.md)
+[![Locales](https://img.shields.io/badge/Locales-EN%20%7C%20RU%20%7C%20UK-blue.svg?style=for-the-badge)](#-languages--языки--мови)
+[![STT Engine](https://img.shields.io/badge/STT-Parakeet%20%7C%20Whisper%20%7C%20Cloud-purple.svg?style=for-the-badge)](docs/en/AUDIO_TRANSCRIPTION.md)
 [![AI Supported](https://img.shields.io/badge/AI-Claude%20%7C%20GPT--4o%20%7C%20DeepSeek%20%7C%20Ollama-FF6600.svg?style=for-the-badge)](AGENTS.md)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**[🇷🇺 Русский](#-русский)** • **[🇬🇧 English](#-english)** • **[🇺🇦 Українська](#-українська)** • **[AGENTS.md](AGENTS.md)**
+**[🇬🇧 English](#-english-click-to-expand--collapse)** • **[🇷🇺 Русский](#-русский-нажмите-чтобы-развернуть--свернуть)** • **[🇺🇦 Українська](#-українська-натисніть-щоб-розгорнути--згорнути)** • **[AGENTS.md](AGENTS.md)**
 
 ---
 
@@ -26,8 +26,8 @@
 
 | Language | Description | Quick Start Prompt | System Prompt | Documentation |
 |:---|:---|:---|:---|:---|
-| 🇷🇺 **Русский** | Главная локаль издания | [`START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/ru/`](docs/ru/) |
 | 🇬🇧 **English** | Target publishing locale | [`START_USER_PROMPT.md`](prompts/en/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/en/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/en/`](docs/en/) |
+| 🇷🇺 **Русский** | Главная локаль издания | [`START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/ru/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/ru/`](docs/ru/) |
 | 🇺🇦 **Українська** | Цільова видавнича локаль | [`START_USER_PROMPT.md`](prompts/uk/START_USER_PROMPT.md) | [`UNIVERSAL_EDITOR_SYSTEM.md`](prompts/uk/UNIVERSAL_EDITOR_SYSTEM.md) | [`docs/uk/`](docs/uk/) |
 
 ---
@@ -70,46 +70,10 @@ graph TD
 
 ---
 
-## 🇷🇺 Русский
+<details open id="english">
+<summary><h2>🇬🇧 English (Click to expand / collapse)</h2></summary>
 
-### Что такое Vox2Book
-
-**Vox2Book** — профессиональный **издательский комплект для ИИ-ассистентов**: система промптов, академических правил вычитки и автоматизированных скриптов, превращающая **сырые диктовки, голосовые сообщения и экспорты чатов** в **готовые книжные макеты DOCX**.
-
-> [!IMPORTANT]
-> **Смысловая неприкосновенность (100% смысловой паритет):** Запрещено выдумывать детали или угадывать факты. Все исправления STT-омофонов и ослышек производятся **исключительно с опорой на контекстное окно ±10 реплик**.
-
-### Ключевые возможности
-
-- 🎙️ **Встроенная локальная транскрибация:** поддержка **NVIDIA Parakeet TDT ONNX** (ультра-быстро) и `faster-whisper` (`large-v3-turbo`).
-- 🤖 **Авто-определение (One-Click Launch):** алгоритм `tools/auto_detect.py` сам определяет жанр (проза, поэзия, диалог, академическая статья, код), стиль и необходимые операции.
-- 🎨 **Допечатная верстка (Pre-press Layout):** очистка от машинного мусора, ссылок и плашек ботов (`@TopSaversBot`, `720p`), удаление `Спикер [HH:MM]`, уникальная цветовая стилизация спикеров.
-- 🔞 **Политика нецензурной лексики (`keep_mat=True`):** 100% сохранение авторского колорита и живой речи по умолчанию.
-- 📚 **Постраничная вычитка (Paginated Batching):** регламент безопасной вычистки крупных книг (300+ стр.) батчами 10 / 3–5 / 1–2 страниц.
-
-### Быстрый старт (За 1 минуту)
-
-1. Положите исходный файл в `inputs/raw_texts/` (или аудио в `inputs/audio/`).
-2. Скопируйте содержимое [`prompts/ru/START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) в чат с ИИ (Cursor, Claude, ChatGPT, VS Code, LM Studio).
-3. Напишите одну команду:
-   ```text
-   Вычитай: [ИМЯ_ФАЙЛА]
-   ```
-4. Заберите верстанную книгу из **`output/books/<имя>.docx`**.
-
-### Локальная транскрибация аудио (STT)
-
-```bash
-# 1. Установка стека Parakeet (рекомендуется, супер-быстро):
-python tools/transcribe_audio.py --install-parakeet
-
-# 2. Распознавание аудио в текст:
-python tools/transcribe_audio.py inputs/audio/voice.ogg --language ru
-```
-
----
-
-## 🇬🇧 English
+<br/>
 
 ### What is Vox2Book
 
@@ -146,9 +110,62 @@ python tools/transcribe_audio.py --install-parakeet
 python tools/transcribe_audio.py inputs/audio/dictation.mp3 --language en
 ```
 
+</details>
+
+<br/>
+
 ---
 
-## 🇺🇦 Українська
+<details id="русский">
+<summary><h2>🇷🇺 Русский (Нажмите, чтобы развернуть / свернуть)</h2></summary>
+
+<br/>
+
+### Что такое Vox2Book
+
+**Vox2Book** — профессиональный **издательский комплект для ИИ-ассистентов**: система промптов, академических правил вычитки и автоматизированных скриптов, превращающая **сырые диктовки, голосовые сообщения и экспорты чатов** в **готовые книжные макеты DOCX**.
+
+> [!IMPORTANT]
+> **Смысловая неприкосновенность (100% смысловой паритет):** Запрещено выдумывать детали или угадывать факты. Все исправления STT-омофонов и ослышек производятся **исключительно с опорой на контекстное окно ±10 реплик**.
+
+### Ключевые возможности
+
+- 🎙️ **Встроенная локальная транскрибация:** поддержка **NVIDIA Parakeet TDT ONNX** (ультра-быстро) и `faster-whisper` (`large-v3-turbo`).
+- 🤖 **Авто-определение (One-Click Launch):** алгоритм `tools/auto_detect.py` сам определяет жанр (проза, поэзия, диалог, академическая статья, код), стиль и необходимые операции.
+- 🎨 **Допечатная верстка (Pre-press Layout):** очистка от машинного мусора, ссылок и плашек ботов (`@TopSaversBot`, `720p`), удаление `Спикер [HH:MM]`, уникальная цветовая стилизация спикеров.
+- 🔞 **Политика нецензурной лексики (`keep_mat=True`):** 100% сохранение авторского колорита и живой речи по умолчанию.
+- 📚 **Постраничная вычитка (Paginated Batching):** регламент безопасной вычистки крупных книг (300+ стр.) батчами 10 / 3–5 / 1–2 страниц.
+
+### Быстрый старт (За 1 минуту)
+
+1. Положите исходный файл в `inputs/raw_texts/` (или аудио в `inputs/audio/`).
+2. Скопируйте содержимое [`prompts/ru/START_USER_PROMPT.md`](prompts/ru/START_USER_PROMPT.md) в чат с ИИ (Cursor, Claude, ChatGPT, VS Code, LM Studio).
+3. Напишите одну команду:
+   ```text
+   Вычитай: [ИМЯ_ФАЙЛА]
+   ```
+4. Заберите верстанную книгу из **`output/books/<имя>.docx`**.
+
+### Локальная транскрибация аудио (STT)
+
+```bash
+# 1. Установка стека Parakeet (рекомендуется, супер-быстро):
+python tools/transcribe_audio.py --install-parakeet
+
+# 2. Распознавание аудио в текст:
+python tools/transcribe_audio.py inputs/audio/voice.ogg --language ru
+```
+
+</details>
+
+<br/>
+
+---
+
+<details id="українська">
+<summary><h2>🇺🇦 Українська (Натисніть, щоб розгорнути / згорнути)</h2></summary>
+
+<br/>
 
 ### Що таке Vox2Book
 
@@ -174,6 +191,10 @@ python tools/transcribe_audio.py inputs/audio/dictation.mp3 --language en
    ```
 4. Заберіть готову книгу з **`output/books/<ім'я>.docx`**.
 
+</details>
+
+<br/>
+
 ---
 
 ## 📁 Repository Structure
@@ -182,11 +203,11 @@ python tools/transcribe_audio.py inputs/audio/dictation.mp3 --language en
 Vox2Book/
 ├── AGENTS.md                          ← Entry point & system instructions for AI Agents
 ├── prompts/                           ← Multilingual AI Prompts & Guides
-│   ├── ru/                            ← Russian prompts (START, SYSTEM, WORKFLOW)
 │   ├── en/                            ← English prompts (START, SYSTEM, WORKFLOW)
+│   ├── ru/                            ← Russian prompts (START, SYSTEM, WORKFLOW)
 │   ├── uk/                            ← Ukrainian prompts (START, SYSTEM, WORKFLOW)
 │   └── glossary/                      ← Universal Specs, Homophone Tables & Audit Guides
-├── docs/                              ← Detailed Technical Documentation (RU / EN / UK)
+├── docs/                              ← Detailed Technical Documentation (EN / RU / UK)
 ├── tools/                             ← Python Automation Scripts & STT Loaders
 │   ├── transcribe_audio.py            ← STT Engine (Parakeet TDT / faster-whisper)
 │   ├── auto_detect.py                 ← Pure Heuristic Genre/Style Detector
@@ -202,6 +223,6 @@ Vox2Book/
 
 <div align="center">
 
-**[AGENTS.md](AGENTS.md)** • **[Documentation](docs/ru/TECHNICAL_SPECIFICATION.md)** • **[MIT License](LICENSE)**
+**[AGENTS.md](AGENTS.md)** • **[Documentation](docs/en/TECHNICAL_SPECIFICATION.md)** • **[MIT License](LICENSE)**
 
 </div>
