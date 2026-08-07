@@ -25,8 +25,8 @@ class TestUniversalPipeline(unittest.TestCase):
         self.assertIn('всё-таки', res)
         
     def test_stt_cleaning(self):
-        sample = 'это пахевизм и не устранные динамики Quiz河'
-        plan = {"locale": "ru", "remove_garbage": True}
+        sample = 'это текста фрагмент с рекламой Quiz河'
+        plan = {"actions": ["cleanup"]}
         res = stage1_cleanup(sample, plan)
         self.assertNotIn('Quiz河', res)
 
