@@ -1,11 +1,16 @@
 {
   "_comment": "Copy to config/transcribe.json to customize. Defaults work without this file.",
-  "backend": "faster-whisper",
-  "model": "large-v3-turbo",
+  "backend": "parakeet",
+  "parakeet_quantization": "int8",
+  "parakeet_model_dir": "models/parakeet-tdt-0.6b-v3-int8",
   "language": "ru",
-  "device": "auto",
-  "compute_type": "auto",
   "output_dir": "inputs/raw_texts",
   "vad_filter": true,
-  "initial_prompt": "Имена, термины, названия брендов — подставьте свои через --prompt или здесь."
+  "_whisper_fallback": {
+    "backend": "faster-whisper",
+    "model": "large-v3-turbo",
+    "device": "auto",
+    "compute_type": "auto",
+    "initial_prompt": "Имена, термины, названия брендов."
+  }
 }

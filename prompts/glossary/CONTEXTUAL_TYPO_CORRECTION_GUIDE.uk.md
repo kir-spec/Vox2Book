@@ -90,7 +90,7 @@ Whisper ламає рідкісні імена — **лише з глосарі�
 | **Silero homographs** | Омографи (багато спільного з UA) | https://github.com/snakers4/silero-stress/wiki/Homograph-List |
 | **JamSpell** | Контекстний спелчекер; модель `uk` | https://github.com/bakwc/JamSpell |
 | **ai-forever/spellcheck_benchmark** | Пари речень RU (корисно для східнослов'янського) | https://huggingface.co/datasets/ai-forever/spellcheck_benchmark |
-| **Yandex.Speller** | API; перевіряй зміст вручну | https://yandex.ru/dev/speller/ |
+| **Yandex.Speller** | Зовнішній спеллер; перевіряй зміст вручну | https://yandex.ru/dev/speller/ |
 | **LanguageTool** | UA граматика (допоміжно) | https://languagetool.org/ |
 
 **Висновок для ШІ:** навіть JamSpell помиляється на омофонах і жаргоні. Ти — **редактор із розумінням змісту**.
@@ -180,3 +180,4 @@ Whisper ламає рідкісні імена — **лише з глосарі�
 - [ ] Немає глобальних замін без явної команди.
 - [ ] Немає масової регресії `. Але` → `, але`.
 - [ ] Мат не цензуровано без команди (`keep_mat=True`).
+

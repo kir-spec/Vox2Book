@@ -25,7 +25,7 @@ Use it as a single spec for AI editors, manual proofreaders, and regex scripts.
 | **C-02** | Verify **question ↔ answer** and topic within ±10 turns. |
 | **C-03** | **Semantic restoration:** no meaningless fragments; no lost phrases during rebuild. |
 | **C-04** | With 2+ plausible readings — **do not fix silently**; mark `[?]` or ask the client. |
-| **C-05** | Large documents (300+ pp.): **100% coverage** — no skipped turns or truncated processing. |
+| **C-05** | Large documents (300+ pp.): **100% coverage** via **paginated batches** — [`PAGINATED_PROOFREADING.en.md`](PAGINATED_PROOFREADING.en.md). |
 | **C-06** | No global `replace()` across the file for homophones, brands, or profanity. |
 
 ---
@@ -206,3 +206,4 @@ Conservative script template: `tools/contextual_rebuild_*.py` (project-specific;
 - [ ] §8 profanity per mode.
 - [ ] §9 raw_chat / prepress_book mode.
 - [ ] §10 audit and output path.
+

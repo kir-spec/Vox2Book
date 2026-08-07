@@ -386,7 +386,10 @@ def _detect_provider(config: dict) -> str:
 
     # 4. Fallback: regex (no LLM)
     return "regex"
-    """Pick the best model for literary editing from available models."""
+
+
+def _pick_best_model(available: list, plan: dict) -> str:
+    """Определите лучшую модель для литературного редактирования из доступных моделей."""
     if not available:
         return ""
     priority_70b = ["llama-3.3-70b", "llama-3.3", "70b"]

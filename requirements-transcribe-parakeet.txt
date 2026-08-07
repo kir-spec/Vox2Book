@@ -1,0 +1,7 @@
+# Vox2Book — NVIDIA Parakeet TDT 0.6B v3 (not Whisper)
+# Install: python tools/transcribe_audio.py --install-parakeet
+# CPU-friendly int8; supports ru, uk, en + 22 European languages
+
+onnx-asr>=0.12.0
+onnxruntime>=1.17.0
+soundfile>=0.12.0

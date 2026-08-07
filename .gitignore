@@ -41,17 +41,38 @@ output/
 temp/
 audio_*.txt
 "00_START_HERE__*"
+Анфи/
+финальная_обработка_текстов/
+transcripts/
+page_batches/
+tools/page_batches/
+.kilo/
+config/glossary_user.json
+config/transcribe.json
 
-# One-off / Temporary processing scripts
+# One-off / Temporary processing scripts & logs
 tmp_*.py
+scratch_*.py
+debug_*.py
+transcribe_all.py
+verify_transcripts.py
 fix_cuts.py
+tools/_*
 tools/process_*.py
 tools/proofread_*.py
 tools/deep_*.py
 tools/merge_*.py
 tools/master_*.py
 tools/apply_user_corrections_*.py
+tools/*_anfi*
 tools/fix_anfi_*.py
 tools/fix_tea_*.py
 tools/fix_dodelku.py
 tools/verify_exact_*.py
+tools/build_dialogue_*.py
+tools/batch_audit_*.py
+tools/local_brain_*.py
+tools/match_speakers.py
+tools/page_batch_*.py
+
+

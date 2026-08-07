@@ -90,7 +90,7 @@ Adjacent-key swaps (*teh → the*), missing letters — fix only if word **does 
 | **guychuk/typos-misspellings-homophones** | Typos + homophones dataset | https://huggingface.co/datasets/guychuk/typos-misspellings-homophones-dataset |
 | **JamSpell** | Context n-gram corrector (`FixFragment`) | https://github.com/bakwc/JamSpell |
 | **SymSpell** | Fast edit distance (weak alone on homophones) | https://github.com/wolfgarbe/SymSpell |
-| **LanguageTool** | Grammar + style API | https://languagetool.org/ |
+| **LanguageTool** | Grammar + style rules | https://languagetool.org/ |
 | **GitHubTypoCorpusRu** | Typos in commits (mixed EN) | via spellcheck benchmarks |
 | **ai-forever/spellcheck_benchmark** | Sentence-level RU pairs (useful for Cyrillic in mixed text) | https://huggingface.co/datasets/ai-forever/spellcheck_benchmark |
 
@@ -186,3 +186,4 @@ Check whether the word exists **in this topic**; if not, search meaning across t
 - [ ] No global replace across the file unless user explicitly ordered it.
 - [ ] No mass `. But` → `, but` regression.
 - [ ] Profanity not censored without explicit command (`keep_mat=True` default).
+

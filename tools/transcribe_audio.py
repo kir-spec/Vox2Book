@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Vox2Book — local speech-to-text (faster-whisper / OpenAI Whisper).
+Vox2Book — local speech-to-text (Parakeet / faster-whisper / OpenAI Whisper).
 Also supports external STT: OpenAI API, AssemblyAI, Deepgram, Telegram export, etc.
 See docs/*/AUDIO_TRANSCRIPTION.md for the full list.
 """
@@ -9,11 +9,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 # Ensure UTF-8 console on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -39,7 +39,12 @@ MODELS = [
     ("distil-large-v3", "Облегчённый large — быстрее, чуть ниже качество."),
 ]
 
-BACKENDS = ("faster-whisper", "whisper")
+BACKENDS = ("parakeet", "faster-whisper", "whisper")
+PARAKEET_MODEL_ID = "nemo-parakeet-tdt-0.6b-v3"
+DEFAULT_PARAKEET_MODEL_DIR = PROJECT_ROOT / "models" / "parakeet-tdt-0.6b-v3-int8"
+
+_PARAKEET_MODEL: Any = None
+_PARAKEET_VAD: Any = None
 
 
 def load_config(path: Path | None) -> dict:
@@ -87,22 +92,128 @@ def collect_audio_paths(target: Path) -> list[Path]:
     return files
 
 
-def pip_install_requirements() -> None:
-    req = PROJECT_ROOT / "requirements-transcribe.txt"
+def pip_install_requirements(parakeet: bool = False) -> None:
+    req = PROJECT_ROOT / (
+        "requirements-transcribe-parakeet.txt" if parakeet else "requirements-transcribe.txt"
+    )
     if not req.is_file():
         raise SystemExit(f"Missing {req}")
-    print("Installing transcription dependencies (may take several minutes)…")
+    label = "Parakeet (onnx-asr)" if parakeet else "Whisper"
+    print(f"Installing {label} dependencies (may take several minutes)…")
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(req)])
     print("Done. Run transcribe again.")
 
 
 def print_models() -> None:
-    print("Available Whisper model sizes:\n")
+    print("Backends:\n")
+    print("  parakeet        — NVIDIA Parakeet TDT 0.6B v3 (NOT Whisper)")
+    print("                    ru/uk/en + 22 EU langs, punctuation, CPU int8, ~17× faster than Whisper large")
+    print("  faster-whisper  — OpenAI Whisper via CTranslate2 (GPU/CUDA)")
+    print("  whisper         — original openai-whisper\n")
+    print("Whisper model sizes (--backend faster-whisper / whisper):\n")
     for name, note in MODELS:
         print(f"  {name:18} — {note}")
-    print("\nBackends:")
-    print("  faster-whisper  — recommended (VAD, GPU, less hallucination)")
-    print("  whisper         — original openai-whisper (pip install openai-whisper)")
+
+
+def load_audio_mono_f32(audio_path: Path, sample_rate: int = 16000) -> Any:
+    import numpy as np
+
+    cmd = [
+        "ffmpeg",
+        "-nostdin",
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-i",
+        str(audio_path),
+        "-f",
+        "f32le",
+        "-acodec",
+        "pcm_f32le",
+        "-ac",
+        "1",
+        "-ar",
+        str(sample_rate),
+        "pipe:1",
+    ]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, check=True)
+    except subprocess.CalledProcessError as e:
+        stderr = (e.stderr or b"").decode("utf-8", errors="replace").strip()
+        raise SystemExit(f"ffmpeg failed for {audio_path.name}: {stderr or e}") from e
+    if not proc.stdout:
+        raise SystemExit(f"No audio decoded from {audio_path}")
+    return np.frombuffer(proc.stdout, dtype=np.float32).copy()
+
+
+def get_parakeet_model(model_dir: Path, quantization: str) -> Any:
+    global _PARAKEET_MODEL
+    if _PARAKEET_MODEL is None:
+        import onnx_asr
+
+        model_dir.mkdir(parents=True, exist_ok=True)
+        print(f"  loading Parakeet from {model_dir} (quantization={quantization})…")
+        _PARAKEET_MODEL = onnx_asr.load_model(
+            PARAKEET_MODEL_ID,
+            model_dir,
+            quantization=quantization,
+        )
+    return _PARAKEET_MODEL
+
+
+def get_parakeet_vad() -> Any:
+    global _PARAKEET_VAD
+    if _PARAKEET_VAD is None:
+        import onnx_asr
+
+        _PARAKEET_VAD = onnx_asr.load_vad("silero")
+    return _PARAKEET_VAD
+
+
+def transcribe_parakeet(
+    audio_path: Path,
+    *,
+    model_dir: Path,
+    quantization: str,
+    language: str | None,
+    vad_filter: bool,
+) -> tuple[str, list[dict], str]:
+    model = get_parakeet_model(model_dir, quantization)
+    print(f"  backend=parakeet model={PARAKEET_MODEL_ID} quantization={quantization}")
+    audio = load_audio_mono_f32(audio_path)
+    recognize_kwargs: dict[str, str] = {}
+    if language:
+        recognize_kwargs["language"] = language
+
+    parts: list[str] = []
+    segments: list[dict] = []
+
+    if vad_filter:
+        adapter = model.with_vad(get_parakeet_vad(), batch_size=1)
+        results = adapter.recognize(audio, **recognize_kwargs)
+        # onnx_asr 0.12 yields a single SegmentResult per VAD segment (not batches)
+        if not isinstance(results, list):
+            results = [results]
+        for seg in results:
+            # tolerate a nested list/batch shape defensively
+            if isinstance(seg, (list, tuple)):
+                inner = seg
+            else:
+                inner = [seg]
+            for s in inner:
+                text = (getattr(s, "text", "") or "").strip()
+                if text:
+                    parts.append(text)
+                    segments.append(
+                        {"start": getattr(s, "start", None), "end": getattr(s, "end", None), "text": text}
+                    )
+    else:
+        text = (model.recognize(audio, **recognize_kwargs) or "").strip()
+        if text:
+            parts.append(text)
+
+    lang_display = language or "auto"
+    return "\n".join(parts), segments, lang_display
 
 
 def transcribe_faster_whisper(
@@ -196,7 +307,7 @@ def write_transcript(
 
 
 def process_one(audio_path: Path, cfg: dict, args: argparse.Namespace) -> Path:
-    backend = args.backend or cfg.get("backend", "faster-whisper")
+    backend = args.backend or cfg.get("backend", "parakeet")
     model = args.model or cfg.get("model", "large-v3-turbo")
     language = args.language or cfg.get("language") or None
     if language == "auto":
@@ -208,9 +319,24 @@ def process_one(audio_path: Path, cfg: dict, args: argparse.Namespace) -> Path:
     output_dir = Path(args.output_dir or cfg.get("output_dir", str(DEFAULT_OUTPUT_DIR)))
     if not output_dir.is_absolute():
         output_dir = PROJECT_ROOT / output_dir
+    parakeet_model_dir = Path(
+        args.parakeet_model_dir or cfg.get("parakeet_model_dir", str(DEFAULT_PARAKEET_MODEL_DIR))
+    )
+    if not parakeet_model_dir.is_absolute():
+        parakeet_model_dir = PROJECT_ROOT / parakeet_model_dir
+    parakeet_quant = args.parakeet_quantization or cfg.get("parakeet_quantization", "int8")
 
     print(f"\n▶ {audio_path.name}")
-    if backend == "faster-whisper":
+    if backend == "parakeet":
+        text, segments, lang = transcribe_parakeet(
+            audio_path,
+            model_dir=parakeet_model_dir,
+            quantization=parakeet_quant,
+            language=language,
+            vad_filter=vad_filter,
+        )
+        model_label = f"{PARAKEET_MODEL_ID}-{parakeet_quant}"
+    elif backend == "faster-whisper":
         text, segments, lang = transcribe_faster_whisper(
             audio_path,
             model=model,
@@ -236,7 +362,7 @@ def process_one(audio_path: Path, cfg: dict, args: argparse.Namespace) -> Path:
         segments,
         output_dir=output_dir,
         backend=backend,
-        model=model,
+        model=model_label if backend == "parakeet" else model,
         language=lang,
         write_json=args.json,
     )
@@ -246,14 +372,15 @@ def process_one(audio_path: Path, cfg: dict, args: argparse.Namespace) -> Path:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        description="Vox2Book: local STT (faster-whisper) → inputs/raw_texts/. See docs/*/AUDIO_TRANSCRIPTION.md for other transcribers.",
+        description="Vox2Book: local STT (Parakeet / faster-whisper) → inputs/raw_texts/. See docs/*/AUDIO_TRANSCRIPTION.md.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"
+            "  python tools/transcribe_audio.py --install-parakeet\n"
+            "  python tools/transcribe_audio.py inputs/audio/voice.ogg --backend parakeet --language ru\n"
+            "  python tools/transcribe_audio.py inputs/audio/ --backend parakeet\n"
             "  python tools/transcribe_audio.py --install\n"
-            "  python tools/transcribe_audio.py inputs/audio/interview.mp3\n"
-            "  python tools/transcribe_audio.py inputs/audio/ --model large-v3 --language ru\n"
-            "  python tools/transcribe_audio.py voice.ogg --backend whisper --model medium\n"
+            "  python tools/transcribe_audio.py inputs/audio/ --backend faster-whisper --model large-v3-turbo\n"
         ),
     )
     p.add_argument(
@@ -263,8 +390,19 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"Audio file or folder (default: {DEFAULT_AUDIO_DIR.relative_to(PROJECT_ROOT)})",
     )
     p.add_argument("--config", type=Path, default=None, help="Path to config/transcribe.json")
-    p.add_argument("--backend", choices=BACKENDS, help="faster-whisper (default) or whisper")
-    p.add_argument("--model", help="Whisper model size (see --list-models)")
+    p.add_argument("--backend", choices=BACKENDS, help="parakeet (default), faster-whisper, or whisper")
+    p.add_argument("--model", help="Whisper model size when using whisper backends (see --list-models)")
+    p.add_argument(
+        "--parakeet-model-dir",
+        dest="parakeet_model_dir",
+        help="Parakeet ONNX cache dir (default: models/parakeet-tdt-0.6b-v3-int8)",
+    )
+    p.add_argument(
+        "--parakeet-quantization",
+        dest="parakeet_quantization",
+        default=None,
+        help="Parakeet quantization: int8 (CPU default) or fp16",
+    )
     p.add_argument("--language", help="ISO code: ru, en, uk, or auto")
     p.add_argument("--device", choices=("auto", "cpu", "cuda"), help="Inference device")
     p.add_argument("--compute-type", dest="compute_type", help="e.g. float16, int8 (faster-whisper)")
@@ -272,7 +410,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--prompt", help="initial_prompt: names, terms, expected vocabulary")
     p.add_argument("--no-vad", action="store_true", help="Disable VAD filter (faster-whisper)")
     p.add_argument("--json", action="store_true", help="Also write .segments.json with timestamps")
-    p.add_argument("--install", action="store_true", help="pip install -r requirements-transcribe.txt")
+    p.add_argument("--install", action="store_true", help="pip install Whisper stack (requirements-transcribe.txt)")
+    p.add_argument(
+        "--install-parakeet",
+        action="store_true",
+        help="pip install Parakeet stack (requirements-transcribe-parakeet.txt)",
+    )
     p.add_argument("--list-models", action="store_true", help="Show model recommendations")
     return p
 
@@ -282,8 +425,11 @@ def main() -> int:
     if args.list_models:
         print_models()
         return 0
+    if args.install_parakeet:
+        pip_install_requirements(parakeet=True)
+        return 0
     if args.install:
-        pip_install_requirements()
+        pip_install_requirements(parakeet=False)
         return 0
 
     cfg = load_config(args.config)
@@ -309,7 +455,10 @@ def main() -> int:
             outputs.append(process_one(audio, cfg, args))
         except ModuleNotFoundError as e:
             print(f"\nMissing dependency: {e}", file=sys.stderr)
-            print("Run:  python tools/transcribe_audio.py --install", file=sys.stderr)
+            if (args.backend or cfg.get("backend", "parakeet")) == "parakeet":
+                print("Run:  python tools/transcribe_audio.py --install-parakeet", file=sys.stderr)
+            else:
+                print("Run:  python tools/transcribe_audio.py --install", file=sys.stderr)
             return 1
 
     print("\n✓ Transcripts ready for literary editing:")

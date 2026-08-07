@@ -19,6 +19,7 @@
 | 🇺🇦 | [`CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md`](glossary/CONTEXTUAL_TYPO_CORRECTION_GUIDE.uk.md) | [`STT_HOMOPHONES.uk.md`](glossary/STT_HOMOPHONES.uk.md) | [`UNIVERSAL_EDITORIAL_SPEC.uk.md`](glossary/UNIVERSAL_EDITORIAL_SPEC.uk.md) |
 
 Индекс + правило «только в контексте»: [`glossary/STT_HOMOPHONES.example.md`](glossary/STT_HOMOPHONES.example.md)  
+**Постраничная вычитка крупных DOCX** (10 / 3–5 / 1–2 стр. по классу модели): [`PAGINATED_PROOFREADING.ru.md`](glossary/PAGINATED_PROOFREADING.ru.md) · [en](glossary/PAGINATED_PROOFREADING.en.md) · [uk](glossary/PAGINATED_PROOFREADING.uk.md)  
 Ваш проект: [`../config/glossary_user.json`](../config/glossary_user.json)
 
 Документация: [`../docs/`](../docs/) → `docs/ru/`, `docs/en/`, `docs/uk/`
