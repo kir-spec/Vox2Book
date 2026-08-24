@@ -141,6 +141,14 @@ mcp_codebase-memo_list_projects()
 mcp_codebase-memo_get_architecture({ "project": "<display_name>" })
 ```
 
+### Indexing policy
+
+- **Per workspace:** MCP runs only from that project's `.cursor/mcp.json` when you open it in Cursor (not from global user config).
+- **`auto_index=true`:** first chat in a workspace builds the graph once if missing.
+- **`auto_watch=false`:** no background reindex of other projects while you work in one.
+- **Cache persists** (`~/.cache/codebase-memory-mcp/*.db`) — reopening a project uses the graph via MCP; do not `delete_project` unless asked.
+- **`CBM_ALLOWED_ROOT=E:/coding`** — indexing confined to `E:\coding`.
+
 ### Workflow
 
 1. Call `list_projects` to discover the correct project name.

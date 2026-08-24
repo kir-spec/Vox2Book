@@ -1226,6 +1226,32 @@ def process_manuscript_chain(input_path: str = None, output_path: str = None):
     print(f"Аудит:   output/.llm_cache/04_audit.md")
 
 
+# Aliases for pipeline/process_dialogue_book.py
+_DEFAULT_DIALOGUE_PLAN = {
+    "actions": ["cleanup", "remove_garbage", "fix_terminal", "audit"],
+    "keep_speakers": True,
+}
+
+
+def stage1_stt_cleanup(text: str) -> str:
+    return stage1_cleanup(text, _DEFAULT_DIALOGUE_PLAN)
+
+
+def stage3_publisher_typography(text: str) -> str:
+    return stage3_typography(text, _DEFAULT_DIALOGUE_PLAN)
+
+
+def stage4_quality_auditor(text: str) -> list[str]:
+    issues = stage4_audit(text, _DEFAULT_DIALOGUE_PLAN)
+    out: list[str] = []
+    for key, val in issues.items():
+        if key == "total" or not isinstance(val, list):
+            continue
+        for item in val:
+            out.append(f"{key}: {item}")
+    return out
+
+
 if __name__ == "__main__":
     in_file = sys.argv[1] if len(sys.argv) > 1 else None
     out_file = sys.argv[2] if len(sys.argv) > 2 else None
