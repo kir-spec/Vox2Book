@@ -34,8 +34,16 @@ Thumbs.db
 
 # User data, confidential inputs & generated outputs
 inputs/
-output/
+output/*
+!output/books/
+output/books/*
+!output/books/Kir и Анфи/
+!output/books/Kir и Анфи/**
+!output/books/аудиокнига_mp3/
+!output/books/аудиокнига_mp3/**
 *.docx
+!output/books/Kir и Анфи/**/*.docx
+.~lock.*
 *.log
 *.tmp
 temp/
