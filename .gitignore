@@ -78,3 +78,12 @@ tools/match_speakers.py
 tools/page_batch_*.py
 
 
+.agents/
+.env
+.env.*
+*.pem
+*.key
+node_modules/
+dist/
+build/
+.gradle/
