@@ -176,3 +176,12 @@ mcp_codebase-memo_get_architecture({ "project": "<display_name>" })
 - `search_code(pattern, project)` — Grep-like text search within indexed files
 - `manage_adr(action)` — CRUD for Architecture Decision Records
 - `ingest_traces(traces)` — Ingest runtime traces to validate HTTP edges
+
+## MCP (обязательно)
+
+- **codebase-memory-mcp** — граф и поиск по символам (см. `.cursor/rules/codebase-memory.mdc`).
+- **project-ops** — git, diff-stat, чтение файлов с лимитом (см. `.cursor/rules/project-ops.mdc`).
+- Не смешивать проекты: работай только в корне **этого** workspace.
+
+Повторный деплой MCP во все проекты: `python E:\coding\_deploy_mcp.py`
+Документация: `E:\coding\MCP_SETUP.md`
